@@ -4,16 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI for Human Good</title>
-
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Google Fonts: JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-
-    <!-- Custom Styles -->
     <style>
         :root {
             --brand-purple: #8854F3;
@@ -21,376 +15,309 @@
             --brand-purple-rgb: 136, 84, 243;
             --brand-orange-rgb: 247, 143, 85;
         }
-
+        html {
+            scroll-behavior: smooth;
+        }
         body {
             font-family: 'JetBrains Mono', monospace;
-            background-color: #0a0a0a; /* Почти черный фон */
+            background-color: #0a0a0a;
+            color: #E5E7EB;
         }
-        
-        .logo-link {
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        .logo-link:hover {
-            opacity: 0.85;
-            transform: scale(1.05);
-        }
-
-        .cta-button {
-            background-image: linear-gradient(to right, var(--brand-purple), var(--brand-orange), var(--brand-purple));
-            background-size: 200% auto;
-            background-position: right center; /* Start from the right, so the orange part is on the left */
-            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-position 0.5s ease;
-            box-shadow: 0px 5px 15px rgba(var(--brand-orange-rgb), 0.2), 0px 5px 15px rgba(var(--brand-purple-rgb), 0.2);
-        }
-
-        /* Новая анимация "3D Press" */
-        .cta-button:hover {
-            background-position: left center; /* Animate to the left, moving the orange part to the right */
-            transform: translateY(2px); /* Сдвиг вниз для эффекта нажатия */
-            box-shadow: 0px 2px 8px rgba(var(--brand-orange-rgb), 0.3), 0px 2px 8px rgba(var(--brand-purple-rgb), 0.3); /* Тень становится меньше */
-        }
-        
-        .cta-button > * {
-            position: relative;
-            z-index: 1; 
-        }
-
-        .cta-button svg {
-            transition: transform 0.3s ease;
-        }
-        
-        .cta-button:hover svg {
-            transform: scale(1.1);
-        }
-
-        .nav-link {
-            position: relative;
-            transition: color 0.3s ease;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--brand-purple);
-            transition: width 0.3s ease;
-        }
-
-        .nav-link:hover {
-            color: #FFFFFF;
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-        
-        .mobile-menu {
-            transition: transform 0.3s ease-in-out;
-        }
-
-        @keyframes blob-move-1 {
-            0%   { transform: scale(1) translate(0, 0); }
-            33%  { transform: scale(1.3) translate(20vw, -25vh); }
-            66%  { transform: scale(0.8) translate(-15vw, 20vh); }
-            100% { transform: scale(1) translate(0, 0); }
-        }
-
-        @keyframes blob-move-2 {
-            0%   { transform: scale(1) translate(0, 0); }
-            33%  { transform: scale(1.25) translate(-20vw, 25vh); }
-            66%  { transform: scale(0.75) translate(15vw, -20vh); }
-            100% { transform: scale(1) translate(0, 0); }
-        }
-
+          
         .blob {
-            position: absolute;
+            position: fixed;
+            z-index: -1;
             border-radius: 9999px;
             filter: blur(80px);
             opacity: 0.7;
-            /* Плавная анимация ВЫХОДА (когда курсор убран) */
-            transition: transform 1.5s cubic-bezier(0.165, 0.84, 0.44, 1), 
-                        opacity 1.5s cubic-bezier(0.165, 0.84, 0.44, 1), 
-                        top 1.5s cubic-bezier(0.165, 0.84, 0.44, 1), 
-                        left 1.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            /* Animation is controlled by JavaScript */
+            transform: scale(1);
+            /* NEW: Added transition for smooth opacity change */
+            transition: opacity 0.4s ease;
         }
-
-        .blob-1 {
-            top: 40%;
-            left: 45%;
-            animation: blob-move-1 12s infinite ease-in-out alternate;
-        }
-        
-        .blob-2 {
-            top: 60%;
-            left: 55%;
-            animation: blob-move-2 15s infinite ease-in-out alternate;
-        }
-        
+          
         .blob-purple { background-color: var(--brand-purple); }
         .blob-orange { background-color: var(--brand-orange); }
-
-        /* Main CTA button styles */
-        .main-cta-button {
-            background-color: white;
-            color: #0a0a0a;
-            transition: color 0.4s ease-in-out, transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
-            transform: scale(1);
-        }
-        .main-cta-button:hover {
-            background-image: linear-gradient(to right, var(--brand-orange), var(--brand-purple), var(--brand-orange));
-            color: white;
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px -5px rgba(var(--brand-orange-rgb), 0.4), 0 8px 10px -6px rgba(var(--brand-purple-rgb), 0.4);
-            background-size: 200% auto;
-            animation: gradient-flow 4s linear infinite;
+          
+        .author-photo-container {
+            position: relative;
+            z-index: 10;
         }
 
-        @keyframes gradient-flow {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
+        .speech-bubble {
+            background-color: #111113;
+            border: 1px solid #333;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* New styles for blob attraction */
-        .blobs-attracted .blob {
-            /* Используем переменные, установленные через JS, для точного позиционирования */
-            top: var(--button-center-y);
-            left: var(--button-center-x);
-            transform: translate(-50%, -50%) scale(0);
-            opacity: 0;
-            animation-play-state: paused; /* Pause animation during attraction */
-            /* Динамичная анимация ВХОДА (при наведении) */
-            transition: transform 1s cubic-bezier(0.86, 0, 0.07, 1), 
-                        opacity 0.7s cubic-bezier(0.86, 0, 0.07, 1), 
-                        top 1s cubic-bezier(0.86, 0, 0.07, 1), 
-                        left 1s cubic-bezier(0.86, 0, 0.07, 1);
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            top: -1rem; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0; height: 0;
+            border-left: 1rem solid transparent;
+            border-right: 1rem solid transparent;
+            border-bottom: 1rem solid #111113;
+            filter: drop-shadow(0px -1px 0px #333);
         }
-
+          
+        @media (min-width: 768px) {
+            .speech-bubble::before {
+                top: 3rem; left: -1rem;
+                transform: translateY(-50%);
+                border-left: 0; border-right: 1rem solid #111113;
+                border-top: 1rem solid transparent;
+                border-bottom: 1rem solid transparent;
+                filter: drop-shadow(-1px 0px 0px #333);
+            }
+        }
+          
+        /* Other styles are unchanged */
+        .logo-link { transition: opacity 0.3s ease, transform 0.3s ease; }
+        .logo-link:hover { opacity: 0.85; transform: scale(1.05); }
+        .cta-button { background-image: linear-gradient(to right, var(--brand-purple), var(--brand-orange), var(--brand-purple)); background-size: 200% auto; background-position: right center; transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-position 0.5s ease; box-shadow: 0px 5px 15px rgba(var(--brand-orange-rgb), 0.2), 0px 5px 15px rgba(var(--brand-purple-rgb), 0.2); }
+        .cta-button:hover { background-position: left center; transform: translateY(2px); box-shadow: 0px 2px 8px rgba(var(--brand-orange-rgb), 0.3), 0px 2px 8px rgba(var(--brand-purple-rgb), 0.3); }
+        .cta-button > * { position: relative; z-index: 1; }
+        .cta-button svg { transition: transform 0.3s ease; }
+        .cta-button:hover svg { transform: scale(1.1); }
+        .nav-link { position: relative; transition: color 0.3s ease; }
+        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 50%; transform: translateX(-50%); background-color: var(--brand-purple); transition: width 0.3s ease; }
+        .nav-link:hover { color: #FFFFFF; }
+        .nav-link:hover::after { width: 100%; }
+        .mobile-menu { transition: transform 0.3s ease-in-out; }
+        .main-cta-button { background-color: white; color: #0a0a0a; transition: color 0.4s ease-in-out, transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out, background-image 0.4s ease-in-out; transform: scale(1); }
+        .main-cta-button:hover { background-image: linear-gradient(to right, var(--brand-orange), var(--brand-purple), var(--brand-orange)); color: white; transform: scale(1.05); box-shadow: 0 10px 25px -5px rgba(var(--brand-orange-rgb), 0.4), 0 8px 10px -6px rgba(var(--brand-purple-rgb), 0.4); background-size: 200% auto; animation: gradient-flow 4s linear infinite; }
+        @keyframes gradient-flow { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+        .cv-button { background-color: white; color: #0a0a0a; transition: color 0.4s ease-in-out, transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out, background-image 0.4s ease-in-out; transform: scale(1); }
+        .cv-button:hover { background-image: linear-gradient(to right, var(--brand-orange), var(--brand-purple), var(--brand-orange)); color: white; transform: scale(1.05); box-shadow: 0 10px 25px -5px rgba(var(--brand-orange-rgb), 0.4), 0 8px 10px -6px rgba(var(--brand-purple-rgb), 0.4); background-size: 200% auto; animation: gradient-flow 4s linear infinite; }
     </style>
 </head>
-<body class="text-gray-300 antialiased">
+<body class="antialiased">
 
-    <div id="app" class="relative overflow-x-hidden h-screen flex flex-col">
-        <div class="blob blob-1 blob-purple w-80 h-80 md:w-96 md:h-96 lg:w-[32rem] lg:h-[32rem] xl:w-[40rem] xl:h-[40rem]"></div>
-        <div class="blob blob-2 blob-orange w-80 h-80 md:w-96 md:h-96 lg:w-[32rem] lg:h-[32rem] xl:w-[40rem] xl:h-[40rem]"></div>
+    <div id="page-container" class="relative">
+        <div id="blob1" class="blob blob-purple w-80 h-80 md:w-96 md:h-96 lg:w-[32rem] lg:h-[32rem] xl:w-[40rem] xl:h-[40rem]"></div>
+        <div id="blob2" class="blob blob-orange w-80 h-80 md:w-96 md:h-96 lg:w-[32rem] lg:h-[32rem] xl:w-[40rem] xl:h-[40rem]"></div>
 
-        <header class="relative z-10 py-4 px-4 md:px-10 lg:py-6 lg:px-16">
-            <div class="container mx-auto flex justify-between items-center">
-                <a href="#" class="logo-link flex-shrink-0">
-                    <img src="https://i.ibb.co/gn7SmgY/866f2500-dd81-4d09-8c0f-2b55c25a3464-removalai-preview.png" alt="AIT Logo" class="h-16 lg:h-20 w-auto">
-                </a>
-
-                <nav class="hidden md:flex items-center md:text-xs lg:text-sm xl:text-base space-x-4 md:space-x-4 lg:space-x-8 xl:space-x-12">
-                    <a href="#" class="nav-link text-center lg:whitespace-nowrap">
-                        <div class="hidden lg:block">AI Super Agent</div>
-                        <div class="lg:hidden">
-                            <span class="block">AI</span>
-                            <span class="block leading-tight">Super Agent</span>
-                        </div>
+        <div id="app" class="relative overflow-x-hidden h-screen flex flex-col">
+             <header class="relative z-10 py-4 px-4 md:px-10 lg:py-6 lg:px-16">
+                 <div class="container mx-auto flex justify-between items-center">
+                    <a href="#" class="logo-link flex-shrink-0"><img src="https://i.ibb.co/gn7SmgY/866f2500-dd81-4d09-8c0f-2b55c25a3464-removalai-preview.png" alt="AIT Logo" class="h-16 lg:h-20 w-auto"></a>
+                    <nav class="hidden md:flex items-center md:text-xs lg:text-sm xl:text-base space-x-4 md:space-x-4 lg:space-x-8 xl:space-x-12">
+                        <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Super Agent</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Super Agent</span></div></a>
+                        <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Employees</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Employees</span></div></a>
+                        <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Companies</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Companies</span></div></a>
+                        <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Startup Studio</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Startup Studio</span></div></a>
+                        <a href="#" class="nav-link text-center"><div class="hidden lg:block">Blog</div><div class="lg:hidden"><span class="block invisible">AI</span><span class="block leading-tight">Blog</span></div></a>
+                    </nav>
+                    <a href="#" class="hidden md:flex items-center justify-center cta-button text-white font-medium py-3 md:px-3 lg:px-5 xl:px-7 rounded-full md:text-xs lg:text-sm xl:text-base">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 flex-shrink-0" fill="none" viewBox="0-0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                        <div><span class="block leading-tight whitespace-nowrap">AI Solutions</span></div>
                     </a>
-                    <a href="#" class="nav-link text-center lg:whitespace-nowrap">
-                        <div class="hidden lg:block">AI Employees</div>
-                        <div class="lg:hidden">
-                            <span class="block">AI</span>
-                            <span class="block leading-tight">Employees</span>
-                        </div>
-                    </a>
-                    <a href="#" class="nav-link text-center lg:whitespace-nowrap">
-                        <div class="hidden lg:block">AI Companies</div>
-                        <div class="lg:hidden">
-                            <span class="block">AI</span>
-                            <span class="block leading-tight">Companies</span>
-                        </div>
-                    </a>
-                    <a href="#" class="nav-link text-center lg:whitespace-nowrap">
-                        <div class="hidden lg:block">AI Startup Studio</div>
-                        <div class="lg:hidden">
-                            <span class="block">AI</span>
-                            <span class="block leading-tight">Startup Studio</span>
-                        </div>
-                    </a>
-                    <a href="#" class="nav-link text-center">
-                        <div class="hidden lg:block">Blog</div>
-                        <div class="lg:hidden">
-                             <span class="block invisible">AI</span> <!-- Placeholder for alignment -->
-                            <span class="block leading-tight">Blog</span>
-                        </div>
-                    </a>
-                </nav>
-
-                <!-- Кнопка с иконкой и текстом, адаптирующаяся под размер экрана -->
-                <a href="#" class="hidden md:flex items-center justify-center cta-button text-white font-medium py-2 md:px-4 lg:px-6 xl:px-8 rounded-full md:text-xs lg:text-sm xl:text-base">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    <div>
-                        <span class="block leading-tight">Discover</span>
-                        <span class="block leading-tight whitespace-nowrap">AI Solutions</span>
+                    <button id="menu-btn" class="md:hidden focus:outline-none z-30"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg></button>
+                </div>
+                <div id="mobile-menu" class="mobile-menu md:hidden fixed top-0 right-0 h-full w-full bg-[#0a0a0a] transform translate-x-full z-20 p-8">
+                    <nav class="flex flex-col h-full justify-center items-center space-y-8 text-lg">
+                        <a href="#" class="nav-link text-center">AI Super Agent</a><a href="#" class="nav-link text-center">AI Employees</a><a href="#" class="nav-link text-center">AI Companies</a><a href="#" class="nav-link text-center">AI Startup Studio</a><a href="#" class="nav-link text-center">Blog</a>
+                        <a href="#" class="main-cta-button flex items-center justify-center font-bold py-3 px-6 sm:py-4 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
+                    </nav>
+                </div>
+            </header>
+            <main class="relative z-0 flex-grow">
+                 <section class="h-full flex items-center justify-center text-center px-4">
+                    <div class="container mx-auto max-w-4xl">
+                        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight xl:whitespace-nowrap"><span style="color: var(--brand-purple);">AI</span> for <span style="color: var(--brand-orange);">Human</span> Good</h1>
+                        <p class="mt-6 text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-3xl mx-auto">AI ecosystem for making AI<br>a trusted business & personal assistant</p>
+                        <a href="#" class="main-cta-button inline-flex items-center justify-center font-bold py-3 px-6 sm:py-4 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
                     </div>
-                </a>
+                </section>
+            </main>
+        </div>
 
-                <button id="menu-btn" class="md:hidden focus:outline-none z-30">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                    </svg>
-                </button>
-            </div>
-            
-            <div id="mobile-menu" class="mobile-menu md:hidden fixed top-0 right-0 h-full w-full bg-[#0a0a0a] transform translate-x-full z-20 p-8">
-                <nav class="flex flex-col h-full justify-center items-center space-y-8 text-lg">
-                    <a href="#" class="nav-link text-center">AI Super Agent</a>
-                    <a href="#" class="nav-link text-center">AI Employees</a>
-                    <a href="#" class="nav-link text-center">AI Companies</a>
-                    <a href="#" class="nav-link text-center">AI Startup Studio</a>
-                    <a href="#" class="nav-link text-center">Blog</a>
-                    <!-- THIS BUTTON IS NOW IDENTICAL TO THE MAIN HERO BUTTON -->
-                    <a href="#" class="main-cta-button flex items-center justify-center font-bold py-3 px-6 sm:py-4 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                           <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                        Discover AI Solutions
-                    </a>
-                </nav>
-            </div>
-        </header>
-
-        <main class="relative z-0 flex-grow">
-            <section class="h-full flex items-center justify-center text-center px-4">
-                <div class="container mx-auto max-w-4xl">
-                    <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight xl:whitespace-nowrap">
-                        <span style="color: var(--brand-orange);">AI</span> for <span style="color: var(--brand-purple);">Human</span> Good
-                    </h1>
-                    <p class="mt-6 text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-3xl mx-auto">
-                        AI ecosystem for making AI<br>a trusted business & personal assistant
-                    </p>
-                    <a href="#" class="main-cta-button inline-flex items-center justify-center font-bold py-3 px-6 sm:py-4 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                           <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                        Discover AI Solutions
+        <section id="about-section" class="h-screen w-full flex items-center justify-center p-4 relative z-0 overflow-hidden">
+            <div class="container mx-auto flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-12">
+                <div class="flex-shrink-0">
+                    <div class="author-photo-container w-48 h-48 lg:w-56 lg:h-56 rounded-full inline-block">
+                        <img src="https://i.ibb.co/zhJTNrC2/photo-2025-04-24-13-34-12.jpg" alt="Andre, founder of Andre AI Technologies" class="w-full h-full object-cover rounded-full">
+                    </div>
+                </div>
+                <div class="speech-bubble mt-4 md:mt-0 w-full max-w-2xl rounded-2xl p-6 lg:p-8 flex flex-col">
+                    <p id="about-text" class="text-white text-sm md:text-base lg:text-lg leading-relaxed">Hi, I’m Andre, founder of Andre AI Technologies.<br>I have 10+ years of experience in AI Transformation of global tech companies and launching AI startups.<br>I focus on AI research, build AI products for businesses and individuals, train people for emerging professions, bring AI to society, and shape a new economy where AI is the operating model.</p>
+                    <a href="#" class="cv-button inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-6 text-base self-end">
+                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2"><path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a.375.375 0 0 1-.375-.375V6.75A3.75 3.75 0 0 0 10.5 3h-1.875A.375.375 0 0 1 8.25 2.625V1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z" clip-rule="evenodd" /><path d="M12.971 1.816A5.23 5.23 0 0 1 15.75 1.5h1.875c.414 0 .75.336.75.75v4.5c0 .414-.336.75-.75.75h-1.875a5.23 5.23 0 0 1-2.779-.316Z" /></svg>
+                        CV
                     </a>
                 </div>
-            </section>
-        </main>
+            </div>
+        </section>
     </div>
 
     <script>
-        // --- Mobile Menu Toggle ---
-        const menuBtn = document.getElementById('menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('translate-x-full');
-            
-            if (mobileMenu.classList.contains('translate-x-full')) {
-                menuBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>`;
-            } else {
-                menuBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>`;
-            }
-        });
-
-        // --- Animations Setup on DOMContentLoaded ---
         document.addEventListener('DOMContentLoaded', () => {
-
-            // --- Blob Attraction Effect ---
-            const mainCtaButtons = document.querySelectorAll('.main-cta-button');
-            const appContainer = document.getElementById('app');
-
-            mainCtaButtons.forEach(button => {
-                button.addEventListener('mouseenter', (event) => {
-                    const currentButton = event.currentTarget;
-                    const buttonRect = currentButton.getBoundingClientRect();
-                    const containerRect = appContainer.getBoundingClientRect();
-
-                    const centerX = buttonRect.left - containerRect.left + buttonRect.width / 2;
-                    const centerY = buttonRect.top - containerRect.top + buttonRect.height / 2;
-
-                    appContainer.style.setProperty('--button-center-x', `${centerX}px`);
-                    appContainer.style.setProperty('--button-center-y', `${centerY}px`);
-
-                    appContainer.classList.add('blobs-attracted');
-                });
-
-                button.addEventListener('mouseleave', () => {
-                    appContainer.classList.remove('blobs-attracted');
-                });
+            // --- Mobile Menu Logic (Unchanged) ---
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('translate-x-full');
+                menuBtn.innerHTML = mobileMenu.classList.contains('translate-x-full') ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>` : `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>`;
             });
 
+            // --- ОБНОВЛЕННАЯ ЛОГИКА АНИМАЦИИ И ИСЧЕЗНОВЕНИЯ ---
+            
+            // Element References
+            const aboutSection = document.getElementById('about-section');
+            const authorPhoto = document.querySelector('.author-photo-container');
+            const blob1 = document.getElementById('blob1');
+            const blob2 = document.getElementById('blob2');
+            const mainCtaButton = document.querySelector('main .main-cta-button');
+            const cvButton = document.querySelector('.cv-button');
 
-            // --- New Text Animations ---
-            const styleSheet = document.createElement("style");
-            styleSheet.type = "text/css";
-            styleSheet.innerText = `
-                h1.animate-fade-in {
-                    animation: fade-in 1.2s ease-out 0.2s forwards;
-                }
-                @keyframes fade-in {
-                    from { opacity: 0; }
-                    to { opacity: 1; }
-                }
-                .typewriter-cursor {
-                    display: inline-block;
-                    color: var(--brand-orange);
-                    animation: blink 0.8s step-end infinite;
-                }
-                @keyframes blink {
-                    50% { opacity: 0; }
-                }
-            `;
-            document.head.appendChild(styleSheet);
+            // Animation States
+            let isOrbiting = false;
+            let angle = 0;
 
-            // Animate H1
-            const title = document.querySelector('h1');
-            if (title) {
-                title.style.opacity = 0; // Hide initially
-                title.classList.add('animate-fade-in');
+            // State for wandering
+            let wanderTargets = {
+                blob1: { x: window.innerWidth * 0.45, y: window.innerHeight * 0.4 },
+                blob2: { x: window.innerWidth * 0.55, y: window.innerHeight * 0.5 }
+            };
+            
+            // Current state (position and scale) for smooth interpolation
+            let blob1State = { x: window.innerWidth * 0.45, y: window.innerHeight * 0.4, scale: 1.0 };
+            let blob2State = { x: window.innerWidth * 0.55, y: window.innerHeight * 0.5, scale: 1.0 };
+            
+            // --- NEW: Simplified event handlers for fading ---
+            const handleButtonMouseOver = () => {
+                blob1.style.opacity = '0';
+                blob2.style.opacity = '0';
+            };
+
+            const handleButtonMouseOut = () => {
+                blob1.style.opacity = '0.7';
+                blob2.style.opacity = '0.7';
+            };
+
+            // Attach listeners to both buttons
+            mainCtaButton.addEventListener('mouseenter', handleButtonMouseOver);
+            mainCtaButton.addEventListener('mouseleave', handleButtonMouseOut);
+            cvButton.addEventListener('mouseenter', handleButtonMouseOver);
+            cvButton.addEventListener('mouseleave', handleButtonMouseOut);
+            
+            // --- Master Animation Loop (Now simpler) ---
+            function animate() {
+                let targetX1, targetY1, targetScale1;
+                let targetX2, targetY2, targetScale2;
+                const smoothingFactor = 0.04; 
+
+                const blobWidth = blob1.offsetWidth;
+                const blobHeight = blob1.offsetHeight;
+
+                // Check if orbiting the photo
+                if (isOrbiting) {
+                    const photoRect = authorPhoto.getBoundingClientRect();
+                    const centerX = photoRect.left + photoRect.width / 2;
+                    const centerY = photoRect.top + photoRect.height / 2;
+                    const radius = photoRect.width * 0.6;
+                    angle += 0.008;
+                    targetScale1 = 0.7;
+                    targetScale2 = 0.7;
+
+                    targetX1 = (centerX + radius * Math.cos(angle)) - blobWidth / 2;
+                    targetY1 = (centerY + radius * Math.sin(angle)) - blobHeight / 2;
+                    targetX2 = (centerX + radius * Math.cos(angle + Math.PI)) - blobWidth / 2;
+                    targetY2 = (centerY + radius * Math.sin(angle + Math.PI)) - blobHeight / 2;
+                
+                // Default wandering behavior
+                } else {
+                    targetX1 = wanderTargets.blob1.x;
+                    targetY1 = wanderTargets.blob1.y;
+                    targetScale1 = 1.0;
+                    targetX2 = wanderTargets.blob2.x;
+                    targetY2 = wanderTargets.blob2.y;
+                    targetScale2 = 1.0;
+                }
+
+                // Smoothly interpolate (lerp) all properties for Blob 1
+                blob1State.x += (targetX1 - blob1State.x) * smoothingFactor;
+                blob1State.y += (targetY1 - blob1State.y) * smoothingFactor;
+                blob1State.scale += (targetScale1 - blob1State.scale) * smoothingFactor;
+                
+                // Smoothly interpolate (lerp) all properties for Blob 2
+                blob2State.x += (targetX2 - blob2State.x) * smoothingFactor;
+                blob2State.y += (targetY2 - blob2State.y) * smoothingFactor;
+                blob2State.scale += (targetScale2 - blob2State.scale) * smoothingFactor;
+                  
+                // Apply the smoothed transformations
+                blob1.style.transform = `translate(${blob1State.x}px, ${blob1State.y}px) scale(${blob1State.scale})`;
+                blob2.style.transform = `translate(${blob2State.x}px, ${blob2State.y}px) scale(${blob2State.scale})`;
+                  
+                requestAnimationFrame(animate);
             }
 
-            // Animate Subtitle with Typewriter
-            const setupTypewriter = (elementSelector, startDelay = 0) => {
+            // Simple wander behavior (unchanged)
+            setInterval(() => {
+                if (!isOrbiting) {
+                    wanderTargets.blob1.x = window.innerWidth * (0.3 + Math.random() * 0.4);
+                    wanderTargets.blob1.y = window.innerHeight * (0.3 + Math.random() * 0.4);
+                    wanderTargets.blob2.x = window.innerWidth * (0.3 + Math.random() * 0.4);
+                    wanderTargets.blob2.y = window.innerHeight * (0.3 + Math.random() * 0.4);
+                }
+            }, 5000);
+
+            // Observer to switch states (unchanged)
+            const observer = new IntersectionObserver((entries) => {
+                isOrbiting = entries[0].isIntersecting;
+            }, { threshold: 0.5 });
+
+            observer.observe(aboutSection);
+            
+            // Start the animation loop
+            animate();
+
+            // Text animation (unchanged)
+            const setupTypewriter = (elementSelector) => { 
                 const element = document.querySelector(elementSelector);
                 if (!element) return;
-
-                const textNodes = [];
-                // Create a sequence of characters and <br> tags
-                Array.from(element.childNodes).forEach(node => {
-                    if (node.nodeType === Node.TEXT_NODE) {
-                        textNodes.push(...node.textContent.split(''));
-                    } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() === 'br') {
-                        textNodes.push('<br>');
-                    }
+                let textNodes = [];
+                element.childNodes.forEach(node => {
+                    if (node.nodeType === Node.TEXT_NODE) textNodes.push(...node.textContent.trim().split(''));
+                    else if (node.tagName === 'BR') textNodes.push('<br>');
                 });
-
-                element.innerHTML = ''; // Clear element
-                let charIndex = 0;
+                const originalContent = element.innerHTML;
+                element.innerHTML = '';
                 
-                setTimeout(() => {
+                let isTyping = false;
+
+                const startTyping = () => {
+                    if (isTyping) return;
+                    isTyping = true;
+                    element.innerHTML = '';
+                    let charIndex = 0;
                     const type = () => {
                         if (charIndex < textNodes.length) {
                             let currentHTML = element.innerHTML.replace(/<span class="typewriter-cursor">.<\/span>/g, '');
                             const char = textNodes[charIndex];
-                            
-                            currentHTML += (char === '<br>') ? '<br>' : char;
-                            
-                            element.innerHTML = currentHTML + '<span class="typewriter-cursor">|</span>';
+                            element.innerHTML = currentHTML + (char === '<br>' ? '<br>' : char) + '<span class="typewriter-cursor">|</span>';
                             charIndex++;
-                            setTimeout(type, 45); // Typing speed
+                            setTimeout(type, 45);
                         } else {
-                            // Typing finished, remove cursor after a blink
-                            setTimeout(() => {
-                                const cursor = element.querySelector('.typewriter-cursor');
-                                if (cursor) cursor.remove();
-                            }, 1000);
+                            element.querySelector('.typewriter-cursor')?.remove();
                         }
                     };
                     type();
-                }, startDelay);
+                };
+                 const typeObserver = new IntersectionObserver(entries => {
+                    if (entries[0].isIntersecting) {
+                        startTyping();
+                        typeObserver.unobserve(element);
+                    }
+                }, { threshold: 0.5 });
+                if (element.matches('main p') || element.matches('#about-text')) typeObserver.observe(element);
             };
-
-            setupTypewriter('main p', 1000); // Start after H1 has had time to animate
+            setupTypewriter('main p');
+            setupTypewriter('#about-text');
         });
     </script>
 </body>
