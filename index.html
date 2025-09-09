@@ -349,8 +349,11 @@
                 
                 let isTyping = false;
                 const originalHTML = element.innerHTML;
+                let timeoutId = null; // Для хранения ID таймера
 
                 const startTyping = () => {
+                    // Очищаем любой предыдущий таймер, чтобы избежать наложений
+                    clearTimeout(timeoutId); 
                     if (isTyping) return;
                     isTyping = true;
                     element.innerHTML = '';
@@ -361,15 +364,19 @@
                             const char = textNodes[charIndex];
                             element.innerHTML = currentHTML + (char === '<br>' ? '<br>' : char) + '<span class="typewriter-cursor">|</span>';
                             charIndex++;
-                            setTimeout(type, 45);
+                            // Сохраняем ID, чтобы можно было его остановить
+                            timeoutId = setTimeout(type, 45);
                         } else {
                             element.querySelector('.typewriter-cursor')?.remove();
+                            isTyping = false; // Сбрасываем флаг по завершении
                         }
                     };
                     type();
                 };
 
                 const reset = () => {
+                    // Очищаем любой активный таймер перед сбросом
+                    clearTimeout(timeoutId);
                     isTyping = false;
                     element.innerHTML = originalHTML;
                 }
@@ -473,3 +480,4 @@
     </script>
 </body>
 </html>
+
