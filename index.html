@@ -15,15 +15,53 @@
             --brand-purple-rgb: 136, 84, 243;
             --brand-orange-rgb: 247, 143, 85;
         }
-        html {
-            scroll-behavior: smooth;
-        }
+        /* Устанавливаем высоту body, чтобы обеспечить пространство для прокрутки (100vh на каждую секцию) */
         body {
             font-family: 'JetBrains Mono', monospace;
             background-color: #0a0a0a;
             color: #E5E7EB;
+            height: 300vh; /* 3 секции * 100vh */
         }
         
+        /* --- НОВЫЕ СТИЛИ ДЛЯ ЭФФЕКТА ПРОКРУТКИ --- */
+        #page-container {
+            /* Этот контейнер будет "прилипать" к верху экрана */
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden; /* Скрываем все, что выходит за пределы "экрана" */
+        }
+
+        #content-wrapper {
+            position: relative;
+            height: 100%;
+            width: 100%;
+        }
+
+        /* Все секции теперь позиционируются абсолютно, накладываясь друг на друга */
+        .content-section {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            z-index: 1;
+            transition: opacity 0.8s ease-in-out;
+            padding: 1rem;
+        }
+
+        /* Класс для отображения активной секции */
+        .content-section.is-visible {
+            opacity: 1;
+            z-index: 2; /* Активная секция должна быть выше остальных */
+        }
+        /* --- КОНЕЦ НОВЫХ СТИЛЕЙ --- */
+
         .blob {
             position: fixed;
             z-index: -1;
@@ -76,7 +114,6 @@
         .logo-link { transition: opacity 0.3s ease, transform 0.3s ease; }
         .logo-link:hover { opacity: 0.85; transform: scale(1.05); }
 
-        /* --- ОБНОВЛЕННЫЕ СТИЛИ КНОПКИ В ХЭДЕРЕ --- */
         .cta-button {
             position: relative;
             background: transparent;
@@ -110,7 +147,6 @@
         .cta-button:hover::before {
             opacity: 0;
         }
-        /* --- КОНЕЦ ОБНОВЛЕННЫХ СТИЛЕЙ --- */
 
         .cta-button > * { position: relative; z-index: 1; }
         .cta-button svg { transition: transform 0.3s ease; }
@@ -125,15 +161,46 @@
         .cv-button { background-color: white; color: #0a0a0a; transition: color 0.4s ease-in-out, transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out, background-image 0.4s ease-in-out; transform: scale(1); }
         .cv-button:hover { background-image: linear-gradient(to right, var(--brand-orange), var(--brand-purple), var(--brand-orange)); color: white; transform: scale(1.05); box-shadow: 0 10px 25px -5px rgba(var(--brand-orange-rgb), 0.4), 0 8px 10px -6px rgba(var(--brand-purple-rgb), 0.4); background-size: 200% auto; animation: gradient-flow 4s linear infinite; }
         @keyframes gradient-flow { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+        
+        /* --- СТИЛИ ДЛЯ ЗЕРНИСТОЙ ПЛЕНКИ --- */
+        body::after {
+            content: "";
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            z-index: 0;
+            pointer-events: none;
+            background-image: url('data:image/svg+xml,<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"><filter id="a"><feTurbulence baseFrequency="0.65" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23a)"/></svg>');
+            background-size: 256px 256px;
+            opacity: 0.1;
+            animation: grain-animation 4s steps(10) infinite;
+        }
+
+        @keyframes grain-animation {
+          0%, 100% { transform: translate(0, 0); }
+          10% { transform: translate(-5%, -10%); }
+          20% { transform: translate(-15%, 5%); }
+          30% { transform: translate(7%, -20%); }
+          40% { transform: translate(-5%, 20%); }
+          50% { transform: translate(-15%, 10%); }
+          60% { transform: translate(15%, 0%); }
+          70% { transform: translate(0%, 15%); }
+          80% { transform: translate(3%, 20%); }
+          90% { transform: translate(-10%, 10%); }
+        }
     </style>
 </head>
 <body class="antialiased">
-
-    <div id="page-container" class="relative">
+    <!-- Этот контейнер теперь "прилипает" к верху, создавая окно для контента -->
+    <div id="page-container">
+        <!-- Анимированные капли остаются здесь, так как они position: fixed -->
         <div id="blob1" class="blob blob-purple w-80 h-80 md:w-96 md:h-96 lg:w-[32rem] lg:h-[32rem] xl:w-[40rem] xl:h-[40rem]"></div>
         <div id="blob2" class="blob blob-orange w-80 h-80 md:w-96 md:h-96 lg:w-[32rem] lg:h-[32rem] xl:w-[40rem] xl:h-[40rem]"></div>
 
-        <header class="sticky top-0 z-20 py-1 px-4 sm:px-6 lg:px-8 bg-[#0a0a0a]/80 backdrop-blur-sm">
+        <!-- Хэдер вынесен за пределы прокручиваемого контента, чтобы он всегда был сверху -->
+        <header class="absolute top-0 w-full z-20 py-1 px-4 sm:px-6 lg:px-8 bg-[#0a0a0a]/80 backdrop-blur-sm">
             <div class="container mx-auto flex justify-between items-center">
                 <a href="#" class="logo-link flex-shrink-0"><img src="https://i.ibb.co/gn7SmgY/866f2500-dd81-4d09-8c0f-2b55c25a3464-removalai-preview.png" alt="AIT Logo" class="h-16 lg:h-20 w-auto"></a>
                 <nav class="hidden md:flex items-center md:text-xs lg:text-sm xl:text-base space-x-4 md:space-x-6 lg:space-x-10">
@@ -157,94 +224,83 @@
             </div>
         </header>
         
-        <div id="app" class="relative overflow-x-hidden h-screen flex flex-col">
-             <main class="relative z-0 flex-grow">
-                 <section class="h-full flex items-center justify-center text-center px-4">
-                     <div class="container mx-auto max-w-4xl">
-                         <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight xl:whitespace-nowrap"><span style="color: var(--brand-purple);">AI</span> for <span style="color: var(--brand-orange);">Human</span> Good</h1>
-                         <p class="mt-6 text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-3xl mx-auto">AI ecosystem for making AI<br>a trusted business & personal assistant</p>
-                         <a href="#" class="main-cta-button inline-flex items-center justify-center font-bold py-3 px-6 sm:py-4 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
-                     </div>
-                 </section>
-             </main>
+        <!-- Обертка для всех секций, которые будут меняться при скролле -->
+        <div id="content-wrapper">
+             <section id="hero-section" class="content-section">
+                 <div class="container mx-auto max-w-4xl text-center">
+                     <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight xl:whitespace-nowrap"><span style="color: var(--brand-purple);">AI</span> for <span style="color: var(--brand-orange);">Human</span> Good</h1>
+                     <p class="mt-6 text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-3xl mx-auto">AI ecosystem for making AI<br>a trusted business & personal assistant</p>
+                     <a href="#" class="main-cta-button inline-flex items-center justify-center font-bold py-3 px-6 sm:py-4 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
+                 </div>
+             </section>
+
+             <section id="about-section" class="content-section">
+                <div class="container mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16">
+                    <div class="flex-shrink-0">
+                        <div class="author-photo-container w-48 h-48 lg:w-56 lg:h-56 rounded-full inline-block">
+                            <img src="https://i.ibb.co/zhJTNrC2/photo-2025-04-24-13-34-12.jpg" alt="Andre, founder of Andre AI Technologies" class="w-full h-full object-cover rounded-full">
+                        </div>
+                    </div>
+                    <div class="speech-bubble mt-4 md:mt-0 w-full max-w-2xl rounded-2xl p-6 lg:p-8 flex flex-col">
+                        <p id="about-text" class="text-white text-sm md:text-base lg:text-lg leading-relaxed">Hi, I’m Andre, founder of Andre AI Technologies.<br>I have 10+ years of experience in AI transformation of global tech companies and launching AI startups.<br>I focus on AI research, building AI products for businesses and individuals, training people for emerging professions, driving harmony between AI and humans, and shaping a new economy where AI is the core of the modern operational model.</p>
+                        <a href="#" class="cv-button inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-6 text-base self-end">
+                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2"><path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a.375.375 0 0 1-.375-.375V6.75A3.75 3.75 0 0 0 10.5 3h-1.875A.375.375 0 0 1 8.25 2.625V1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z" clip-rule="evenodd" /><path d="M12.971 1.816A5.23 5.23 0 0 1 15.75 1.5h1.875c.414 0 .75.336.75.75v4.5c0 .414-.336.75-.75.75h-1.875a5.23 5.23 0 0 1-2.779-.316Z" /></svg>
+                            CV
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+             <section id="dataism-section" class="content-section">
+                <div class="container mx-auto max-w-7xl xl:max-w-screen-xl text-center flex flex-col items-center px-4">
+                    <div class="flex flex-col items-center justify-center">
+                        <div class="flex flex-col text-center">
+                            <h2 class="text-4xl sm:text-5xl font-bold text-white leading-tight">
+                                Dataism Science Hub
+                            </h2>
+                            <p class="text-xl md:text-2xl text-white mt-2">Open Applied AI Community</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 lg:mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
+                        <div class="bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300">
+                            <div class="flex-grow">
+                                <h3 class="text-2xl font-bold text-white whitespace-nowrap">🔬 AI Laboratory</h3>
+                                <p class="mt-3 text-gray-400">Research & Development<br>of Applied AI Solutions</p>
+                            </div>
+                            <a href="#" class="cv-button self-center inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-12 text-sm w-44">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" /></svg>
+                                <span class="text-center leading-tight">Visit<br> AI Lab</span>
+                            </a>
+                        </div>
+                        <div class="bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300">
+                           <div class="flex-grow">
+                                <h3 class="text-2xl font-bold text-white whitespace-nowrap">🎓 AI Academy</h3>
+                                <p class="mt-3 text-gray-400">Educational programs<br>for AI Professionals</p>
+                           </div>
+                            <a href="#" class="cv-button self-center inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-12 text-sm w-44">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" /></svg>
+                                <span class="text-center leading-tight">Visit<br> AI Academy</span>
+                            </a>
+                        </div>
+                        <div class="bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300">
+                            <div class="flex-grow">
+                                 <h3 class="text-2xl font-bold text-white whitespace-nowrap">🌍 Datapedia</h3>
+                                 <p class="mt-3 text-gray-400">Interactive Encyclopedia<br>of AI Simulations</p>
+                            </div>
+                            <a href="#" class="cv-button self-center inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-12 text-sm w-44">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" /></svg>
+                                <span class="text-center leading-tight">Visit<br> Datapedia</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
-
-        <section id="about-section" class="min-h-screen w-full flex items-center justify-center relative z-0 overflow-hidden py-24 px-4 sm:px-6 lg:px-8">
-            <div class="container mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16">
-                <div class="flex-shrink-0">
-                    <div class="author-photo-container w-48 h-48 lg:w-56 lg:h-56 rounded-full inline-block">
-                        <img src="https://i.ibb.co/zhJTNrC2/photo-2025-04-24-13-34-12.jpg" alt="Andre, founder of Andre AI Technologies" class="w-full h-full object-cover rounded-full">
-                    </div>
-                </div>
-                <div class="speech-bubble mt-4 md:mt-0 w-full max-w-2xl rounded-2xl p-6 lg:p-8 flex flex-col">
-                    <p id="about-text" class="text-white text-sm md:text-base lg:text-lg leading-relaxed">Hi, I’m Andre, founder of Andre AI Technologies.<br>I have 10+ years of experience in AI Transformation of global tech companies and launching AI startups.<br>I focus on AI research, build AI products for businesses and individuals, train people for emerging professions, bring AI to society, and shape a new economy where AI is the core of a modern operational model.</p>
-                    <a href="#" class="cv-button inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-6 text-base self-end">
-                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2"><path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a.375.375 0 0 1-.375-.375V6.75A3.75 3.75 0 0 0 10.5 3h-1.875A.375.375 0 0 1 8.25 2.625V1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z" clip-rule="evenodd" /><path d="M12.971 1.816A5.23 5.23 0 0 1 15.75 1.5h1.875c.414 0 .75.336.75.75v4.5c0 .414-.336.75-.75.75h-1.875a5.23 5.23 0 0 1-2.779-.316Z" /></svg>
-                        CV
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- НОВЫЙ БЛОК -->
-        <section id="dataism-section" class="min-h-screen w-full flex items-center justify-center relative z-0 overflow-hidden py-24 px-4 sm:px-6 lg:px-8">
-            <div class="container mx-auto max-w-6xl text-center flex flex-col items-center">
-                
-                <div class="flex flex-col items-center justify-center">
-                    <div class="flex flex-col text-center">
-                        <h2 class="text-4xl sm:text-5xl font-bold text-white leading-tight">
-                            Dataism Science Hub
-                        </h2>
-                        <p class="text-xl md:text-2xl text-white mt-2">Open Applied AI Community</p>
-                    </div>
-                </div>
-
-                <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
-                    <!-- Карточка 1: AI Laboratory -->
-                    <div class="bg-[#111113] border border-[#333] rounded-2xl p-8 flex flex-col text-center shadow-lg transform hover:scale-105 transition-transform duration-300">
-                        <div>
-                            <h3 class="text-2xl font-bold text-white">🔬 AI Laboratory</h3>
-                            <p class="mt-3 text-gray-400">Research & Development<br>of Applied AI Solutions</p>
-                        </div>
-                        <a href="#" class="cv-button self-center inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-auto text-sm w-44">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" /></svg>
-                            <span class="text-center leading-tight">Visit<br> AI Lab</span>
-                        </a>
-                    </div>
-                    
-                    <!-- Карточка 2: AI Academy -->
-                    <div class="bg-[#111113] border border-[#333] rounded-2xl p-8 flex flex-col text-center shadow-lg transform hover:scale-105 transition-transform duration-300">
-                       <div>
-                            <h3 class="text-2xl font-bold text-white">🎓 AI Academy</h3>
-                            <p class="mt-3 text-gray-400">Educational programs<br>for AI Professionals</p>
-                       </div>
-                        <a href="#" class="cv-button self-center inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-auto text-sm w-44">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" /></svg>
-                            <span class="text-center leading-tight">Visit<br> AI Academy</span>
-                        </a>
-                    </div>
-
-                    <!-- Карточка 3: Datapedia -->
-                    <div class="bg-[#111113] border border-[#333] rounded-2xl p-8 flex flex-col text-center shadow-lg transform hover:scale-105 transition-transform duration-300">
-                        <div>
-                             <h3 class="text-2xl font-bold text-white">🌍 Datapedia</h3>
-                             <p class="mt-3 text-gray-400">Interactive Encyclopedia<br>of AI Simulations</p>
-                        </div>
-                        <a href="#" class="cv-button self-center inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-auto text-sm w-44">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" /></svg>
-                            <span class="text-center leading-tight">Visit<br> Datapedia</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- КОНЕЦ НОВОГО БЛОКА -->
-
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Mobile Menu Logic (Unchanged) ---
             const menuBtn = document.getElementById('menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
             menuBtn.addEventListener('click', () => {
@@ -252,42 +308,117 @@
                 menuBtn.innerHTML = mobileMenu.classList.contains('translate-x-full') ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>` : `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>`;
             });
 
-            // --- Animation and Fading Logic ---
-            const aboutSection = document.getElementById('about-section');
+            // --- ОБНОВЛЕННАЯ ЛОГИКА АНИМАЦИИ И ПЕРЕКЛЮЧЕНИЯ СЕКЦИЙ ---
+            const sections = document.querySelectorAll('.content-section');
             const authorPhoto = document.querySelector('.author-photo-container');
             const blob1 = document.getElementById('blob1');
             const blob2 = document.getElementById('blob2');
             let isOrbiting = false;
             let angle = 0; 
             let wanderTime = 0; 
+            let currentSectionIndex = -1;
             
             let blob1State = { x: window.innerWidth * 0.45, y: window.innerHeight * 0.4, scale: 1.0 };
             let blob2State = { x: window.innerWidth * 0.55, y: window.innerHeight * 0.5, scale: 1.0 };
             
-            const handleButtonMouseOver = () => {
-                blob1.style.opacity = '0';
-                blob2.style.opacity = '0';
-            };
-            const handleButtonMouseOut = () => {
-                blob1.style.opacity = '0.7';
-                blob2.style.opacity = '0.7';
-            };
-            
-            // Attach listeners to ALL relevant buttons
             const allCtaButtons = document.querySelectorAll('.main-cta-button, .cv-button, .cta-button');
             allCtaButtons.forEach(button => {
-                button.addEventListener('mouseenter', handleButtonMouseOver);
-                button.addEventListener('mouseleave', handleButtonMouseOut);
+                button.addEventListener('mouseenter', () => {
+                    blob1.style.opacity = '0';
+                    blob2.style.opacity = '0';
+                });
+                button.addEventListener('mouseleave', () => {
+                    blob1.style.opacity = '0.7';
+                    blob2.style.opacity = '0.7';
+                });
             });
+
+            // typewriter instances
+            const typewriterInstances = {};
+
+            // Функция для запуска анимации печатной машинки
+            const setupTypewriter = (element) => { 
+                if (!element) return;
+                const elementId = element.id || element.parentElement.id;
+                
+                let textNodes = [];
+                element.childNodes.forEach(node => {
+                    if (node.nodeType === Node.TEXT_NODE) textNodes.push(...node.textContent.trim().split(''));
+                    else if (node.tagName === 'BR') textNodes.push('<br>');
+                });
+                
+                let isTyping = false;
+                const originalHTML = element.innerHTML;
+
+                const startTyping = () => {
+                    if (isTyping) return;
+                    isTyping = true;
+                    element.innerHTML = '';
+                    let charIndex = 0;
+                    const type = () => {
+                        if (charIndex < textNodes.length) {
+                            let currentHTML = element.innerHTML.replace(/<span class="typewriter-cursor">.<\/span>/g, '');
+                            const char = textNodes[charIndex];
+                            element.innerHTML = currentHTML + (char === '<br>' ? '<br>' : char) + '<span class="typewriter-cursor">|</span>';
+                            charIndex++;
+                            setTimeout(type, 45);
+                        } else {
+                            element.querySelector('.typewriter-cursor')?.remove();
+                        }
+                    };
+                    type();
+                };
+
+                const reset = () => {
+                    isTyping = false;
+                    element.innerHTML = originalHTML;
+                }
+
+                typewriterInstances[elementId] = { start: startTyping, reset: reset };
+            };
+
+            setupTypewriter(document.querySelector('#hero-section p'));
+            setupTypewriter(document.getElementById('about-text'));
             
-            // Master Animation Loop
+            // Логика переключения секций при скролле
+            function handleScroll() {
+                const scrollPosition = window.scrollY;
+                const screenHeight = window.innerHeight;
+                const newSectionIndex = Math.min(Math.floor(scrollPosition / screenHeight), sections.length - 1);
+                
+                if (newSectionIndex !== currentSectionIndex) {
+                    currentSectionIndex = newSectionIndex;
+                    
+                    sections.forEach((section, index) => {
+                        const typewriterId = section.querySelector('p')?.id || section.id;
+                        const instance = typewriterInstances[typewriterId];
+
+                        if (index === currentSectionIndex) {
+                            section.classList.add('is-visible');
+                             if(instance) {
+                                instance.start();
+                             }
+                        } else {
+                            section.classList.remove('is-visible');
+                            if(instance) {
+                                instance.reset();
+                            }
+                        }
+                    });
+
+                    // Заменяем IntersectionObserver для анимации капель
+                    isOrbiting = (currentSectionIndex === 1); // 1 - это индекс секции "about"
+                }
+            }
+
+            // Главный цикл анимации для капель (без изменений)
             function animate() {
                 let targetX1, targetY1, targetScale1;
                 let targetX2, targetY2, targetScale2;
                 const blobWidth = blob1.offsetWidth;
                 const blobHeight = blob1.offsetHeight;
 
-                if (isOrbiting) {
+                if (isOrbiting && authorPhoto) {
                     const smoothingFactor = 0.04;
                     const photoRect = authorPhoto.getBoundingClientRect();
                     const centerX = photoRect.left + photoRect.width / 2;
@@ -334,60 +465,12 @@
                 requestAnimationFrame(animate);
             }
 
-            // Observer to switch states
-            const observer = new IntersectionObserver((entries) => {
-                 if (entries[0].target.id === 'about-section') {
-                    isOrbiting = entries[0].isIntersecting;
-                }
-            }, { threshold: 0.5 });
-            
-            if(aboutSection) {
-                 observer.observe(aboutSection);
-            }
-            
-            animate();
-
-            // Text animation
-            const setupTypewriter = (elementSelector) => { 
-                const element = document.querySelector(elementSelector);
-                if (!element) return;
-                let textNodes = [];
-                element.childNodes.forEach(node => {
-                    if (node.nodeType === Node.TEXT_NODE) textNodes.push(...node.textContent.trim().split(''));
-                    else if (node.tagName === 'BR') textNodes.push('<br>');
-                });
-                element.innerHTML = '';
-                
-                let isTyping = false;
-                const startTyping = () => {
-                    if (isTyping) return;
-                    isTyping = true;
-                    element.innerHTML = '';
-                    let charIndex = 0;
-                    const type = () => {
-                        if (charIndex < textNodes.length) {
-                            let currentHTML = element.innerHTML.replace(/<span class="typewriter-cursor">.<\/span>/g, '');
-                            const char = textNodes[charIndex];
-                            element.innerHTML = currentHTML + (char === '<br>' ? '<br>' : char) + '<span class="typewriter-cursor">|</span>';
-                            charIndex++;
-                            setTimeout(type, 45);
-                        } else {
-                            element.querySelector('.typewriter-cursor')?.remove();
-                        }
-                    };
-                    type();
-                };
-                 const typeObserver = new IntersectionObserver(entries => {
-                     if (entries[0].isIntersecting) {
-                         startTyping();
-                         typeObserver.unobserve(element);
-                     }
-                 }, { threshold: 0.8 });
-                 if (element) typeObserver.observe(element);
-            };
-            setupTypewriter('main p');
-            setupTypewriter('#about-text');
+            // Инициализация
+            window.addEventListener('scroll', handleScroll);
+            handleScroll(); // Вызываем один раз при загрузке, чтобы показать первую секцию
+            animate(); // Запускаем анимацию капель
         });
     </script>
 </body>
 </html>
+
