@@ -133,10 +133,10 @@
         <div id="blob1" class="blob blob-purple w-80 h-80 md:w-96 md:h-96 lg:w-[32rem] lg:h-[32rem] xl:w-[40rem] xl:h-[40rem]"></div>
         <div id="blob2" class="blob blob-orange w-80 h-80 md:w-96 md:h-96 lg:w-[32rem] lg:h-[32rem] xl:w-[40rem] xl:h-[40rem]"></div>
 
-        <header class="sticky top-0 z-20 py-1 px-4 md:px-10 lg:py-2 lg:px-16 bg-[#0a0a0a]/80 backdrop-blur-sm">
+        <header class="sticky top-0 z-20 py-1 px-4 sm:px-6 lg:px-8 bg-[#0a0a0a]/80 backdrop-blur-sm">
             <div class="container mx-auto flex justify-between items-center">
                 <a href="#" class="logo-link flex-shrink-0"><img src="https://i.ibb.co/gn7SmgY/866f2500-dd81-4d09-8c0f-2b55c25a3464-removalai-preview.png" alt="AIT Logo" class="h-16 lg:h-20 w-auto"></a>
-                <nav class="hidden md:flex items-center md:text-xs lg:text-sm xl:text-base space-x-4 md:space-x-4 lg:space-x-8 xl:space-x-12">
+                <nav class="hidden md:flex items-center md:text-xs lg:text-sm xl:text-base space-x-4 md:space-x-6 lg:space-x-10">
                     <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Super Agent</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Super Agent</span></div></a>
                     <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Employees</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Employees</span></div></a>
                     <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Companies</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Companies</span></div></a>
@@ -169,8 +169,8 @@
              </main>
         </div>
 
-        <section id="about-section" class="h-screen w-full flex items-center justify-center p-4 relative z-0 overflow-hidden">
-            <div class="container mx-auto flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-12">
+        <section id="about-section" class="min-h-screen w-full flex items-center justify-center relative z-0 overflow-hidden py-24 px-4 sm:px-6 lg:px-8">
+            <div class="container mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16">
                 <div class="flex-shrink-0">
                     <div class="author-photo-container w-48 h-48 lg:w-56 lg:h-56 rounded-full inline-block">
                         <img src="https://i.ibb.co/zhJTNrC2/photo-2025-04-24-13-34-12.jpg" alt="Andre, founder of Andre AI Technologies" class="w-full h-full object-cover rounded-full">
@@ -187,7 +187,7 @@
         </section>
 
         <!-- НОВЫЙ БЛОК -->
-        <section id="dataism-section" class="min-h-screen w-full flex items-center justify-center p-8 relative z-0 overflow-hidden">
+        <section id="dataism-section" class="min-h-screen w-full flex items-center justify-center relative z-0 overflow-hidden py-24 px-4 sm:px-6 lg:px-8">
             <div class="container mx-auto max-w-6xl text-center flex flex-col items-center">
                 
                 <div class="flex flex-col items-center justify-center">
@@ -201,32 +201,38 @@
 
                 <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
                     <!-- Карточка 1: AI Laboratory -->
-                    <div class="bg-[#111113] border border-[#333] rounded-2xl p-6 flex flex-col items-center justify-center shadow-lg transform hover:scale-105 transition-transform duration-300 aspect-square md:aspect-auto">
-                        <h3 class="text-2xl font-bold text-white">🔬 AI Laboratory</h3>
-                        <p class="mt-3 text-gray-400 flex-grow">Research & Development<br>of Applied AI Solutions</p>
-                        <a href="#" class="cv-button inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-6 text-sm w-44">
+                    <div class="bg-[#111113] border border-[#333] rounded-2xl p-8 flex flex-col text-center shadow-lg transform hover:scale-105 transition-transform duration-300">
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">🔬 AI Laboratory</h3>
+                            <p class="mt-3 text-gray-400">Research & Development<br>of Applied AI Solutions</p>
+                        </div>
+                        <a href="#" class="cv-button self-center inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-auto text-sm w-44">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" /></svg>
-                            <span class="text-center leading-tight">Visit<br class="lg:hidden"> AI Lab</span>
+                            <span class="text-center leading-tight">Visit<br> AI Lab</span>
                         </a>
                     </div>
                     
                     <!-- Карточка 2: AI Academy -->
-                    <div class="bg-[#111113] border border-[#333] rounded-2xl p-6 flex flex-col items-center justify-center shadow-lg transform hover:scale-105 transition-transform duration-300 aspect-square md:aspect-auto">
-                        <h3 class="text-2xl font-bold text-white">🎓 AI Academy</h3>
-                        <p class="mt-3 text-gray-400 flex-grow">Educational programs<br>for AI Professionals</p>
-                        <a href="#" class="cv-button inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-6 text-sm w-44">
+                    <div class="bg-[#111113] border border-[#333] rounded-2xl p-8 flex flex-col text-center shadow-lg transform hover:scale-105 transition-transform duration-300">
+                       <div>
+                            <h3 class="text-2xl font-bold text-white">🎓 AI Academy</h3>
+                            <p class="mt-3 text-gray-400">Educational programs<br>for AI Professionals</p>
+                       </div>
+                        <a href="#" class="cv-button self-center inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-auto text-sm w-44">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" /></svg>
-                            <span class="text-center leading-tight">Visit<br class="lg:hidden"> AI Academy</span>
+                            <span class="text-center leading-tight">Visit<br> AI Academy</span>
                         </a>
                     </div>
 
                     <!-- Карточка 3: Datapedia -->
-                    <div class="bg-[#111113] border border-[#333] rounded-2xl p-6 flex flex-col items-center justify-center shadow-lg transform hover:scale-105 transition-transform duration-300 aspect-square md:aspect-auto">
-                        <h3 class="text-2xl font-bold text-white">🌍 Datapedia</h3>
-                        <p class="mt-3 text-gray-400 flex-grow">Interactive Encyclopedia<br>of AI Simulations</p>
-                        <a href="#" class="cv-button inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-6 text-sm w-44">
+                    <div class="bg-[#111113] border border-[#333] rounded-2xl p-8 flex flex-col text-center shadow-lg transform hover:scale-105 transition-transform duration-300">
+                        <div>
+                             <h3 class="text-2xl font-bold text-white">🌍 Datapedia</h3>
+                             <p class="mt-3 text-gray-400">Interactive Encyclopedia<br>of AI Simulations</p>
+                        </div>
+                        <a href="#" class="cv-button self-center inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-auto text-sm w-44">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" /></svg>
-                            <span class="text-center leading-tight">Visit<br class="lg:hidden"> Datapedia</span>
+                            <span class="text-center leading-tight">Visit<br> Datapedia</span>
                         </a>
                     </div>
                 </div>
@@ -385,4 +391,3 @@
     </script>
 </body>
 </html>
-
