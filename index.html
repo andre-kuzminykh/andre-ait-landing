@@ -379,36 +379,48 @@
 
             const typewriterInstances = {};
 
+            // --- TYPEWRITER EFFECT START ---
+            // This function is self-contained and handles the typewriter effect cleanly.
             const setupTypewriter = (element) => { 
                 if (!element) return;
-                const elementId = element.id || element.parentElement.id;
+                const elementId = element.id;
+                if (!elementId) {
+                    console.warn("Typewriter target needs an ID", element);
+                    return;
+                }
                 
-                let textNodes = [];
-                element.childNodes.forEach(node => {
-                    if (node.nodeType === Node.TEXT_NODE) textNodes.push(...node.textContent.trim().split(''));
-                    else if (node.tagName === 'BR') textNodes.push('<br>');
-                });
-                
-                let isTyping = false;
                 const originalHTML = element.innerHTML;
+                const contentQueue = [];
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = originalHTML;
+                // Parse nodes into a simple array of characters and '<br>' strings
+                Array.from(tempDiv.childNodes).forEach(node => {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        contentQueue.push(...node.textContent.split(''));
+                    } else if (node.tagName === 'BR') {
+                        contentQueue.push('<br>');
+                    }
+                });
+
+                let isTyping = false;
                 let timeoutId = null;
 
                 const startTyping = () => {
                     clearTimeout(timeoutId); 
                     if (isTyping) return;
                     isTyping = true;
-                    element.innerHTML = '';
+                    element.innerHTML = ''; // Clear content
+                    element.style.visibility = 'visible'; // Make visible right before typing starts
                     let charIndex = 0;
+                    
                     const type = () => {
-                        if (charIndex < textNodes.length) {
-                            let currentHTML = element.innerHTML.replace(/<span class="typewriter-cursor">.<\/span>/g, '');
-                            const char = textNodes[charIndex];
-                            element.innerHTML = currentHTML + (char === '<br>' ? '<br>' : char) + '<span class="typewriter-cursor">|</span>';
+                        if (charIndex < contentQueue.length) {
+                            const char = contentQueue[charIndex];
+                            element.innerHTML += char; // Append char or <br> tag
                             charIndex++;
-                            timeoutId = setTimeout(type, 45);
+                            timeoutId = setTimeout(type, 45); // Typing speed
                         } else {
-                            element.querySelector('.typewriter-cursor')?.remove();
-                            isTyping = false;
+                            isTyping = false; // Done
                         }
                     };
                     type();
@@ -418,13 +430,18 @@
                     clearTimeout(timeoutId);
                     isTyping = false;
                     element.innerHTML = originalHTML;
+                    element.style.visibility = 'hidden'; // Hide it to prevent flash of content
                 }
 
                 typewriterInstances[elementId] = { start: startTyping, reset: reset };
+                reset(); // Set initial state to hidden
             };
 
-            setupTypewriter(document.querySelector('#hero-section p'));
+            // Assign IDs and initialize the typewriter effect for target elements
+            document.querySelector('#hero-section p').id = 'hero-subtitle';
+            setupTypewriter(document.getElementById('hero-subtitle'));
             setupTypewriter(document.getElementById('about-text'));
+            // --- TYPEWRITER EFFECT END ---
             
             function handleScroll() {
                 const scrollPosition = window.scrollY;
@@ -435,8 +452,11 @@
                     currentSectionIndex = newSectionIndex;
                     
                     sections.forEach((section, index) => {
-                        const typewriterId = section.querySelector('p')?.id || section.id;
-                        const instance = typewriterInstances[typewriterId];
+                        // The querySelector here is a bit broad, but we rely on the specific IDs
+                        // given to the typewriter elements to trigger the correct instance.
+                        const pElement = section.querySelector('p');
+                        const typewriterId = pElement ? pElement.id : null;
+                        const instance = typewriterId ? typewriterInstances[typewriterId] : null;
 
                         if (index === currentSectionIndex) {
                             section.classList.add('is-visible');
@@ -523,4 +543,3 @@
     </script>
 </body>
 </html>
-
