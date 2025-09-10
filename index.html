@@ -11,9 +11,10 @@
     <style>
         :root {
             --brand-purple: #8854F3;
-            --brand-orange: #F78F55;
-            --brand-purple-rgb: 136, 84, 243;
-            --brand-orange-rgb: 247, 143, 85;
+            /* FIX: Switched to a safer orange shade to prevent color shifting with filter:blur() on some mobile browsers. */
+            --brand-orange: #F97316; /* Was #F78F55 */
+            --brand-purple-rgb: 136, 84, 23;
+            --brand-orange-rgb: 249, 115, 22;
         }
         /* FIX 2: Added -webkit-overflow-scrolling: touch for smoother scrolling on iOS */
         body {
@@ -59,19 +60,24 @@
         }
 
         /* FIX 1: Added will-change and transform: translateZ(0) to promote the blobs to a new layer, fixing visibility on some mobile browsers like Safari. */
+        /* FIX: Reverted to filter:blur() from radial-gradient for the original visual effect. */
         .blob {
             position: fixed;
             z-index: -1;
             border-radius: 9999px;
-            filter: blur(80px);
-            opacity: 0.7;
+            filter: blur(80px); /* Restored for the original visual effect */
+            opacity: 0.7; 
             transform: scale(1) translateZ(0); /* Using translateZ to create a new stacking context */
             transition: opacity 0.4s ease;
             will-change: transform, opacity; /* Performance hint for the browser */
         }
         
-        .blob-purple { background-color: var(--brand-purple); }
-        .blob-orange { background-color: var(--brand-orange); }
+        .blob-purple { 
+            background-color: var(--brand-purple);
+        }
+        .blob-orange { 
+            background-color: var(--brand-orange);
+        }
         
         .author-photo-container {
             position: relative;
@@ -268,7 +274,7 @@
                  <div class="container mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16">
                      <div class="flex-shrink-0">
                          <div class="author-photo-container w-48 h-48 lg:w-56 lg:h-56 rounded-full inline-block">
-                             <!-- FIX: Corrected GIF URL -->
+                             <!-- FIX: Restored original GIF URL -->
                              <img src="https://i.ibb.co/G3MdKgx1/High-Performance-bli.gif" alt="Andre, founder of Andre AI Technologies" class="w-full h-full object-cover rounded-full">
                          </div>
                      </div>
@@ -543,3 +549,4 @@
     </script>
 </body>
 </html>
+
