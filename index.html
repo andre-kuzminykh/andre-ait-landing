@@ -31,7 +31,7 @@
             width: 100%;
             overflow: hidden;
             perspective: 1000px;
-            /* FIX 3: Устанавливаем z-index, чтобы контейнер был выше fixed-элементов (блобов) */
+            /* Устанавливаем z-index, чтобы контейнер был выше fixed-элементов (блобов) */
             z-index: 1;
         }
 
@@ -39,7 +39,6 @@
             position: relative;
             height: 100%;
             width: 100%;
-            /* z-index теперь не нужен, так как родитель #page-container управляет слоем */
         }
 
         .content-section {
@@ -62,13 +61,13 @@
             z-index: 2;
         }
 
-        /* FIX 3: ИСПРАВЛЕНИЕ МИГАНИЯ В TELEGRAM WEBVIEW */
+        /* РЕШЕНИЕ 3: СТРУКТУРА ДЛЯ СТАБИЛЬНОГО РЕНДЕРИНГА */
+        /* Эта конфигурация является наиболее стабильной для фона. */
+        /* position: fixed отвязывает блобы от sticky-контейнера, предотвращая их "исчезновение" при скролле в проблемных WebView (например, в Telegram). */
+        /* z-index: 0 помещает их на самый задний план. */
         .blob {
-            /* Изменено на 'fixed' для отвязки от 'sticky' родителя, что решает проблему с рендерингом при скролле */
             position: fixed; 
-            /* Принудительное создание слоя для аппаратного ускорения */
-            transform: translate3d(0, 0, 0);  
-            /* z-index 0, чтобы блобы были на самом заднем плане */
+            transform: translate3d(0, 0, 0); 
             z-index: 0; 
             border-radius: 9999px;
             filter: blur(80px);
@@ -77,7 +76,6 @@
             will-change: transform, opacity;
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
-            /* NEW FIX: Создаем новый контекст наложения, чтобы изолировать рендеринг блоба */
             isolation: isolate;
         }
         
@@ -237,7 +235,6 @@
     </style>
 </head>
 <body class="antialiased">
-    <!-- FIX 3: Перемещаем блобы в body и делаем 'position: fixed' для стабильного рендеринга -->
     <div id="blob1" class="blob blob-purple w-80 h-80 md:w-96 md:h-96 lg:w-[32rem] lg:h-[32rem] xl:w-[40rem] xl:h-[40rem]"></div>
     <div id="blob2" class="blob blob-orange w-80 h-80 md:w-96 md:h-96 lg:w-[32rem] lg:h-[32rem] xl:w-[40rem] xl:h-[40rem]"></div>
 
@@ -273,7 +270,6 @@
              <section id="hero-section" class="content-section is-visible">
                  <div class="container mx-auto max-w-4xl text-center">
                      <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight xl:whitespace-nowrap"><span style="color: var(--brand-purple);">AI</span> FOR <span style="color: var(--brand-orange);">HUMAN</span> GOOD</h1>
-                     <!-- FIX 2: Адаптивная минимальная высота для предотвращения "прыжка" текста на мобильных -->
                      <p id="hero-text" class="mt-6 text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-3xl mx-auto min-h-[4rem] md:min-h-[4.5rem]" style="font-weight: 700;">AI ecosystem for making AI<br>a trusted business & personal assistant</p>
                      <a href="#" class="main-cta-button inline-flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
                  </div>
@@ -283,7 +279,7 @@
                  <div class="container mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16">
                      <div class="flex-shrink-0">
                          <div class="author-photo-container w-48 h-48 lg:w-56 lg:h-56 rounded-full inline-block">
-                             <img src="https://i.ibb.co/G3MdKgx1/High-Performance-bli.gif" alt="Andre, founder of Andre AI Technologies" class="w-full h-full object-cover rounded-full">
+                             <img src="https://i.ibb.co/G3MdKgx/High-Performance-bli.gif" alt="Andre, founder of Andre AI Technologies" class="w-full h-full object-cover rounded-full">
                          </div>
                      </div>
                      <div class="speech-bubble mt-4 md:mt-0 w-full max-w-2xl rounded-2xl p-6 lg:p-8 flex flex-col">
@@ -296,10 +292,8 @@
                  </div>
              </section>
 
-            <!-- FIX 1: Добавлен overflow-y-auto для скролла контента на мобильных устройствах -->
-             <section id="dataism-section" class="content-section overflow-y-auto">
-                 <!-- FIX 1: Адаптивные отступы и выравнивание для корректного отображения на мобильных -->
-                 <div class="container mx-auto max-w-7xl xl:max-w-screen-xl text-center flex flex-col items-center justify-start sm:justify-center px-4 pt-20 sm:pt-32 pb-16">
+             <section id="dataism-section" class="content-section">
+                 <div class="container mx-auto max-w-7xl xl:max-w-screen-xl text-center flex flex-col items-center justify-start sm:justify-center px-4 pt-24 sm:pt-28 md:pt-32 pb-16">
                      <div class="flex flex-col items-center justify-center">
                          <div class="flex flex-col text-center">
                              <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight whitespace-nowrap">
@@ -427,12 +421,17 @@
                         if (charIndex < textNodes.length) {
                             let currentHTML = element.innerHTML.replace(/<span class="typewriter-cursor">.<\/span>/g, '');
                             const char = textNodes[charIndex];
-                            element.innerHTML = currentHTML + (char === '<br>' ? '<br>' : char) + '<span class="typewriter-cursor">|</span>';
+                            element.innerHTML = currentHTML + (char === '<br>' ? '<br>' : char) + '<span class="typewriter-cursor" style="user-select: none;">|</span>';
                             charIndex++;
                             timeoutId = setTimeout(type, 45);
                         } else {
-                            // FIX 2: Восстанавливаем исходный HTML, чтобы убрать курсор и любые артефакты
-                            element.innerHTML = originalHTML;
+                            // РЕШЕНИЕ 2: Убираем артефакт (layout shift) после завершения анимации.
+                            // Вместо полного сброса innerHTML, мы просто находим и удаляем курсор.
+                            // Это менее "разрушительная" операция для DOM, которая не вызывает перерасчет макета.
+                            const cursor = element.querySelector('.typewriter-cursor');
+                            if (cursor) {
+                                cursor.remove();
+                            }
                             isTyping = false;
                         }
                     };
@@ -454,7 +453,7 @@
             function handleScroll() {
                 const scrollPosition = window.scrollY;
                 const screenHeight = window.innerHeight;
-                // FIX 1: Убедимся, что индекс не выходит за пределы 2 (для 3 секций)
+                // Убедимся, что индекс не выходит за пределы 2 (для 3 секций)
                 const newSectionIndex = Math.min(Math.floor(scrollPosition / screenHeight), sections.length - 1);
                 
                 if (newSectionIndex !== currentSectionIndex) {
