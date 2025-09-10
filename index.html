@@ -60,7 +60,8 @@
 
         .blob {
             position: fixed;
-            transform: translateZ(0); 
+            /* FIX 2 & 3: Use translate3d for better hardware acceleration */
+            transform: translate3d(0, 0, 0); 
             z-index: -1;
             border-radius: 9999px;
             filter: blur(80px);
@@ -271,13 +272,14 @@
                  <div class="container mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16">
                      <div class="flex-shrink-0">
                          <div class="author-photo-container w-48 h-48 lg:w-56 lg:h-56 rounded-full inline-block">
-                             <!-- FIX 2: Corrected image URL -->
                              <img src="https://i.ibb.co/G3MdKgx1/High-Performance-bli.gif" alt="Andre, founder of Andre AI Technologies" class="w-full h-full object-cover rounded-full">
                          </div>
                      </div>
                      <div class="speech-bubble mt-4 md:mt-0 w-full max-w-2xl rounded-2xl p-6 lg:p-8 flex flex-col">
                          <p id="about-text" class="text-white text-sm md:text-base lg:text-lg leading-relaxed">Hi, I’m Andre, founder of Andre AI Technologies.<br>I have 10+ years of experience in AI transformation of global tech companies and launching AI startups.<br>I focus on AI research, building AI products for businesses and individuals, training people for emerging professions, driving harmony between AI and humans, and shaping a new economy where AI is the core of the modern operational model.</p>
+                         <!-- FIX 1: Restored the document icon SVG to the CV button -->
                          <a href="#" class="cv-button inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-6 text-base self-end">
+                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2"><path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a.375.375 0 0 1-.375-.375V6.75A3.75 3.75 0 0 0 10.5 3h-1.875A.375.375 0 0 1 8.25 2.625V1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z" clip-rule="evenodd" /><path d="M12.971 1.816A5.23 5.23 0 0 1 15.75 1.5h1.875c.414 0 .75.336.75.75v4.5c0 .414-.336.75-.75.75h-1.875a5.23 5.23 0 0 1-2.779-.316Z" /></svg>
                              CV
                          </a>
                      </div>
@@ -391,7 +393,6 @@
 
             const setupTypewriter = (element) => { 
                 if (!element) return;
-                // FIX 1: Use the element's own ID if it exists, otherwise fallback to parent ID
                 const elementId = element.id || element.parentElement.id;
                 
                 let textNodes = [];
@@ -434,7 +435,6 @@
                 typewriterInstances[elementId] = { start: startTyping, reset: reset };
             };
 
-            // Setup for both paragraphs
             setupTypewriter(document.getElementById('hero-text'));
             setupTypewriter(document.getElementById('about-text'));
             
@@ -447,7 +447,6 @@
                     currentSectionIndex = newSectionIndex;
                     
                     sections.forEach((section, index) => {
-                        // Find the paragraph with an ID inside the section
                         const pWithId = section.querySelector('p[id]');
                         const typewriterId = pWithId ? pWithId.id : null;
                         const instance = typewriterId ? typewriterInstances[typewriterId] : null;
@@ -469,7 +468,6 @@
                 }
             }
             
-            // FIX: Removed the explicit start call and reverted to a robust initialization.
             function animate() {
                 let targetX1, targetY1, targetScale1;
                 let targetX2, targetY2, targetScale2;
@@ -524,16 +522,16 @@
                 blob2State.y += (targetY2 - blob2State.y) * smoothingFactor;
                 blob2State.scale += (targetScale2 - blob2State.scale) * smoothingFactor;
                 
-                blob1.style.transform = `translate(${blob1State.x}px, ${blob1State.y}px) scale(${blob1State.scale}) translateZ(0)`;
-                blob2.style.transform = `translate(${blob2State.x}px, ${blob2State.y}px) scale(${blob2State.scale}) translateZ(0)`;
+                // FIX 2 & 3: Use translate3d for smoother animation
+                blob1.style.transform = `translate3d(${blob1State.x}px, ${blob1State.y}px, 0) scale(${blob1State.scale})`;
+                blob2.style.transform = `translate3d(${blob2State.x}px, ${blob2State.y}px, 0) scale(${blob2State.scale})`;
                 requestAnimationFrame(animate);
             }
 
             window.addEventListener('scroll', handleScroll);
-            handleScroll(); // FIX: Calling this once on load correctly sets the initial state.
+            handleScroll();
             animate();
         });
     </script>
 </body>
 </html>
-
