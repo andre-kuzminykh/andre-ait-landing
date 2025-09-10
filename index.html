@@ -19,7 +19,8 @@
             font-family: 'JetBrains Mono', monospace;
             background-color: #0a0a0a;
             color: #E5E7EB;
-            height: 300vh;
+            /* ИСПОЛЬЗУЕМ JS-ПЕРЕМЕННУЮ ДЛЯ КОРРЕКТНОЙ ВЫСОТЫ НА МОБИЛЬНЫХ */
+            height: calc(var(--vh, 1vh) * 300);
             -webkit-overflow-scrolling: touch;
             overflow-x: hidden;
             touch-action: pan-y;
@@ -27,11 +28,12 @@
         #page-container {
             position: sticky;
             top: 0;
-            height: 100vh;
+            /* ИСПОЛЬЗУЕМ JS-ПЕРЕМЕННУЮ ДЛЯ КОРРЕКТНОЙ ВЫСОТЫ НА МОБИЛЬНЫХ */
+            height: calc(var(--vh, 1vh) * 100);
             width: 100%;
             perspective: 1000px;
             z-index: 1;
-            /* overflow: hidden; БЫЛ УДАЛЕН, ТАК КАК БЛОКИРОВАЛ СКРОЛЛ */
+            /* overflow: hidden; УДАЛЕНО, ЧТОБЫ РАБОТАЛ СКРОЛЛ */
         }
         #content-wrapper {
             position: relative;
@@ -309,6 +311,14 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const setRealViewportHeight = () => {
+                const vh = window.innerHeight * 0.01;
+                document.documentElement.style.setProperty('--vh', `${vh}px`);
+            };
+            window.addEventListener('resize', setRealViewportHeight);
+            window.addEventListener('orientationchange', setRealViewportHeight);
+            setRealViewportHeight();
+
             const menuBtn = document.getElementById('menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
             menuBtn.addEventListener('click', () => {
@@ -474,3 +484,4 @@
     </script>
 </body>
 </html>
+
