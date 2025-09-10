@@ -43,10 +43,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            /* ИСПРАВЛЕНИЕ (v5): Использование CSS Grid для надежного центрирования на всех устройствах. */
+            display: grid;
+            place-items: center;
             opacity: 0;
             z-index: 1;
             transition: opacity 0.8s ease-in-out;
@@ -242,10 +241,10 @@
         </header>
         <div id="content-wrapper">
              <section id="hero-section" class="content-section is-visible">
-                 <div class="container mx-auto max-w-4xl text-center mt-20">
+                 <div class="container mx-auto max-w-4xl text-center">
                      <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight xl:whitespace-nowrap"><span style="color: var(--brand-purple);">AI</span> FOR <span style="color: var(--brand-orange);">HUMAN</span> GOOD</h1>
                      <p id="hero-text" class="mt-6 text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-3xl mx-auto min-h-[8rem]" style="font-weight: 700;">AI ecosystem for making AI<br>a trusted business & personal assistant</p>
-                     <a href="#" class="main-cta-button inline-flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-10 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
+                     <a href="#" class="main-cta-button inline-flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-6 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
                  </div>
              </section>
              <section id="about-section" class="content-section">
@@ -342,7 +341,6 @@
                 });
                 button.addEventListener('mouseleave', () => {
                     blob1.style.opacity = '0.7';
-                    blob2.style.opacity = '0.7';
                 });
             });
             const dataismCards = document.querySelectorAll('.dataism-card');
@@ -482,3 +480,4 @@
     </script>
 </body>
 </html>
+
