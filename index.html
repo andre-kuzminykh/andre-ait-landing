@@ -22,7 +22,6 @@
             height: calc(var(--vh, 1vh) * 300);
             -webkit-overflow-scrolling: touch;
             touch-action: pan-y;
-            /* ИСПРАВЛЕНИЕ (v3): Запрещаем горизонтальную прокрутку, что решает проблему с меню и стабилизирует layout. */
             overflow-x: hidden;
         }
         #page-container {
@@ -45,8 +44,9 @@
             width: 100%;
             height: 100%;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
             opacity: 0;
             z-index: 1;
             transition: opacity 0.8s ease-in-out;
@@ -216,11 +216,10 @@
             <div class="container mx-auto flex justify-between items-center">
                 <a href="#" class="logo-link flex-shrink-0"><img src="https://i.ibb.co/gn7SmgY/866f2500-dd81-4d09-8c0f-2b55c25a3464-removalai-preview.png" alt="AIT Logo" class="h-16 lg:h-20 w-auto"></a>
                 <nav class="hidden md:flex items-center md:text-xs lg:text-sm xl:text-base space-x-4 md:space-x-6 lg:space-x-10">
-                    <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Super Agent</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Super Agent</span></div></a>
+                    <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">Science Hub</div><div class="lg:hidden"><span class="block">Science</span><span class="block leading-tight">Hub</span></div></a>
+                    <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Super Agent</div><div class="lg:hidden"><span class="block">AI Super</span><span class="block leading-tight">Agent</span></div></a>
                     <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Employees</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Employees</span></div></a>
-                    <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Companies</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Companies</span></div></a>
-                    <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Startup Studio</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Startup Studio</span></div></a>
-                    <a href="#" class="nav-link text-center"><div class="hidden lg:block">Blog</div><div class="lg:hidden"><span class="block invisible">AI</span><span class="block leading-tight">Blog</span></div></a>
+                    <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Services</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Services</span></div></a>
                 </nav>
                 <a href="#" class="hidden md:flex items-center justify-center cta-button text-white font-medium py-3 md:px-3 lg:px-5 xl:px-7 rounded-full md:text-xs lg:text-sm xl:text-base">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 flex-shrink-0" fill="none" viewBox="0-0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
@@ -233,17 +232,20 @@
                     <img src="https://i.ibb.co/gn7SmgY/866f2500-dd81-4d09-8c0f-2b55c25a3464-removalai-preview.png" alt="AIT Logo" class="h-16 w-auto">
                 </a>
                 <nav class="flex flex-col h-full justify-center items-center space-y-8 text-lg">
-                    <a href="#" class="nav-link text-center">AI Super Agent</a><a href="#" class="nav-link text-center">AI Employees</a><a href="#" class="nav-link text-center">AI Companies</a><a href="#" class="nav-link text-center">AI Startup Studio</a><a href="#" class="nav-link text-center">Blog</a>
+                    <a href="#" class="nav-link text-center">Science Hub</a>
+                    <a href="#" class="nav-link text-center">AI Super Agent</a>
+                    <a href="#" class="nav-link text-center">AI Employees</a>
+                    <a href="#" class="nav-link text-center">AI Services</a>
                     <a href="#" class="main-cta-button flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
                 </nav>
             </div>
         </header>
         <div id="content-wrapper">
              <section id="hero-section" class="content-section is-visible">
-                 <div class="container mx-auto max-w-4xl text-center">
+                 <div class="container mx-auto max-w-4xl text-center mt-20">
                      <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight xl:whitespace-nowrap"><span style="color: var(--brand-purple);">AI</span> FOR <span style="color: var(--brand-orange);">HUMAN</span> GOOD</h1>
                      <p id="hero-text" class="mt-6 text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-3xl mx-auto min-h-[8rem]" style="font-weight: 700;">AI ecosystem for making AI<br>a trusted business & personal assistant</p>
-                     <a href="#" class="main-cta-button inline-flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
+                     <a href="#" class="main-cta-button inline-flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-10 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
                  </div>
              </section>
              <section id="about-section" class="content-section">
@@ -440,7 +442,7 @@
                     const photoRect = authorPhoto.getBoundingClientRect();
                     const centerX = photoRect.left + photoRect.width / 2;
                     const centerY = photoRect.top + photoRect.height / 2;
-                    const radius = photoRect.width * 0.6;
+                    const radius = photoRect.width * 0.45;
                     angle += 0.003;
                     targetScale1 = 0.7;
                     targetScale2 = 0.7;
