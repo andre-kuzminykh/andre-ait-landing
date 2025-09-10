@@ -77,6 +77,8 @@
             will-change: transform, opacity;
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
+            /* NEW FIX: Создаем новый контекст наложения, чтобы изолировать рендеринг блоба */
+            isolation: isolate;
         }
         
         .blob-purple { background-color: var(--brand-purple); }
@@ -271,8 +273,8 @@
              <section id="hero-section" class="content-section is-visible">
                  <div class="container mx-auto max-w-4xl text-center">
                      <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight xl:whitespace-nowrap"><span style="color: var(--brand-purple);">AI</span> FOR <span style="color: var(--brand-orange);">HUMAN</span> GOOD</h1>
-                     <!-- FIX 2: Добавлена минимальная высота для предотвращения "прыжка" текста при анимации -->
-                     <p id="hero-text" class="mt-6 text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-3xl mx-auto min-h-[4.5rem]" style="font-weight: 700;">AI ecosystem for making AI<br>a trusted business & personal assistant</p>
+                     <!-- FIX 2: Адаптивная минимальная высота для предотвращения "прыжка" текста на мобильных -->
+                     <p id="hero-text" class="mt-6 text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-3xl mx-auto min-h-[4rem] md:min-h-[4.5rem]" style="font-weight: 700;">AI ecosystem for making AI<br>a trusted business & personal assistant</p>
                      <a href="#" class="main-cta-button inline-flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
                  </div>
              </section>
@@ -297,7 +299,7 @@
             <!-- FIX 1: Добавлен overflow-y-auto для скролла контента на мобильных устройствах -->
              <section id="dataism-section" class="content-section overflow-y-auto">
                  <!-- FIX 1: Адаптивные отступы и выравнивание для корректного отображения на мобильных -->
-                 <div class="container mx-auto max-w-7xl xl:max-w-screen-xl text-center flex flex-col items-center justify-start sm:justify-center px-4 pt-24 sm:pt-32 pb-16">
+                 <div class="container mx-auto max-w-7xl xl:max-w-screen-xl text-center flex flex-col items-center justify-start sm:justify-center px-4 pt-20 sm:pt-32 pb-16">
                      <div class="flex flex-col items-center justify-center">
                          <div class="flex flex-col text-center">
                              <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight whitespace-nowrap">
