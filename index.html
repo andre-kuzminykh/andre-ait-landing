@@ -23,25 +23,28 @@
             height: calc(var(--vh, 1vh) * 300);
             -webkit-overflow-scrolling: touch;
         }
-        
         #page-container {
             position: sticky;
             top: 0;
             height: calc(var(--vh, 1vh) * 100);
             width: 100%;
-            overflow: hidden;
+            /*
+             * ИСПРАВЛЕНИЕ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ:
+             * Свойство 'overflow: hidden' было удалено.
+             * Оно создавало новый контекст форматирования и "захватывало" события
+             * свайпа на сенсорных экранах, не позволяя прокручивать основную
+             * страницу (body) и, соответственно, переключаться на третий блок.
+             * Без этого свойства события скролла свободно проходят к body.
+            */
             perspective: 1000px;
-            /* FIX 3: Устанавливаем z-index, чтобы контейнер был выше fixed-элементов (блобов) */
             z-index: 1;
         }
-
         #content-wrapper {
             position: relative;
             height: 100%;
             width: 100%;
             /* z-index теперь не нужен, так как родитель #page-container управляет слоем */
         }
-
         .content-section {
             position: absolute;
             top: 0;
@@ -56,20 +59,18 @@
             transition: opacity 0.8s ease-in-out;
             padding: 1rem;
         }
-
         .content-section.is-visible {
             opacity: 1;
             z-index: 2;
         }
-
         /* FIX 3: ИСПРАВЛЕНИЕ МИГАНИЯ В TELEGRAM WEBVIEW */
         .blob {
             /* Изменено на 'fixed' для отвязки от 'sticky' родителя, что решает проблему с рендерингом при скролле */
-            position: fixed; 
+            position: fixed;
             /* Принудительное создание слоя для аппаратного ускорения */
-            transform: translate3d(0, 0, 0);  
+            transform: translate3d(0, 0, 0);
             /* z-index 0, чтобы блобы были на самом заднем плане */
-            z-index: 0; 
+            z-index: 0;
             border-radius: 9999px;
             filter: blur(80px);
             opacity: 0.7;
@@ -78,26 +79,22 @@
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
         }
-        
         .blob-purple { background-color: var(--brand-purple); }
         .blob-orange { background-color: var(--brand-orange); }
-        
         .author-photo-container {
             position: relative;
             z-index: 10;
         }
-
         .speech-bubble {
             background-color: #111113;
             border: 1px solid #333;
             position: relative;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        
         .speech-bubble::before {
             content: '';
             position: absolute;
-            top: -1rem;  
+            top: -1rem;
             left: 50%;
             transform: translateX(-50%);
             width: 0; height: 0;
@@ -106,7 +103,6 @@
             border-bottom: 1rem solid #111113;
             filter: drop-shadow(0px -1px 0px #333);
         }
-        
         @media (min-width: 768px) {
             .speech-bubble::before {
                 top: 3rem; left: -1rem;
@@ -117,10 +113,8 @@
                 filter: drop-shadow(-1px 0px 0px #333);
             }
         }
-        
         .logo-link { transition: opacity 0.3s ease, transform 0.3s ease; }
         .logo-link:hover { opacity: 0.85; transform: scale(1.05); }
-
         .cta-button {
             position: relative;
             background: transparent;
@@ -154,7 +148,6 @@
         .cta-button:hover::before {
             opacity: 0;
         }
-
         .cta-button > * { position: relative; z-index: 1; }
         .cta-button svg { transition: transform 0.3s ease; }
         .cta-button:hover svg { transform: scale(1.1); }
@@ -165,7 +158,6 @@
         .mobile-menu { transition: transform 0.3s ease-in-out; }
         .main-cta-button { background-color: white; color: #0a0a0a; transition: color 0.4s ease-in-out, transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out, background-image 0.4s ease-in-out; transform: scale(1); }
         .main-cta-button:hover { background-image: linear-gradient(to right, var(--brand-orange), var(--brand-purple), var(--brand-orange)); color: white; transform: scale(1.05); box-shadow: 0 10px 25px -5px rgba(var(--brand-orange-rgb), 0.4), 0 8px 10px -6px rgba(var(--brand-purple-rgb), 0.4); background-size: 200% auto; animation: gradient-flow 4s linear infinite; }
-        
         .cv-button {
             background-color: white;
             color: #0a0a0a;
@@ -176,7 +168,6 @@
             color: white;
             box-shadow: 0 8px 20px -5px rgba(var(--brand-orange-rgb), 0.3), 0 6px 8px -6px rgba(var(--brand-purple-rgb), 0.3);
         }
-        
         .with-arrow::before {
             content: '';
             display: inline-block;
@@ -190,19 +181,15 @@
             background-position: center;
             transition: background-image 0.2s ease-in-out;
         }
-
         .cv-button.with-arrow:hover::before {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='3' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25' /%3E%3C/svg%3E");
         }
-
         .dataism-card {
             background-color: #111113;
             border: 1px solid #333;
             border-radius: 1rem;
         }
-        
         @keyframes gradient-flow { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
-        
         body::after {
             content: "";
             position: fixed;
@@ -215,16 +202,14 @@
             background-image: url('data:image/svg+xml,<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"><filter id="a"><feTurbulence baseFrequency="0.65" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23a)"/></svg>');
             background-size: 256px 256px;
             opacity: 0.08;
-            transform: translateZ(0); 
+            transform: translateZ(0);
         }
-
         @media (min-width: 768px) {
             body::after {
                 will-change: transform;
                 animation: grain-animation 8s alternate linear infinite;
             }
         }
-
         @keyframes grain-animation {
             0%   { transform: translate(0, 0); }
             25%  { transform: translate(-3px, 4px); }
@@ -238,7 +223,6 @@
     <!-- FIX 3: Перемещаем блобы в body и делаем 'position: fixed' для стабильного рендеринга -->
     <div id="blob1" class="blob blob-purple w-80 h-80 md:w-96 md:h-96 lg:w-[32rem] lg:h-[32rem] xl:w-[40rem] xl:h-[40rem]"></div>
     <div id="blob2" class="blob blob-orange w-80 h-80 md:w-96 md:h-96 lg:w-[32rem] lg:h-[32rem] xl:w-[40rem] xl:h-[40rem]"></div>
-
     <div id="page-container">
         <header class="absolute top-0 w-full z-20 py-1 px-4 sm:px-6 lg:px-8 bg-[#0a0a0a]">
             <div class="container mx-auto flex justify-between items-center">
@@ -266,7 +250,6 @@
                 </nav>
             </div>
         </header>
-        
         <div id="content-wrapper">
              <section id="hero-section" class="content-section is-visible">
                  <div class="container mx-auto max-w-4xl text-center">
@@ -276,7 +259,6 @@
                      <a href="#" class="main-cta-button inline-flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
                  </div>
              </section>
-
              <section id="about-section" class="content-section">
                  <div class="container mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16">
                      <div class="flex-shrink-0">
@@ -293,7 +275,6 @@
                      </div>
                  </div>
              </section>
-
             <!-- FIX 1: Добавлен overflow-y-auto для скролла контента на мобильных устройствах -->
              <section id="dataism-section" class="content-section overflow-y-auto">
                  <!-- FIX 1: Адаптивные отступы и выравнивание для корректного отображения на мобильных -->
@@ -306,9 +287,7 @@
                              <p class="text-xl md:text-2xl text-white mt-2">Open Applied AI Community</p>
                          </div>
                      </div>
-
                      <div class="mt-12 lg:mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
-                         
                          <div class="dataism-card p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg max-w-xs mx-auto w-full md:max-w-none md:mx-0">
                              <div class="flex-grow">
                                  <h3 class="text-2xl font-bold text-white">🔬 AI Laboratory</h3>
@@ -318,7 +297,6 @@
                                  <span class="whitespace-nowrap">Visit AI Lab</span>
                              </a>
                          </div>
-                         
                          <div class="dataism-card p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg max-w-xs mx-auto w-full md:max-w-none md:mx-0">
                             <div class="flex-grow">
                                  <h3 class="text-2xl font-bold text-white">🎓 AI Academy</h3>
@@ -328,7 +306,6 @@
                                  <span class="whitespace-nowrap">Visit AI Academy</span>
                              </a>
                          </div>
-                         
                          <div class="dataism-card p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg max-w-xs mx-auto w-full md:max-w-none md:mx-0">
                              <div class="flex-grow">
                                      <h3 class="text-2xl font-bold text-white">🌍 Datapedia</h3>
@@ -343,7 +320,6 @@
              </section>
         </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const pageContainer = document.getElementById('page-container');
@@ -354,27 +330,23 @@
             window.addEventListener('resize', setRealViewportHeight);
             window.addEventListener('orientationchange', setRealViewportHeight);
             setRealViewportHeight();
-
             const menuBtn = document.getElementById('menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
             menuBtn.addEventListener('click', () => {
                 mobileMenu.classList.toggle('translate-x-full');
                 menuBtn.innerHTML = mobileMenu.classList.contains('translate-x-full') ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>` : `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>`;
             });
-
             const sections = document.querySelectorAll('.content-section');
             const authorPhoto = document.querySelector('.author-photo-container');
             const blob1 = document.getElementById('blob1');
             const blob2 = document.getElementById('blob2');
             let isOrbiting = false;
-            let angle = 0; 
-            let wanderTime = 0; 
-            let currentSectionIndex = -1; 
+            let angle = 0;
+            let wanderTime = 0;
+            let currentSectionIndex = -1;
             let cardTarget = null;
-            
             let blob1State = { x: window.innerWidth * 0.45, y: window.innerHeight * 0.4, scale: 1.0 };
             let blob2State = { x: window.innerWidth * 0.55, y: window.innerHeight * 0.5, scale: 1.0 };
-            
             const allCtaButtons = document.querySelectorAll('.main-cta-button, .cv-button, .cta-button');
             allCtaButtons.forEach(button => {
                 button.addEventListener('mouseenter', () => {
@@ -386,7 +358,6 @@
                     blob2.style.opacity = '0.7';
                 });
             });
-
             const dataismCards = document.querySelectorAll('.dataism-card');
             dataismCards.forEach(card => {
                 card.addEventListener('mouseenter', () => {
@@ -398,25 +369,20 @@
                     cardTarget = null;
                 });
             });
-
             const typewriterInstances = {};
-
-            const setupTypewriter = (element) => { 
+            const setupTypewriter = (element) => {
                 if (!element) return;
                 const elementId = element.id || element.parentElement.id;
-                
                 let textNodes = [];
                 element.childNodes.forEach(node => {
                     if (node.nodeType === Node.TEXT_NODE) textNodes.push(...node.textContent.trim().split(''));
                     else if (node.tagName === 'BR') textNodes.push('<br>');
                 });
-                
                 let isTyping = false;
                 const originalHTML = element.innerHTML;
                 let timeoutId = null;
-
                 const startTyping = () => {
-                    clearTimeout(timeoutId); 
+                    clearTimeout(timeoutId);
                     if (isTyping) return;
                     isTyping = true;
                     element.innerHTML = '';
@@ -436,33 +402,26 @@
                     };
                     type();
                 };
-
                 const reset = () => {
                     clearTimeout(timeoutId);
                     isTyping = false;
                     element.innerHTML = originalHTML;
                 }
-
                 typewriterInstances[elementId] = { start: startTyping, reset: reset };
             };
-
             setupTypewriter(document.getElementById('hero-text'));
             setupTypewriter(document.getElementById('about-text'));
-            
             function handleScroll() {
                 const scrollPosition = window.scrollY;
                 const screenHeight = window.innerHeight;
                 // FIX 1: Убедимся, что индекс не выходит за пределы 2 (для 3 секций)
                 const newSectionIndex = Math.min(Math.floor(scrollPosition / screenHeight), sections.length - 1);
-                
                 if (newSectionIndex !== currentSectionIndex) {
                     currentSectionIndex = newSectionIndex;
-                    
                     sections.forEach((section, index) => {
                         const pWithId = section.querySelector('p[id]');
                         const typewriterId = pWithId ? pWithId.id : null;
                         const instance = typewriterId ? typewriterInstances[typewriterId] : null;
-
                         if (index === currentSectionIndex) {
                             section.classList.add('is-visible');
                              if(instance) {
@@ -475,36 +434,30 @@
                             }
                         }
                     });
-
                     isOrbiting = (currentSectionIndex === 1);
                 }
             }
-            
             function animate() {
                 let targetX1, targetY1, targetScale1;
                 let targetX2, targetY2, targetScale2;
                 const blobWidth = blob1.offsetWidth;
                 const blobHeight = blob1.offsetHeight;
-
                 if (cardTarget && currentSectionIndex === 2) {
                     const cardRect = cardTarget.getBoundingClientRect();
                     const centerX = cardRect.left + cardRect.width / 2;
                     const centerY = cardRect.top + cardRect.height / 2;
-                    
                     targetScale1 = 0.6;
                     targetScale2 = 0.6;
-                    
                     targetX1 = centerX - blobWidth / 2;
                     targetY1 = centerY - blobHeight / 2;
                     targetX2 = centerX - blobWidth / 2;
                     targetY2 = centerY - blobHeight / 2;
-
                 } else if (isOrbiting && authorPhoto) {
                     const photoRect = authorPhoto.getBoundingClientRect();
                     const centerX = photoRect.left + photoRect.width / 2;
                     const centerY = photoRect.top + photoRect.height / 2;
                     const radius = photoRect.width * 0.6;
-                    angle += 0.003; 
+                    angle += 0.003;
                     targetScale1 = 0.7;
                     targetScale2 = 0.7;
                     targetX1 = (centerX + radius * Math.cos(angle)) - blobWidth / 2;
@@ -525,20 +478,17 @@
                     targetY2 = centerY + wanderRadiusY * Math.sin((wanderTime - phaseOffset) * 1.5) - blobHeight / 2;
                     targetScale2 = 1.0;
                 }
-                
-                const smoothingFactor = 0.04; 
+                const smoothingFactor = 0.04;
                 blob1State.x += (targetX1 - blob1State.x) * smoothingFactor;
                 blob1State.y += (targetY1 - blob1State.y) * smoothingFactor;
                 blob1State.scale += (targetScale1 - blob1State.scale) * smoothingFactor;
                 blob2State.x += (targetX2 - blob2State.x) * smoothingFactor;
                 blob2State.y += (targetY2 - blob2State.y) * smoothingFactor;
                 blob2State.scale += (targetScale2 - blob2State.scale) * smoothingFactor;
-                
                 blob1.style.transform = `translate3d(${blob1State.x}px, ${blob1State.y}px, 0) scale(${blob1State.scale})`;
                 blob2.style.transform = `translate3d(${blob2State.x}px, ${blob2State.y}px, 0) scale(${blob2State.scale})`;
                 requestAnimationFrame(animate);
             }
-
             window.addEventListener('scroll', handleScroll, { passive: true });
             handleScroll();
             animate();
