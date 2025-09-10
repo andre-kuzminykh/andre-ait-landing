@@ -160,7 +160,8 @@
         .cv-button:hover { background-image: linear-gradient(to right, var(--brand-orange), var(--brand-purple), var(--brand-orange)); color: white; transform: scale(1.05); box-shadow: 0 10px 25px -5px rgba(var(--brand-orange-rgb), 0.4), 0 8px 10px -6px rgba(var(--brand-purple-rgb), 0.4); background-size: 200% auto; animation: gradient-flow 4s linear infinite; }
         @keyframes gradient-flow { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
         
-        /* FIX 2 & 6: Optimized grain effect for performance and visual appearance */
+        /* PERFORMANCE FIX: The animated grain effect was causing major slowdowns on mobile devices. */
+        /* It is now disabled on screens smaller than 768px to ensure a smooth experience. */
         body::after {
             content: "";
             position: fixed;
@@ -172,12 +173,20 @@
             pointer-events: none;
             background-image: url('data:image/svg+xml,<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"><filter id="a"><feTurbulence baseFrequency="0.65" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23a)"/></svg>');
             background-size: 256px 256px;
-            opacity: 0.08; /* Slightly reduced opacity */
-            will-change: transform; /* Performance hint for animation */
-            animation: grain-animation 8s alternate linear infinite; /* Smoother, slower, non-stepped animation */
+            opacity: 0.08;
+            /* Promotes the element to its own layer for better static compositing performance. */
+            transform: translateZ(0); 
         }
 
-        /* FIX 6: Replaced jittery animation with a smoother, subtle one to prevent "interference" look */
+        /* The expensive grain animation is now enabled only on larger screens. */
+        @media (min-width: 768px) {
+            body::after {
+                will-change: transform; /* Performance hint for animation */
+                animation: grain-animation 8s alternate linear infinite;
+            }
+        }
+
+        /* The keyframe animation for the grain effect. */
         @keyframes grain-animation {
             0%   { transform: translate(0, 0); }
             25%  { transform: translate(-3px, 4px); }
@@ -238,14 +247,14 @@
                  <div class="container mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16">
                      <div class="flex-shrink-0">
                          <div class="author-photo-container w-48 h-48 lg:w-56 lg:h-56 rounded-full inline-block">
-                             <!-- FIX 1: Corrected GIF URL -->
+                             <!-- FIX: Corrected GIF URL -->
                              <img src="https://i.ibb.co/G3MdKgx1/High-Performance-bli.gif" alt="Andre, founder of Andre AI Technologies" class="w-full h-full object-cover rounded-full">
                          </div>
                      </div>
                      <div class="speech-bubble mt-4 md:mt-0 w-full max-w-2xl rounded-2xl p-6 lg:p-8 flex flex-col">
                          <p id="about-text" class="text-white text-sm md:text-base lg:text-lg leading-relaxed">Hi, I’m Andre, founder of Andre AI Technologies.<br>I have 10+ years of experience in AI transformation of global tech companies and launching AI startups.<br>I focus on AI research, building AI products for businesses and individuals, training people for emerging professions, driving harmony between AI and humans, and shaping a new economy where AI is the core of the modern operational model.</p>
                          <a href="#" class="cv-button inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-6 text-base self-end">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2"><path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a.375.375 0 0 1-.375-.375V6.75A3.75 3.75 0 0 0 10.5 3h-1.875A.375.375 0 0 1 8.25 2.625V1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z" clip-rule="evenodd" /><path d="M12.971 1.816A5.23 5.23 0 0 1 15.75 1.5h1.875c.414 0 .75.336.75.75v4.5c0 .414-.336.75-.75.75h-1.875a5.23 5.23 0 0 1-2.779-.316Z" /></svg>
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2"><path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a.375.375 0 0 1-.375-.375V6.75A3.75 3.75 0 0 0 10.5 3h-1.875A.375.375 0 0 1 8.25 2.625V1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z" clip-rule="evenodd" /><path d="M12.971 1.816A5.23 5.23 0 0 1 15.75 1.5h1.875c.414 0 .75.336.75.75v4.5c0 .414-.336.75-.75.75h-1.875a5.23 5.23 0 0 1-2.779-.316Z" /></svg>
                              CV
                          </a>
                      </div>
@@ -266,7 +275,7 @@
 
                      <div class="mt-12 lg:mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
                          <!-- FIX: Adjusted card width for mobile and ensured content dictates height -->
-                         <div class="bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-xs mx-auto w-full md:max-w-none md:mx-0">
+                         <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-xs mx-auto w-full md:max-w-none md:mx-0">
                              <div class="flex-grow">
                                  <h3 class="text-2xl font-bold text-white">🔬 AI Laboratory</h3>
                                  <p class="mt-3 text-gray-400">Research & Development<br>of Applied AI Solutions</p>
@@ -278,11 +287,11 @@
                              </a>
                          </div>
                          <!-- FIX: Adjusted card width for mobile and ensured content dictates height -->
-                         <div class="bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-xs mx-auto w-full md:max-w-none md:mx-0">
-                            <div class="flex-grow">
+                         <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-xs mx-auto w-full md:max-w-none md:mx-0">
+                           <div class="flex-grow">
                                  <h3 class="text-2xl font-bold text-white">🎓 AI Academy</h3>
                                  <p class="mt-3 text-gray-400">Educational programs<br>for AI Professionals</p>
-                            </div>
+                           </div>
                              <!-- FIX: Added fixed width to ensure all buttons are the same size -->
                              <a href="#" class="cv-button self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full mt-6 text-sm w-48">
                                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" /></svg>
@@ -290,7 +299,7 @@
                              </a>
                          </div>
                          <!-- FIX: Adjusted card width for mobile and ensured content dictates height -->
-                         <div class="bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-xs mx-auto w-full md:max-w-none md:mx-0">
+                         <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-xs mx-auto w-full md:max-w-none md:mx-0">
                              <div class="flex-grow">
                                   <h3 class="text-2xl font-bold text-white">🌍 Datapedia</h3>
                                   <p class="mt-3 text-gray-400">Interactive Encyclopedia<br>of AI Simulations</p>
@@ -324,6 +333,7 @@
             let angle = 0; 
             let wanderTime = 0; 
             let currentSectionIndex = -1;
+            let cardTarget = null; // Will store the element of the hovered card
             
             let blob1State = { x: window.innerWidth * 0.45, y: window.innerHeight * 0.4, scale: 1.0 };
             let blob2State = { x: window.innerWidth * 0.55, y: window.innerHeight * 0.5, scale: 1.0 };
@@ -337,6 +347,18 @@
                 button.addEventListener('mouseleave', () => {
                     blob1.style.opacity = '0.7';
                     blob2.style.opacity = '0.7';
+                });
+            });
+
+            const dataismCards = document.querySelectorAll('.dataism-card');
+            dataismCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    if (currentSectionIndex === 2) {
+                        cardTarget = card;
+                    }
+                });
+                card.addEventListener('mouseleave', () => {
+                    cardTarget = null;
                 });
             });
 
@@ -424,8 +446,22 @@
                 const blobWidth = blob1.offsetWidth;
                 const blobHeight = blob1.offsetHeight;
 
-                if (isOrbiting && authorPhoto) {
-                    const smoothingFactor = 0.04;
+                // Priority: Card Hover > Orbiting > Wandering
+                if (cardTarget && currentSectionIndex === 2) {
+                    const cardRect = cardTarget.getBoundingClientRect();
+                    const centerX = cardRect.left + cardRect.width / 2;
+                    const centerY = cardRect.top + cardRect.height / 2;
+                    
+                    targetScale1 = 0.6; // A bit larger when centered
+                    targetScale2 = 0.6;
+                    
+                    // Set target for both blobs to the center of the card
+                    targetX1 = centerX - blobWidth / 2;
+                    targetY1 = centerY - blobHeight / 2;
+                    targetX2 = centerX - blobWidth / 2;
+                    targetY2 = centerY - blobHeight / 2;
+
+                } else if (isOrbiting && authorPhoto) {
                     const photoRect = authorPhoto.getBoundingClientRect();
                     const centerX = photoRect.left + photoRect.width / 2;
                     const centerY = photoRect.top + photoRect.height / 2;
@@ -437,15 +473,7 @@
                     targetY1 = (centerY + radius * Math.sin(angle)) - blobHeight / 2;
                     targetX2 = (centerX + radius * Math.cos(angle + Math.PI)) - blobWidth / 2;
                     targetY2 = (centerY + radius * Math.sin(angle + Math.PI)) - blobHeight / 2;
-                    
-                    blob1State.x += (targetX1 - blob1State.x) * smoothingFactor;
-                    blob1State.y += (targetY1 - blob1State.y) * smoothingFactor;
-                    blob1State.scale += (targetScale1 - blob1State.scale) * smoothingFactor;
-                    blob2State.x += (targetX2 - blob2State.x) * smoothingFactor;
-                    blob2State.y += (targetY2 - blob2State.y) * smoothingFactor;
-                    blob2State.scale += (targetScale2 - blob2State.scale) * smoothingFactor;
                 } else {
-                    const smoothingFactor = 0.04; 
                     wanderTime += 0.003;
                     const centerX = window.innerWidth / 2;
                     const centerY = window.innerHeight / 2;
@@ -458,13 +486,15 @@
                     targetX2 = centerX + wanderRadiusX * Math.cos(wanderTime - phaseOffset) - blobWidth / 2;
                     targetY2 = centerY + wanderRadiusY * Math.sin((wanderTime - phaseOffset) * 1.5) - blobHeight / 2;
                     targetScale2 = 1.0;
-                    blob1State.x += (targetX1 - blob1State.x) * smoothingFactor;
-                    blob1State.y += (targetY1 - blob1State.y) * smoothingFactor;
-                    blob1State.scale += (targetScale1 - blob1State.scale) * smoothingFactor;
-                    blob2State.x += (targetX2 - blob2State.x) * smoothingFactor;
-                    blob2State.y += (targetY2 - blob2State.y) * smoothingFactor;
-                    blob2State.scale += (targetScale2 - blob2State.scale) * smoothingFactor;
                 }
+                
+                const smoothingFactor = 0.04; 
+                blob1State.x += (targetX1 - blob1State.x) * smoothingFactor;
+                blob1State.y += (targetY1 - blob1State.y) * smoothingFactor;
+                blob1State.scale += (targetScale1 - blob1State.scale) * smoothingFactor;
+                blob2State.x += (targetX2 - blob2State.x) * smoothingFactor;
+                blob2State.y += (targetY2 - blob2State.y) * smoothingFactor;
+                blob2State.scale += (targetScale2 - blob2State.scale) * smoothingFactor;
                 
                 blob1.style.transform = `translate(${blob1State.x}px, ${blob1State.y}px) scale(${blob1State.scale}) translateZ(0)`;
                 blob2.style.transform = `translate(${blob2State.x}px, ${blob2State.y}px) scale(${blob2State.scale}) translateZ(0)`;
