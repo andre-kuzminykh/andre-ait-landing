@@ -15,7 +15,6 @@
             --brand-purple-rgb: 136, 84, 243;
             --brand-orange-rgb: 247, 143, 85;
         }
-        /* FIX 2: Added -webkit-overflow-scrolling: touch for smoother scrolling on iOS */
         body {
             font-family: 'JetBrains Mono', monospace;
             background-color: #0a0a0a;
@@ -30,6 +29,7 @@
             height: 100vh;
             width: 100%;
             overflow: hidden;
+            perspective: 1000px;
         }
 
         #content-wrapper {
@@ -58,16 +58,17 @@
             z-index: 2;
         }
 
-        /* FIX 1: Added will-change and transform: translateZ(0) to promote the blobs to a new layer, fixing visibility on some mobile browsers like Safari. */
         .blob {
             position: fixed;
             z-index: -1;
             border-radius: 9999px;
             filter: blur(80px);
             opacity: 0.7;
-            transform: scale(1) translateZ(0); /* Using translateZ to create a new stacking context */
+            transform: scale(1) translateZ(0);
             transition: opacity 0.4s ease;
-            will-change: transform, opacity; /* Performance hint for the browser */
+            will-change: transform, opacity;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
         }
         
         .blob-purple { background-color: var(--brand-purple); }
@@ -123,8 +124,8 @@
             position: absolute;
             inset: 0;
             z-index: -1;
-            border-radius: 9999px; /* Tailwind's rounded-full */
-            padding: 2px; /* Border thickness */
+            border-radius: 9999px;
+            padding: 2px;
             background: linear-gradient(to right, var(--brand-purple), var(--brand-orange));
             -webkit-mask:
                 linear-gradient(#fff 0 0) content-box,
@@ -156,12 +157,46 @@
         .mobile-menu { transition: transform 0.3s ease-in-out; }
         .main-cta-button { background-color: white; color: #0a0a0a; transition: color 0.4s ease-in-out, transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out, background-image 0.4s ease-in-out; transform: scale(1); }
         .main-cta-button:hover { background-image: linear-gradient(to right, var(--brand-orange), var(--brand-purple), var(--brand-orange)); color: white; transform: scale(1.05); box-shadow: 0 10px 25px -5px rgba(var(--brand-orange-rgb), 0.4), 0 8px 10px -6px rgba(var(--brand-purple-rgb), 0.4); background-size: 200% auto; animation: gradient-flow 4s linear infinite; }
-        .cv-button { background-color: white; color: #0a0a0a; transition: color 0.4s ease-in-out, transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out, background-image 0.4s ease-in-out; transform: scale(1); }
-        .cv-button:hover { background-image: linear-gradient(to right, var(--brand-orange), var(--brand-purple), var(--brand-orange)); color: white; transform: scale(1.05); box-shadow: 0 10px 25px -5px rgba(var(--brand-orange-rgb), 0.4), 0 8px 10px -6px rgba(var(--brand-purple-rgb), 0.4); background-size: 200% auto; animation: gradient-flow 4s linear infinite; }
+        
+        /* --- FINAL GUARANTEED FIX --- */
+        .cv-button {
+            background-color: white;
+            color: #0a0a0a;
+            transition: color 0.2s ease-in-out, background-image 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .cv-button:hover {
+            background-image: linear-gradient(to right, var(--brand-orange), var(--brand-purple));
+            color: white;
+            box-shadow: 0 8px 20px -5px rgba(var(--brand-orange-rgb), 0.3), 0 6px 8px -6px rgba(var(--brand-purple-rgb), 0.3);
+        }
+        .cv-button::before {
+            content: '';
+            display: inline-block;
+            flex-shrink: 0;
+            width: 1em;
+            height: 1em;
+            margin-right: 0.5em;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='3' stroke='%230a0a0a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25' /%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .cv-button:hover::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='3' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25' /%3E%3C/svg%3E");
+        }
+        /* --- END OF FIX --- */
+        
+        /* --- CARD IS STATIC. THIS IS THE KEY TO STABILITY. --- */
+        .dataism-card {
+            background-color: #111113;
+            border: 1px solid #333;
+            border-radius: 1rem;
+            /* NO HOVER EFFECT OR TRANSITION. This was the root cause of the bug. */
+        }
+        /* --- END OF FIX --- */
+        
         @keyframes gradient-flow { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
         
-        /* PERFORMANCE FIX: The animated grain effect was causing major slowdowns on mobile devices. */
-        /* It is now disabled on screens smaller than 768px to ensure a smooth experience. */
         body::after {
             content: "";
             position: fixed;
@@ -174,19 +209,16 @@
             background-image: url('data:image/svg+xml,<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"><filter id="a"><feTurbulence baseFrequency="0.65" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23a)"/></svg>');
             background-size: 256px 256px;
             opacity: 0.08;
-            /* Promotes the element to its own layer for better static compositing performance. */
             transform: translateZ(0); 
         }
 
-        /* The expensive grain animation is now enabled only on larger screens. */
         @media (min-width: 768px) {
             body::after {
-                will-change: transform; /* Performance hint for animation */
+                will-change: transform;
                 animation: grain-animation 8s alternate linear infinite;
             }
         }
 
-        /* The keyframe animation for the grain effect. */
         @keyframes grain-animation {
             0%   { transform: translate(0, 0); }
             25%  { transform: translate(-3px, 4px); }
@@ -201,7 +233,6 @@
         <div id="blob1" class="blob blob-purple w-80 h-80 md:w-96 md:h-96 lg:w-[32rem] lg:h-[32rem] xl:w-[40rem] xl:h-[40rem]"></div>
         <div id="blob2" class="blob blob-orange w-80 h-80 md:w-96 md:h-96 lg:w-[32rem] lg:h-[32rem] xl:w-[40rem] xl:h-[40rem]"></div>
 
-        <!-- FIX: Header background is now black -->
         <header class="absolute top-0 w-full z-20 py-1 px-4 sm:px-6 lg:px-8 bg-[#0a0a0a]">
             <div class="container mx-auto flex justify-between items-center">
                 <a href="#" class="logo-link flex-shrink-0"><img src="https://i.ibb.co/gn7SmgY/866f2500-dd81-4d09-8c0f-2b55c25a3464-removalai-preview.png" alt="AIT Logo" class="h-16 lg:h-20 w-auto"></a>
@@ -219,13 +250,11 @@
                 <button id="menu-btn" class="md:hidden focus:outline-none z-30"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg></button>
             </div>
             <div id="mobile-menu" class="mobile-menu md:hidden fixed top-0 right-0 h-full w-full bg-[#0a0a0a] transform translate-x-full z-20 p-8">
-                <!-- FIX 7: Added logo to the top-left of the mobile menu -->
                 <a href="#" class="logo-link absolute top-1 left-4 sm:left-6">
                     <img src="https://i.ibb.co/gn7SmgY/866f2500-dd81-4d09-8c0f-2b55c25a3464-removalai-preview.png" alt="AIT Logo" class="h-16 w-auto">
                 </a>
                 <nav class="flex flex-col h-full justify-center items-center space-y-8 text-lg">
                     <a href="#" class="nav-link text-center">AI Super Agent</a><a href="#" class="nav-link text-center">AI Employees</a><a href="#" class="nav-link text-center">AI Companies</a><a href="#" class="nav-link text-center">AI Startup Studio</a><a href="#" class="nav-link text-center">Blog</a>
-                    <!-- FIX 5: Increased button height to match the main hero button -->
                     <a href="#" class="main-cta-button flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
                 </nav>
             </div>
@@ -235,10 +264,7 @@
              <section id="hero-section" class="content-section">
                  <div class="container mx-auto max-w-4xl text-center">
                      <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight xl:whitespace-nowrap"><span style="color: var(--brand-purple);">AI</span> FOR <span style="color: var(--brand-orange);">HUMAN</span> GOOD</h1>
-                     <!-- FIX 8: Added font-bold to match the button's font weight -->
-                     <!-- FIX 3: Replaced class with inline style for font-weight consistency -->
                      <p class="mt-6 text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-3xl mx-auto" style="font-weight: 700;">AI ecosystem for making AI<br>a trusted business & personal assistant</p>
-                     <!-- FIX 4: Increased vertical padding to make the button taller -->
                      <a href="#" class="main-cta-button inline-flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
                  </div>
              </section>
@@ -247,7 +273,6 @@
                  <div class="container mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16">
                      <div class="flex-shrink-0">
                          <div class="author-photo-container w-48 h-48 lg:w-56 lg:h-56 rounded-full inline-block">
-                             <!-- FIX: Corrected GIF URL -->
                              <img src="https://i.ibb.co/G3MdKgx1/High-Performance-bli.gif" alt="Andre, founder of Andre AI Technologies" class="w-full h-full object-cover rounded-full">
                          </div>
                      </div>
@@ -262,7 +287,6 @@
              </section>
 
              <section id="dataism-section" class="content-section">
-                 <!-- FIX: Reverted to vertical centering on desktop and enabled conditional scrolling with padding on mobile -->
                  <div class="container mx-auto max-w-7xl xl:max-w-screen-xl text-center flex flex-col items-center px-4 pt-24 pb-8 md:p-0 h-full overflow-y-auto md:h-auto md:overflow-visible md:justify-center">
                      <div class="flex flex-col items-center justify-center">
                          <div class="flex flex-col text-center">
@@ -274,40 +298,34 @@
                      </div>
 
                      <div class="mt-12 lg:mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
-                         <!-- FIX: Adjusted card width for mobile and ensured content dictates height -->
-                         <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-xs mx-auto w-full md:max-w-none md:mx-0">
+                         
+                         <div class="dataism-card p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg max-w-xs mx-auto w-full md:max-w-none md:mx-0">
                              <div class="flex-grow">
                                  <h3 class="text-2xl font-bold text-white">🔬 AI Laboratory</h3>
                                  <p class="mt-3 text-gray-400">Research & Development<br>of Applied AI Solutions</p>
                              </div>
-                             <!-- FIX: Added fixed width to ensure all buttons are the same size -->
-                             <a href="#" class="cv-button self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full mt-6 text-sm w-48">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" /></svg>
-                                 <span class="whitespace-nowrap">Visit AI Lab</span>
+                             <a href="#" class="cv-button inline-flex items-center justify-center self-center font-bold py-3 px-6 rounded-full mt-6 text-sm w-48">
+                                <span class="whitespace-nowrap">Visit AI Lab</span>
                              </a>
                          </div>
-                         <!-- FIX: Adjusted card width for mobile and ensured content dictates height -->
-                         <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-xs mx-auto w-full md:max-w-none md:mx-0">
+                         
+                         <div class="dataism-card p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg max-w-xs mx-auto w-full md:max-w-none md:mx-0">
                            <div class="flex-grow">
                                  <h3 class="text-2xl font-bold text-white">🎓 AI Academy</h3>
                                  <p class="mt-3 text-gray-400">Educational programs<br>for AI Professionals</p>
                            </div>
-                             <!-- FIX: Added fixed width to ensure all buttons are the same size -->
-                             <a href="#" class="cv-button self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full mt-6 text-sm w-48">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" /></svg>
-                                 <span class="whitespace-nowrap">Visit AI Academy</span>
+                             <a href="#" class="cv-button inline-flex items-center justify-center self-center font-bold py-3 px-6 rounded-full mt-6 text-sm w-48">
+                                <span class="whitespace-nowrap">Visit AI Academy</span>
                              </a>
                          </div>
-                         <!-- FIX: Adjusted card width for mobile and ensured content dictates height -->
-                         <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-xs mx-auto w-full md:max-w-none md:mx-0">
+                         
+                         <div class="dataism-card p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg max-w-xs mx-auto w-full md:max-w-none md:mx-0">
                              <div class="flex-grow">
                                   <h3 class="text-2xl font-bold text-white">🌍 Datapedia</h3>
                                   <p class="mt-3 text-gray-400">Interactive Encyclopedia<br>of AI Simulations</p>
                              </div>
-                             <!-- FIX: Added fixed width to ensure all buttons are the same size -->
-                             <a href="#" class="cv-button self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full mt-6 text-sm w-48">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" /></svg>
-                                 <span class="whitespace-nowrap">Visit Datapedia</span>
+                             <a href="#" class="cv-button inline-flex items-center justify-center self-center font-bold py-3 px-6 rounded-full mt-6 text-sm w-48">
+                                <span class="whitespace-nowrap">Visit Datapedia</span>
                              </a>
                          </div>
                      </div>
@@ -333,7 +351,7 @@
             let angle = 0; 
             let wanderTime = 0; 
             let currentSectionIndex = -1;
-            let cardTarget = null; // Will store the element of the hovered card
+            let cardTarget = null;
             
             let blob1State = { x: window.innerWidth * 0.45, y: window.innerHeight * 0.4, scale: 1.0 };
             let blob2State = { x: window.innerWidth * 0.55, y: window.innerHeight * 0.5, scale: 1.0 };
@@ -446,16 +464,14 @@
                 const blobWidth = blob1.offsetWidth;
                 const blobHeight = blob1.offsetHeight;
 
-                // Priority: Card Hover > Orbiting > Wandering
                 if (cardTarget && currentSectionIndex === 2) {
                     const cardRect = cardTarget.getBoundingClientRect();
                     const centerX = cardRect.left + cardRect.width / 2;
                     const centerY = cardRect.top + cardRect.height / 2;
                     
-                    targetScale1 = 0.6; // A bit larger when centered
+                    targetScale1 = 0.6;
                     targetScale2 = 0.6;
                     
-                    // Set target for both blobs to the center of the card
                     targetX1 = centerX - blobWidth / 2;
                     targetY1 = centerY - blobHeight / 2;
                     targetX2 = centerX - blobWidth / 2;
