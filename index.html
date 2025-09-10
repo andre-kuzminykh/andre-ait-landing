@@ -39,11 +39,11 @@
         }
         .content-section {
             position: absolute;
+            /* ИСПРАВЛЕНИЕ (v6): Замена width/height на top/bottom/left/right для лучшей совместимости. */
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            /* ИСПРАВЛЕНИЕ (v5): Использование CSS Grid для надежного центрирования на всех устройствах. */
+            right: 0;
+            bottom: 0;
             display: grid;
             place-items: center;
             opacity: 0;
@@ -480,4 +480,3 @@
     </script>
 </body>
 </html>
-
