@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://css.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --brand-purple: #8854F3;
@@ -21,7 +21,6 @@
             font-family: 'JetBrains Mono', monospace;
             background-color: #0a0a0a;
             color: #E5E7EB;
-            /* Увеличена высота для размещения нового, четвертого блока */
             height: 400vh; 
             -webkit-overflow-scrolling: touch;
         }
@@ -32,7 +31,7 @@
             height: 100vh;
             width: 100%;
             overflow: hidden;
-            perspective: 1000px; /* Force 3D rendering context for children */
+            perspective: 1000px;
         }
 
         #content-wrapper {
@@ -54,6 +53,7 @@
             z-index: 1;
             transition: opacity 0.8s ease-in-out;
             padding: 1rem;
+            padding-top: 6rem;
         }
 
         .content-section.is-visible {
@@ -61,7 +61,6 @@
             z-index: 2;
         }
 
-        /* --- FIX for blob pixelation --- */
         .blob {
             position: fixed;
             z-index: -1;
@@ -69,20 +68,15 @@
             transform: scale(1) translateZ(0);
             transition: opacity 0.4s ease;
             will-change: transform, opacity;
-            
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-
-            /* Added properties to prevent pixelation on mobile Web Views during transforms. */
-            /* This forces better hardware acceleration and hints the engine to prioritize quality. */
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
             image-rendering: -webkit-optimize-contrast;
             image-rendering: high-quality;
         }
 
-        /* Added width/height attributes to the SVG data URI to hint the browser to rasterize at a high resolution, preventing pixelation. */
         .blob-purple { 
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='1600' viewBox='0 0 500 500'%3e%3cdefs%3e%3cradialGradient id='grad' cx='50%25' cy='50%25' r='50%25'%3e%3cstop offset='0%25' stop-color='%238854F3' stop-opacity='1'/%3e%3cstop offset='100%25' stop-color='%238854F3' stop-opacity='0'/%3e%3c/radialGradient%3e%3cfilter id='blob_filter' x='-50%25' y='-50%25' width='200%25' height='200%25'%3e%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='3' result='noise'/%3e%3CfeDisplacementMap in='SourceGraphic' in2='noise' scale='50'/%3e%3CfeGaussianBlur stdDeviation='70'/%3e%3C/filter%3e%3C/defs%3e%3ccircle cx='250' cy='250' r='150' fill='url(%23grad)' filter='url(%23blob_filter)'/%3e%3c/svg%3e");
         }
@@ -116,6 +110,9 @@
         }
         
         @media (min-width: 768px) {
+            .content-section {
+                padding-top: 1rem;
+            }
             .speech-bubble::before {
                 top: 3rem; left: -1rem;
                 transform: translateY(-50%);
@@ -180,11 +177,11 @@
         .btn-with-arrow::before {
             content: '';
             display: inline-block;
-            width: 16px; /* w-4 */
-            height: 16px; /* h-4 */
-            margin-right: 0.5rem; /* mr-2 */
+            width: 16px;
+            height: 16px;
+            margin-right: 0.5rem;
             background-color: currentColor;
-            flex-shrink: 0; /* prevent shrinking */
+            flex-shrink: 0;
             -webkit-mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2.5' stroke='currentColor'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' d='m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25' /%3e%3c/svg%3e");
             mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2.5' stroke='currentColor'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' d='m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25' /%3e%3c/svg%3e");
             -webkit-mask-size: contain;
@@ -226,6 +223,76 @@
             75%  { transform: translate(-2px, -2px); }
             100% { transform: translate(0, 0); }
         }
+
+        /* MODIFIED: Glitch Effect Styles */
+        .glitch-title {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            gap: 0.25em;
+        }
+        .glitch-word {
+            display: inline-flex;
+            position: relative;
+            z-index: 1;
+        }
+        .glitch-char {
+            position: relative;
+            z-index: 1;
+            display: inline-block;
+        }
+        .glitch-char::before,
+        .glitch-char::after {
+            content: attr(data-char);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            overflow: hidden;
+            opacity: 0;
+        }
+        .glitch-title.glitching .glitch-char::before,
+        .glitch-title.glitching .glitch-char::after {
+            opacity: 1;
+        }
+        .glitch-title.glitching .glitch-char::before {
+            text-shadow: -2px 0 var(--glitch-color-1);
+            animation: glitch-anim-1 2s linear;
+        }
+        .glitch-title.glitching .glitch-char::after {
+            text-shadow: 2px 0 var(--glitch-color-2);
+            animation: glitch-anim-2 2s linear;
+        }
+
+        @keyframes glitch-anim-1 {
+            0% { clip-path: inset(35% 0 55% 0); transform: translate(-2px, 0); }
+            10% { clip-path: inset(65% 0 25% 0); transform: translate(2px, 0); }
+            20% { clip-path: inset(45% 0 45% 0); transform: translate(-2px, 0); }
+            30% { clip-path: inset(80% 0 10% 0); transform: translate(2px, 0); }
+            40% { clip-path: inset(20% 0 70% 0); transform: translate(-2px, 0); }
+            50% { clip-path: inset(50% 0 40% 0); transform: translate(2px, 0); }
+            60% { clip-path: inset(30% 0 60% 0); transform: translate(-2px, 0); }
+            70% { clip-path: inset(75% 0 15% 0); transform: translate(2px, 0); }
+            80% { clip-path: inset(55% 0 35% 0); transform: translate(-2px, 0); }
+            90% { clip-path: inset(10% 0 80% 0); transform: translate(2px, 0); }
+            100% { clip-path: inset(40% 0 50% 0); transform: translate(-2px, 0); }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% { clip-path: inset(58% 0 32% 0); transform: translate(2px, 0); }
+            10% { clip-path: inset(28% 0 62% 0); transform: translate(-2px, 0); }
+            20% { clip-path: inset(48% 0 42% 0); transform: translate(2px, 0); }
+            30% { clip-path: inset(13% 0 77% 0); transform: translate(-2px, 0); }
+            40% { clip-path: inset(78% 0 12% 0); transform: translate(2px, 0); }
+            50% { clip-path: inset(38% 0 52% 0); transform: translate(-2px, 0); }
+            60% { clip-path: inset(68% 0 22% 0); transform: translate(2px, 0); }
+            70% { clip-path: inset(18% 0 72% 0); transform: translate(-2px, 0); }
+            80% { clip-path: inset(33% 0 57% 0); transform: translate(2px, 0); }
+            90% { clip-path: inset(88% 0 2% 0); transform: translate(-2px, 0); }
+            100% { clip-path: inset(23% 0 67% 0); transform: translate(2px, 0); }
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -236,7 +303,6 @@
         <header class="absolute top-0 w-full z-20 py-1 px-4 sm:px-6 lg:px-8 bg-[#0a0a0a]">
             <div class="container mx-auto flex justify-between items-center">
                 <a href="#" class="logo-link flex-shrink-0"><img src="https://i.ibb.co/gn7SmgY/866f2500-dd81-4d09-8c0f-2b55c25a3464-removalai-preview.png" alt="AIT Logo" class="h-16 lg:h-20 w-auto"></a>
-                <!-- НАВИГАЦИЯ ОБНОВЛЕНА -->
                 <nav class="hidden md:flex items-center md:text-xs lg:text-sm xl:text-base space-x-4 md:space-x-6 lg:space-x-10">
                     <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">Science Hub</div><div class="lg:hidden"><span class="block">Science</span><span class="block leading-tight">Hub</span></div></a>
                     <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Super Agent</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Super Agent</span></div></a>
@@ -253,7 +319,6 @@
                 <a href="#" class="logo-link absolute top-1 left-4 sm:left-6">
                     <img src="https://i.ibb.co/gn7SmgY/866f2500-dd81-4d09-8c0f-2b55c25a3464-removalai-preview.png" alt="AIT Logo" class="h-16 w-auto">
                 </a>
-                <!-- МОБИЛЬНАЯ НАВИГАЦИЯ ОБНОВЛЕНА -->
                 <nav class="flex flex-col h-full justify-center items-center space-y-8 text-lg">
                     <a href="#" class="nav-link text-center">Science Hub</a>
                     <a href="#" class="nav-link text-center">AI Super Agent</a>
@@ -267,8 +332,14 @@
         <div id="content-wrapper">
              <section id="hero-section" class="content-section">
                  <div class="container mx-auto max-w-4xl text-center">
-                     <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight xl:whitespace-nowrap"><span style="color: var(--brand-purple);">AI</span> FOR <span style="color: var(--brand-orange);">HUMAN</span> GOOD</h1>
-                     <p id="hero-subtitle" class="typewriter-target mt-6 text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-3xl mx-auto" style="font-weight: 700;">AI ecosystem for making AI<br>a trusted business & personal assistant</p>
+                     <!-- MODIFIED: HTML structure for the title is completely changed for the new glitch effect -->
+                     <h1 id="hero-title" class="glitch-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight xl:whitespace-nowrap">
+                        <span class="glitch-word" data-text="AI" style="color: var(--brand-purple);">AI</span>
+                        <span class="glitch-word" data-text="FOR">FOR</span>
+                        <span class="glitch-word" data-text="HUMAN" style="color: var(--brand-orange);">HUMAN</span>
+                        <span class="glitch-word" data-text="GOOD">GOOD</span>
+                     </h1>
+                     <p id="hero-subtitle" data-typewriter-mode="adaptive" class="typewriter-target mt-6 text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-3xl mx-auto" style="font-weight: 700;">AI ecosystem for making AI<br>a trusted business & personal assistant</p>
                      <a href="#" class="main-cta-button inline-flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
                  </div>
              </section>
@@ -277,12 +348,11 @@
                  <div class="container mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16">
                      <div class="flex-shrink-0">
                          <div class="author-photo-container w-48 h-48 lg:w-56 lg:h-56 rounded-full inline-block">
-                             <!-- GIF is safe and untouched -->
                              <img src="https://i.ibb.co/G3MdKgx1/High-Performance-bli.gif" alt="Andre, founder of Andre AI Technologies" class="w-full h-full object-cover rounded-full">
                          </div>
                      </div>
                      <div class="speech-bubble mt-4 md:mt-0 w-full max-w-2xl rounded-2xl p-6 lg:p-8 flex flex-col">
-                         <p id="about-text" class="typewriter-target text-white text-sm md:text-base lg:text-lg leading-relaxed">Hi, I’m Andre, founder of Andre AI Technologies.<br>I have 10+ years of experience in AI transformation of global tech companies and launching AI startups.<br>I focus on AI research, building AI products for businesses and individuals, training people for emerging professions, driving harmony between AI and humans, and shaping a new economy where AI is the core of the modern operational model.</p>
+                         <p id="about-text" data-typewriter-mode="adaptive" class="typewriter-target text-white text-sm md:text-base lg:text-lg leading-relaxed">Hi, I’m Andre, founder of Andre AI Technologies.<br>I have 10+ years of experience in AI transformation of global tech companies and launching AI startups.<br>I focus on AI research, building AI products for businesses and individuals, training people for emerging professions, driving harmony between AI and humans, and shaping a new economy where AI is the core of the modern operational model.</p>
                          <a href="#" class="cv-button inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-6 text-base self-end">
                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2"><path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a.375.375 0 0 1-.375-.375V6.75A3.75 3.75 0 0 0 10.5 3h-1.875A.375.375 0 0 1 8.25 2.625V1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z" clip-rule="evenodd" /><path d="M12.971 1.816A5.23 5.23 0 0 1 15.75 1.5h1.875c.414 0 .75.336.75.75v4.5c0 .414-.336.75-.75.75h-1.875a5.23 5.23 0 0 1-2.779-.316Z" /></svg>
                              CV
@@ -295,17 +365,15 @@
                  <div class="container mx-auto max-w-7xl xl:max-w-screen-xl text-center flex flex-col items-center px-4 pt-24 pb-8 md:p-0 h-full overflow-y-auto md:h-auto md:overflow-visible md:justify-center">
                      <div class="flex flex-col items-center justify-center">
                          <div class="flex flex-col text-center">
-                             <!-- MODIFIED: Added ID and class for typewriter -->
                              <h2 id="dataism-title" class="typewriter-target text-4xl sm:text-5xl font-bold text-white leading-tight">
                                  Dataism Science Hub
                              </h2>
-                             <!-- MODIFIED: Added ID and class for typewriter -->
                              <p id="dataism-subtitle" class="typewriter-target text-xl md:text-2xl text-white mt-2">Open Applied AI Community</p>
                          </div>
                      </div>
 
                      <div class="mt-12 lg:mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
-                         <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-xs mx-auto w-full md:max-w-none md:mx-0">
+                         <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg max-w-xs mx-auto w-full md:max-w-none md:mx-0">
                              <div class="flex-grow">
                                  <h3 class="text-2xl font-bold text-white">🔬 AI Laboratory</h3>
                                  <p class="mt-3 text-gray-400">Research & Development<br>of Applied AI Solutions</p>
@@ -314,7 +382,7 @@
                                  <span class="whitespace-nowrap">Visit AI Lab</span>
                              </a>
                          </div>
-                         <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-xs mx-auto w-full md:max-w-none md:mx-0">
+                         <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg max-w-xs mx-auto w-full md:max-w-none md:mx-0">
                             <div class="flex-grow">
                                  <h3 class="text-2xl font-bold text-white">🎓 AI Academy</h3>
                                  <p class="mt-3 text-gray-400">Educational programs<br>for AI Professionals</p>
@@ -323,7 +391,7 @@
                                  <span class="whitespace-nowrap">Visit AI Academy</span>
                              </a>
                          </div>
-                         <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-xs mx-auto w-full md:max-w-none md:mx-0">
+                         <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg max-w-xs mx-auto w-full md:max-w-none md:mx-0">
                              <div class="flex-grow">
                                   <h3 class="text-2xl font-bold text-white">🌍 Datapedia</h3>
                                   <p class="mt-3 text-gray-400">Interactive Encyclopedia<br>of AI Simulations</p>
@@ -336,34 +404,31 @@
                  </div>
              </section>
 
-            <!-- НОВЫЙ ЧЕТВЕРТЫЙ БЛОК -->
             <section id="neuronium-section" class="content-section">
                 <div class="container mx-auto max-w-7xl xl:max-w-screen-xl text-center flex flex-col items-center px-4 pt-24 pb-8 md:p-0 h-full overflow-y-auto md:h-auto md:overflow-visible md:justify-center">
                     <div class="flex flex-col items-center justify-center">
                         <div class="flex flex-col text-center">
-                            <!-- MODIFIED: Added ID and class for typewriter -->
                             <h2 id="neuronium-title" class="typewriter-target text-4xl sm:text-5xl font-bold text-white leading-tight">
                                 Neuronium AI
                             </h2>
-                            <!-- MODIFIED: Added ID and class for typewriter -->
                             <p id="neuronium-subtitle" class="typewriter-target text-xl md:text-2xl text-white mt-2">AI Super Agent</p>
-                        </div>
-                    </div>
+                     </div>
+                 </div>
 
-                    <div class="mt-12 lg:mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mx-auto">
-                        <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-sm mx-auto w-full">
-                            <div class="flex-grow">
-                                <h3 class="text-2xl font-bold text-white">🤖 Personal</h3>
-                                <p class="mt-3 text-gray-400">For advanced research<br>and daily tasks</p>
+                 <div class="mt-12 lg:mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mx-auto">
+                     <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg max-w-sm mx-auto w-full">
+                         <div class="flex-grow">
+                             <h3 class="text-2xl font-bold text-white">🤖 Personal</h3>
+                             <p class="mt-3 text-gray-400">For advanced research<br>and daily tasks</p>
                             </div>
                             <a href="#" class="cv-button btn-with-arrow self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full mt-6 text-sm w-48">
                                 <span class="whitespace-nowrap">Learn More</span>
-                            </a>
-                        </div>
-                        <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-sm mx-auto w-full">
-                           <div class="flex-grow">
-                                <h3 class="text-2xl font-bold text-white">💼 Professional</h3>
-                                <p class="mt-3 text-gray-400">For automation of complex<br>business processes</p>
+                         </a>
+                     </div>
+                     <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg max-w-sm mx-auto w-full">
+                        <div class="flex-grow">
+                             <h3 class="text-2xl font-bold text-white">💼 Professional</h3>
+                             <p class="mt-3 text-gray-400">For automation of complex<br>business processes</p>
                            </div>
                             <a href="#" class="cv-button btn-with-arrow self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full mt-6 text-sm w-48">
                                 <span class="whitespace-nowrap">Learn More</span>
@@ -393,6 +458,7 @@
             let wanderTime = 0; 
             let currentSectionIndex = -1;
             let cardTarget = null;
+            let glitchTimeout = null;
             
             let blob1State = { x: window.innerWidth * 0.45, y: window.innerHeight * 0.4, scale: 1.0 };
             let blob2State = { x: window.innerWidth * 0.55, y: window.innerHeight * 0.5, scale: 1.0 };
@@ -409,11 +475,9 @@
                 });
             });
 
-            // Этот селектор теперь захватит карточки из обоих секций (3-й и 4-й)
             const dataismCards = document.querySelectorAll('.dataism-card');
             dataismCards.forEach(card => {
                 card.addEventListener('mouseenter', () => {
-                    // Условие обновлено, чтобы работать для 3-й и 4-й секции
                     if (currentSectionIndex === 2 || currentSectionIndex === 3) {
                         cardTarget = card;
                     }
@@ -425,16 +489,38 @@
 
             const typewriterInstances = {};
 
-            // MODIFIED: Typewriter setup now prevents layout shifts and handles callbacks.
-            const setupTypewriter = (element) => { 
+            // MODIFIED: This function now creates a "sizer" element to prevent layout shifts for non-adaptive text.
+            const setupTypewriter = (element) => {
                 if (!element) return;
                 const elementId = element.id;
                 if (!elementId) {
                     console.warn("Typewriter target needs an ID", element);
                     return;
                 }
-                
+
+                const isAdaptive = element.dataset.typewriterMode === 'adaptive';
                 const originalHTML = element.innerHTML;
+                let typingTarget = element;
+
+                if (!isAdaptive) {
+                    element.style.position = 'relative';
+                    const sizer = document.createElement('span');
+                    sizer.style.visibility = 'hidden';
+                    sizer.innerHTML = originalHTML;
+
+                    const typer = document.createElement('span');
+                    typer.style.position = 'absolute';
+                    typer.style.top = '0';
+                    typer.style.left = '0';
+                    typer.style.width = '100%';
+                    typer.style.height = '100%';
+
+                    element.innerHTML = '';
+                    element.appendChild(sizer);
+                    element.appendChild(typer);
+                    typingTarget = typer;
+                }
+
                 const contentQueue = [];
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = originalHTML;
@@ -450,31 +536,22 @@
                 let timeoutId = null;
 
                 const startTyping = (onComplete = null) => {
-                    clearTimeout(timeoutId); 
+                    clearTimeout(timeoutId);
                     if (isTyping) return;
                     isTyping = true;
                     
-                    // Prevent layout shift by setting min-height
-                    const height = element.offsetHeight;
-                    element.style.minHeight = `${height}px`;
+                    typingTarget.innerHTML = '';
 
-                    element.innerHTML = '';
-                    element.style.color = ''; // Restore text color
-                    
                     let charIndex = 0;
-                    
                     const type = () => {
                         if (charIndex < contentQueue.length) {
                             const char = contentQueue[charIndex];
-                            element.innerHTML += char;
+                            typingTarget.innerHTML += char;
                             charIndex++;
                             timeoutId = setTimeout(type, 25);
                         } else {
                             isTyping = false;
-                            element.style.minHeight = ''; // Cleanup min-height
-                            if (onComplete) {
-                                onComplete();
-                            }
+                            if (onComplete) onComplete();
                         }
                     };
                     type();
@@ -483,19 +560,54 @@
                 const reset = () => {
                     clearTimeout(timeoutId);
                     isTyping = false;
-                    element.innerHTML = originalHTML; // Keep original HTML to hold space
-                    element.style.color = 'transparent'; // Make text invisible but keep layout
-                    element.style.minHeight = ''; // Ensure min-height is reset
-                }
-
+                    typingTarget.innerHTML = '';
+                };
+                
                 typewriterInstances[elementId] = { start: startTyping, reset: reset };
                 reset();
             };
 
-            // MODIFIED: Setting up all typewriter targets.
             document.querySelectorAll('.typewriter-target').forEach(setupTypewriter);
             
-            // MODIFIED: Scroll handler now implements sequential typing.
+            function setupLetterGlitch() {
+                const title = document.getElementById('hero-title');
+                if (!title) return;
+
+                const words = title.querySelectorAll('.glitch-word');
+                
+                words.forEach(word => {
+                    const text = word.getAttribute('data-text');
+                    const originalColor = window.getComputedStyle(word).color;
+                    let glitchColor1, glitchColor2;
+
+                    // Assign glitch colors based on the word's original color
+                    if (originalColor.includes('136, 84, 243')) { // Purple
+                        glitchColor1 = 'var(--brand-purple)';
+                        glitchColor2 = 'var(--brand-purple)'; // Only purple glitch for purple text
+                    } else if (originalColor.includes('249, 115, 22')) { // Orange
+                        glitchColor1 = 'var(--brand-orange)';
+                        glitchColor2 = 'var(--brand-orange)'; // Only orange glitch for orange text
+                    } else { // White
+                        glitchColor1 = '#FFFFFF';
+                        glitchColor2 = '#FFFFFF'; // Only white glitch for white text
+                    }
+
+                    word.innerHTML = ''; // Clear the word
+                    for (const char of text) {
+                        const charSpan = document.createElement('span');
+                        charSpan.className = 'glitch-char';
+                        charSpan.setAttribute('data-char', char);
+                        charSpan.textContent = char;
+                        
+                        charSpan.style.setProperty('--glitch-color-1', glitchColor1);
+                        charSpan.style.setProperty('--glitch-color-2', glitchColor2);
+                        
+                        word.appendChild(charSpan);
+                    }
+                });
+            }
+            setupLetterGlitch();
+
             function handleScroll() {
                 const scrollPosition = window.scrollY;
                 const screenHeight = window.innerHeight;
@@ -509,38 +621,35 @@
 
                         if (index === currentSectionIndex) {
                             section.classList.add('is-visible');
+
+                            if (section.id === 'hero-section') {
+                                const heroTitle = document.getElementById('hero-title');
+                                if (heroTitle) {
+                                    clearTimeout(glitchTimeout);
+                                    heroTitle.classList.add('glitching');
+                                    glitchTimeout = setTimeout(() => {
+                                        heroTitle.classList.remove('glitching');
+                                    }, 2000);
+                                }
+                            }
                             
-                            // Sequential typing logic for specific sections
                             if (section.id === 'dataism-section') {
-                                const title = typewriterInstances['dataism-title'];
-                                const subtitle = typewriterInstances['dataism-subtitle'];
-                                if (title && subtitle) {
-                                    title.start(() => subtitle.start());
-                                }
+                                typewriterInstances['dataism-title']?.start(() => typewriterInstances['dataism-subtitle']?.start());
                             } else if (section.id === 'neuronium-section') {
-                                const title = typewriterInstances['neuronium-title'];
-                                const subtitle = typewriterInstances['neuronium-subtitle'];
-                                if (title && subtitle) {
-                                    title.start(() => subtitle.start());
-                                }
+                                typewriterInstances['neuronium-title']?.start(() => typewriterInstances['neuronium-subtitle']?.start());
                             } else {
-                                // Default behavior for other sections
-                                typewriterElements.forEach(el => {
-                                    const instance = typewriterInstances[el.id];
-                                    if (instance) {
-                                        instance.start();
-                                    }
-                                });
+                                typewriterElements.forEach(el => typewriterInstances[el.id]?.start());
                             }
                         } else {
                             section.classList.remove('is-visible');
-                            // Reset all typewriters in hidden sections
-                            typewriterElements.forEach(el => {
-                                const instance = typewriterInstances[el.id];
-                                if(instance) {
-                                    instance.reset();
+                            if (section.id === 'hero-section') {
+                                const heroTitle = document.getElementById('hero-title');
+                                if (heroTitle) {
+                                    clearTimeout(glitchTimeout);
+                                    heroTitle.classList.remove('glitching');
                                 }
-                            });
+                            }
+                            typewriterElements.forEach(el => typewriterInstances[el.id]?.reset());
                         }
                     });
 
@@ -554,26 +663,21 @@
                 const blobWidth = blob1.offsetWidth;
                 const blobHeight = blob1.offsetHeight;
                 
-                // Условие обновлено, чтобы работать для 3-й и 4-й секции
                 if (cardTarget && (currentSectionIndex === 2 || currentSectionIndex === 3)) {
                     const cardRect = cardTarget.getBoundingClientRect();
                     const centerX = cardRect.left + cardRect.width / 2;
                     const centerY = cardRect.top + cardRect.height / 2;
-                    
                     targetScale1 = 0.6;
                     targetScale2 = 0.6;
-                    
-                    const offset = cardRect.width * 0.2; // Расстояние, на которое блобы разъезжаются
-                    
+                    const offset = cardRect.width * 0.2;
                     targetX1 = centerX - (blobWidth / 2) - offset;
                     targetY1 = centerY - blobHeight / 2;
                     targetX2 = centerX - (blobWidth / 2) + offset;
                     targetY2 = centerY - blobHeight / 2;
-
                 } else if (isOrbiting && authorPhoto) {
                     const photoRect = authorPhoto.getBoundingClientRect();
                     const centerX = photoRect.left + photoRect.width / 2;
-                    const centerY = window.innerHeight * 0.32; // ПОДНЯЛ ЕЩЕ НЕМНОГО
+                    const centerY = window.innerHeight * 0.32;
                     const radius = photoRect.width * 0.6;
                     angle += 0.003; 
                     targetScale1 = 0.7;
@@ -591,7 +695,7 @@
                     targetX1 = centerX + wanderRadiusX * Math.cos(wanderTime) - blobWidth / 2;
                     targetY1 = centerY + wanderRadiusY * Math.sin(wanderTime * 1.5) - blobHeight / 2;
                     targetScale1 = 1.0;
-                    const phaseOffset = 1.5; // Увеличил расстояние между блобами
+                    const phaseOffset = 1.5;
                     targetX2 = centerX + wanderRadiusX * Math.cos(wanderTime - phaseOffset) - blobWidth / 2;
                     targetY2 = centerY + wanderRadiusY * Math.sin((wanderTime - phaseOffset) * 1.5) - blobHeight / 2;
                     targetScale2 = 1.0;
@@ -617,3 +721,4 @@
     </script>
 </body>
 </html>
+
