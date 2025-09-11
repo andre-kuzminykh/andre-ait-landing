@@ -21,7 +21,8 @@
             font-family: 'JetBrains Mono', monospace;
             background-color: #0a0a0a;
             color: #E5E7EB;
-            height: 300vh;
+            /* Увеличена высота для размещения нового, четвертого блока */
+            height: 400vh; 
             -webkit-overflow-scrolling: touch;
         }
         
@@ -235,12 +236,12 @@
         <header class="absolute top-0 w-full z-20 py-1 px-4 sm:px-6 lg:px-8 bg-[#0a0a0a]">
             <div class="container mx-auto flex justify-between items-center">
                 <a href="#" class="logo-link flex-shrink-0"><img src="https://i.ibb.co/gn7SmgY/866f2500-dd81-4d09-8c0f-2b55c25a3464-removalai-preview.png" alt="AIT Logo" class="h-16 lg:h-20 w-auto"></a>
+                <!-- НАВИГАЦИЯ ОБНОВЛЕНА -->
                 <nav class="hidden md:flex items-center md:text-xs lg:text-sm xl:text-base space-x-4 md:space-x-6 lg:space-x-10">
+                    <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">Science Hub</div><div class="lg:hidden"><span class="block">Science</span><span class="block leading-tight">Hub</span></div></a>
                     <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Super Agent</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Super Agent</span></div></a>
                     <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Employees</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Employees</span></div></a>
-                    <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Companies</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Companies</span></div></a>
-                    <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Startup Studio</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Startup Studio</span></div></a>
-                    <a href="#" class="nav-link text-center"><div class="hidden lg:block">Blog</div><div class="lg:hidden"><span class="block invisible">AI</span><span class="block leading-tight">Blog</span></div></a>
+                    <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Services</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Services</span></div></a>
                 </nav>
                 <a href="#" class="hidden md:flex items-center justify-center cta-button text-white font-medium py-3 md:px-3 lg:px-5 xl:px-7 rounded-full md:text-xs lg:text-sm xl:text-base">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
@@ -252,8 +253,12 @@
                 <a href="#" class="logo-link absolute top-1 left-4 sm:left-6">
                     <img src="https://i.ibb.co/gn7SmgY/866f2500-dd81-4d09-8c0f-2b55c25a3464-removalai-preview.png" alt="AIT Logo" class="h-16 w-auto">
                 </a>
+                <!-- МОБИЛЬНАЯ НАВИГАЦИЯ ОБНОВЛЕНА -->
                 <nav class="flex flex-col h-full justify-center items-center space-y-8 text-lg">
-                    <a href="#" class="nav-link text-center">AI Super Agent</a><a href="#" class="nav-link text-center">AI Employees</a><a href="#" class="nav-link text-center">AI Companies</a><a href="#" class="nav-link text-center">AI Startup Studio</a><a href="#" class="nav-link text-center">Blog</a>
+                    <a href="#" class="nav-link text-center">Science Hub</a>
+                    <a href="#" class="nav-link text-center">AI Super Agent</a>
+                    <a href="#" class="nav-link text-center">AI Employees</a>
+                    <a href="#" class="nav-link text-center">AI Services</a>
                     <a href="#" class="main-cta-button flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
                 </nav>
             </div>
@@ -328,6 +333,41 @@
                      </div>
                  </div>
              </section>
+
+            <!-- НОВЫЙ ЧЕТВЕРТЫЙ БЛОК -->
+            <section id="neuronium-section" class="content-section">
+                <div class="container mx-auto max-w-7xl xl:max-w-screen-xl text-center flex flex-col items-center px-4 pt-24 pb-8 md:p-0 h-full overflow-y-auto md:h-auto md:overflow-visible md:justify-center">
+                    <div class="flex flex-col items-center justify-center">
+                        <div class="flex flex-col text-center">
+                            <h2 class="text-4xl sm:text-5xl font-bold text-white leading-tight">
+                                Neuronium AI
+                            </h2>
+                            <p class="text-xl md:text-2xl text-white mt-2">AI Super Agent</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 lg:mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mx-auto">
+                        <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-sm mx-auto w-full">
+                            <div class="flex-grow">
+                                <h3 class="text-2xl font-bold text-white">🤖 Personal</h3>
+                                <p class="mt-3 text-gray-400">For advanced research<br>and daily tasks</p>
+                            </div>
+                            <a href="#" class="cv-button btn-with-arrow self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full mt-6 text-sm w-48">
+                                <span class="whitespace-nowrap">Learn More</span>
+                            </a>
+                        </div>
+                        <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-sm mx-auto w-full">
+                           <div class="flex-grow">
+                                <h3 class="text-2xl font-bold text-white">💼 Professional</h3>
+                                <p class="mt-3 text-gray-400">For automation of complex<br>business processes</p>
+                           </div>
+                            <a href="#" class="cv-button btn-with-arrow self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full mt-6 text-sm w-48">
+                                <span class="whitespace-nowrap">Learn More</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 
@@ -365,10 +405,12 @@
                 });
             });
 
+            // Этот селектор теперь захватит карточки из обоих секций (3-й и 4-й)
             const dataismCards = document.querySelectorAll('.dataism-card');
             dataismCards.forEach(card => {
                 card.addEventListener('mouseenter', () => {
-                    if (currentSectionIndex === 2) {
+                    // Условие обновлено, чтобы работать для 3-й и 4-й секции
+                    if (currentSectionIndex === 2 || currentSectionIndex === 3) {
                         cardTarget = card;
                     }
                 });
@@ -473,8 +515,9 @@
                 let targetX2, targetY2, targetScale2;
                 const blobWidth = blob1.offsetWidth;
                 const blobHeight = blob1.offsetHeight;
-
-                if (cardTarget && currentSectionIndex === 2) {
+                
+                // Условие обновлено, чтобы работать для 3-й и 4-й секции
+                if (cardTarget && (currentSectionIndex === 2 || currentSectionIndex === 3)) {
                     const cardRect = cardTarget.getBoundingClientRect();
                     const centerX = cardRect.left + cardRect.width / 2;
                     const centerY = cardRect.top + cardRect.height / 2;
@@ -536,4 +579,3 @@
     </script>
 </body>
 </html>
-
