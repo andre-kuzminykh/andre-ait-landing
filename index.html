@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://css.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --brand-purple: #8854F3;
@@ -21,7 +21,7 @@
             font-family: 'JetBrains Mono', monospace;
             background-color: #0a0a0a;
             color: #E5E7EB;
-            height: 400vh; 
+            height: 400vh;
             -webkit-overflow-scrolling: touch;
         }
         
@@ -144,7 +144,7 @@
                 linear-gradient(#fff 0 0) content-box,
                 linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
-                    mask-composite: exclude;
+            mask-composite: exclude;
             transition: opacity 0.5s ease;
             opacity: 1;
         }
@@ -217,81 +217,11 @@
         }
 
         @keyframes grain-animation {
-            0%   { transform: translate(0, 0); }
-            25%  { transform: translate(-3px, 4px); }
-            50%  { transform: translate(4px, -3px); }
-            75%  { transform: translate(-2px, -2px); }
+            0%  { transform: translate(0, 0); }
+            25% { transform: translate(-3px, 4px); }
+            50% { transform: translate(4px, -3px); }
+            75% { transform: translate(-2px, -2px); }
             100% { transform: translate(0, 0); }
-        }
-
-        /* MODIFIED: Glitch Effect Styles */
-        .glitch-title {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            gap: 0.25em;
-        }
-        .glitch-word {
-            display: inline-flex;
-            position: relative;
-            z-index: 1;
-        }
-        .glitch-char {
-            position: relative;
-            z-index: 1;
-            display: inline-block;
-        }
-        .glitch-char::before,
-        .glitch-char::after {
-            content: attr(data-char);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            overflow: hidden;
-            opacity: 0;
-        }
-        .glitch-title.glitching .glitch-char::before,
-        .glitch-title.glitching .glitch-char::after {
-            opacity: 1;
-        }
-        .glitch-title.glitching .glitch-char::before {
-            text-shadow: -2px 0 var(--glitch-color-1);
-            animation: glitch-anim-1 2s linear;
-        }
-        .glitch-title.glitching .glitch-char::after {
-            text-shadow: 2px 0 var(--glitch-color-2);
-            animation: glitch-anim-2 2s linear;
-        }
-
-        @keyframes glitch-anim-1 {
-            0% { clip-path: inset(35% 0 55% 0); transform: translate(-2px, 0); }
-            10% { clip-path: inset(65% 0 25% 0); transform: translate(2px, 0); }
-            20% { clip-path: inset(45% 0 45% 0); transform: translate(-2px, 0); }
-            30% { clip-path: inset(80% 0 10% 0); transform: translate(2px, 0); }
-            40% { clip-path: inset(20% 0 70% 0); transform: translate(-2px, 0); }
-            50% { clip-path: inset(50% 0 40% 0); transform: translate(2px, 0); }
-            60% { clip-path: inset(30% 0 60% 0); transform: translate(-2px, 0); }
-            70% { clip-path: inset(75% 0 15% 0); transform: translate(2px, 0); }
-            80% { clip-path: inset(55% 0 35% 0); transform: translate(-2px, 0); }
-            90% { clip-path: inset(10% 0 80% 0); transform: translate(2px, 0); }
-            100% { clip-path: inset(40% 0 50% 0); transform: translate(-2px, 0); }
-        }
-
-        @keyframes glitch-anim-2 {
-            0% { clip-path: inset(58% 0 32% 0); transform: translate(2px, 0); }
-            10% { clip-path: inset(28% 0 62% 0); transform: translate(-2px, 0); }
-            20% { clip-path: inset(48% 0 42% 0); transform: translate(2px, 0); }
-            30% { clip-path: inset(13% 0 77% 0); transform: translate(-2px, 0); }
-            40% { clip-path: inset(78% 0 12% 0); transform: translate(2px, 0); }
-            50% { clip-path: inset(38% 0 52% 0); transform: translate(-2px, 0); }
-            60% { clip-path: inset(68% 0 22% 0); transform: translate(2px, 0); }
-            70% { clip-path: inset(18% 0 72% 0); transform: translate(-2px, 0); }
-            80% { clip-path: inset(33% 0 57% 0); transform: translate(2px, 0); }
-            90% { clip-path: inset(88% 0 2% 0); transform: translate(-2px, 0); }
-            100% { clip-path: inset(23% 0 67% 0); transform: translate(2px, 0); }
         }
     </style>
 </head>
@@ -324,7 +254,7 @@
                     <a href="#" class="nav-link text-center">AI Super Agent</a>
                     <a href="#" class="nav-link text-center">AI Employees</a>
                     <a href="#" class="nav-link text-center">AI Services</a>
-                    <a href="#" class="main-cta-button flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
+                    <a href="#" class="main-cta-button inline-flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
                 </nav>
             </div>
         </header>
@@ -332,12 +262,8 @@
         <div id="content-wrapper">
              <section id="hero-section" class="content-section">
                  <div class="container mx-auto max-w-4xl text-center">
-                     <!-- MODIFIED: HTML structure for the title is completely changed for the new glitch effect -->
-                     <h1 id="hero-title" class="glitch-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight xl:whitespace-nowrap">
-                        <span class="glitch-word" data-text="AI" style="color: var(--brand-purple);">AI</span>
-                        <span class="glitch-word" data-text="FOR">FOR</span>
-                        <span class="glitch-word" data-text="HUMAN" style="color: var(--brand-orange);">HUMAN</span>
-                        <span class="glitch-word" data-text="GOOD">GOOD</span>
+                     <h1 id="hero-title" class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight xl:whitespace-nowrap">
+                         <span style="color: var(--brand-purple);">AI</span> FOR <span style="color: var(--brand-orange);">HUMAN</span> GOOD
                      </h1>
                      <p id="hero-subtitle" data-typewriter-mode="adaptive" class="typewriter-target mt-6 text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-3xl mx-auto" style="font-weight: 700;">AI ecosystem for making AI<br>a trusted business & personal assistant</p>
                      <a href="#" class="main-cta-button inline-flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
@@ -386,7 +312,7 @@
                             <div class="flex-grow">
                                  <h3 class="text-2xl font-bold text-white">🎓 AI Academy</h3>
                                  <p class="mt-3 text-gray-400">Educational programs<br>for AI Professionals</p>
-                            </div>
+                             </div>
                              <a href="#" class="cv-button btn-with-arrow self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full mt-6 text-sm w-48">
                                  <span class="whitespace-nowrap">Visit AI Academy</span>
                              </a>
@@ -404,39 +330,39 @@
                  </div>
              </section>
 
-            <section id="neuronium-section" class="content-section">
-                <div class="container mx-auto max-w-7xl xl:max-w-screen-xl text-center flex flex-col items-center px-4 pt-24 pb-8 md:p-0 h-full overflow-y-auto md:h-auto md:overflow-visible md:justify-center">
-                    <div class="flex flex-col items-center justify-center">
-                        <div class="flex flex-col text-center">
-                            <h2 id="neuronium-title" class="typewriter-target text-4xl sm:text-5xl font-bold text-white leading-tight">
-                                Neuronium AI
-                            </h2>
-                            <p id="neuronium-subtitle" class="typewriter-target text-xl md:text-2xl text-white mt-2">AI Super Agent</p>
+             <section id="neuronium-section" class="content-section">
+                 <div class="container mx-auto max-w-7xl xl:max-w-screen-xl text-center flex flex-col items-center px-4 pt-24 pb-8 md:p-0 h-full overflow-y-auto md:h-auto md:overflow-visible md:justify-center">
+                     <div class="flex flex-col items-center justify-center">
+                         <div class="flex flex-col text-center">
+                             <h2 id="neuronium-title" class="typewriter-target text-4xl sm:text-5xl font-bold text-white leading-tight">
+                                 Neuronium AI
+                             </h2>
+                             <p id="neuronium-subtitle" class="typewriter-target text-xl md:text-2xl text-white mt-2">AI Super Agent</p>
+                         </div>
+                     </div>
+
+                     <div class="mt-12 lg:mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mx-auto">
+                         <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg max-w-sm mx-auto w-full">
+                             <div class="flex-grow">
+                                 <h3 class="text-2xl font-bold text-white">🤖 Personal</h3>
+                                 <p class="mt-3 text-gray-400">For advanced research<br>and daily tasks</p>
+                             </div>
+                             <a href="#" class="cv-button btn-with-arrow self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full mt-6 text-sm w-48">
+                                 <span class="whitespace-nowrap">Learn More</span>
+                             </a>
+                         </div>
+                         <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg max-w-sm mx-auto w-full">
+                             <div class="flex-grow">
+                                 <h3 class="text-2xl font-bold text-white">💼 Professional</h3>
+                                 <p class="mt-3 text-gray-400">For automation of complex<br>business processes</p>
+                             </div>
+                             <a href="#" class="cv-button btn-with-arrow self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full mt-6 text-sm w-48">
+                                 <span class="whitespace-nowrap">Learn More</span>
+                             </a>
+                         </div>
                      </div>
                  </div>
-
-                 <div class="mt-12 lg:mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mx-auto">
-                     <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg max-w-sm mx-auto w-full">
-                         <div class="flex-grow">
-                             <h3 class="text-2xl font-bold text-white">🤖 Personal</h3>
-                             <p class="mt-3 text-gray-400">For advanced research<br>and daily tasks</p>
-                            </div>
-                            <a href="#" class="cv-button btn-with-arrow self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full mt-6 text-sm w-48">
-                                <span class="whitespace-nowrap">Learn More</span>
-                         </a>
-                     </div>
-                     <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg max-w-sm mx-auto w-full">
-                        <div class="flex-grow">
-                             <h3 class="text-2xl font-bold text-white">💼 Professional</h3>
-                             <p class="mt-3 text-gray-400">For automation of complex<br>business processes</p>
-                           </div>
-                            <a href="#" class="cv-button btn-with-arrow self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full mt-6 text-sm w-48">
-                                <span class="whitespace-nowrap">Learn More</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </section>
+             </section>
         </div>
     </div>
 
@@ -489,7 +415,6 @@
 
             const typewriterInstances = {};
 
-            // MODIFIED: This function now creates a "sizer" element to prevent layout shifts for non-adaptive text.
             const setupTypewriter = (element) => {
                 if (!element) return;
                 const elementId = element.id;
@@ -569,45 +494,6 @@
 
             document.querySelectorAll('.typewriter-target').forEach(setupTypewriter);
             
-            function setupLetterGlitch() {
-                const title = document.getElementById('hero-title');
-                if (!title) return;
-
-                const words = title.querySelectorAll('.glitch-word');
-                
-                words.forEach(word => {
-                    const text = word.getAttribute('data-text');
-                    const originalColor = window.getComputedStyle(word).color;
-                    let glitchColor1, glitchColor2;
-
-                    // Assign glitch colors based on the word's original color
-                    if (originalColor.includes('136, 84, 243')) { // Purple
-                        glitchColor1 = 'var(--brand-purple)';
-                        glitchColor2 = 'var(--brand-purple)'; // Only purple glitch for purple text
-                    } else if (originalColor.includes('249, 115, 22')) { // Orange
-                        glitchColor1 = 'var(--brand-orange)';
-                        glitchColor2 = 'var(--brand-orange)'; // Only orange glitch for orange text
-                    } else { // White
-                        glitchColor1 = '#FFFFFF';
-                        glitchColor2 = '#FFFFFF'; // Only white glitch for white text
-                    }
-
-                    word.innerHTML = ''; // Clear the word
-                    for (const char of text) {
-                        const charSpan = document.createElement('span');
-                        charSpan.className = 'glitch-char';
-                        charSpan.setAttribute('data-char', char);
-                        charSpan.textContent = char;
-                        
-                        charSpan.style.setProperty('--glitch-color-1', glitchColor1);
-                        charSpan.style.setProperty('--glitch-color-2', glitchColor2);
-                        
-                        word.appendChild(charSpan);
-                    }
-                });
-            }
-            setupLetterGlitch();
-
             function handleScroll() {
                 const scrollPosition = window.scrollY;
                 const screenHeight = window.innerHeight;
@@ -622,17 +508,6 @@
                         if (index === currentSectionIndex) {
                             section.classList.add('is-visible');
 
-                            if (section.id === 'hero-section') {
-                                const heroTitle = document.getElementById('hero-title');
-                                if (heroTitle) {
-                                    clearTimeout(glitchTimeout);
-                                    heroTitle.classList.add('glitching');
-                                    glitchTimeout = setTimeout(() => {
-                                        heroTitle.classList.remove('glitching');
-                                    }, 2000);
-                                }
-                            }
-                            
                             if (section.id === 'dataism-section') {
                                 typewriterInstances['dataism-title']?.start(() => typewriterInstances['dataism-subtitle']?.start());
                             } else if (section.id === 'neuronium-section') {
@@ -642,13 +517,6 @@
                             }
                         } else {
                             section.classList.remove('is-visible');
-                            if (section.id === 'hero-section') {
-                                const heroTitle = document.getElementById('hero-title');
-                                if (heroTitle) {
-                                    clearTimeout(glitchTimeout);
-                                    heroTitle.classList.remove('glitching');
-                                }
-                            }
                             typewriterElements.forEach(el => typewriterInstances[el.id]?.reset());
                         }
                     });
@@ -721,4 +589,3 @@
     </script>
 </body>
 </html>
-
