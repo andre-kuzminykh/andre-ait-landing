@@ -11,12 +11,11 @@
     <style>
         :root {
             --brand-purple: #8854F3;
-            /* FIX: Switched to a safer orange shade to prevent color shifting with filter:blur() on some mobile browsers. */
-            --brand-orange: #F97316; /* Was #F78F55 */
-            --brand-purple-rgb: 136, 84, 23;
+            --brand-orange: #F97316;
+            --brand-purple-rgb: 136, 84, 243;
             --brand-orange-rgb: 249, 115, 22;
         }
-        /* FIX 2: Added -webkit-overflow-scrolling: touch for smoother scrolling on iOS */
+        
         body {
             font-family: 'JetBrains Mono', monospace;
             background-color: #0a0a0a;
@@ -59,25 +58,30 @@
             z-index: 2;
         }
 
-        /* FIX 1: Added will-change and transform: translateZ(0) to promote the blobs to a new layer, fixing visibility on some mobile browsers like Safari. */
-        /* FIX: Reverted to filter:blur() from radial-gradient for the original visual effect. */
+        /* --- OPTIMIZATION START: Replaced filter:blur() with high-performance inline SVG backgrounds --- */
         .blob {
             position: fixed;
             z-index: -1;
-            border-radius: 9999px;
-            filter: blur(80px); /* Restored for the original visual effect */
-            opacity: 0.7; 
-            transform: scale(1) translateZ(0); /* Using translateZ to create a new stacking context */
+            opacity: 0.7;
+            transform: scale(1) translateZ(0);
             transition: opacity 0.4s ease;
-            will-change: transform, opacity; /* Performance hint for the browser */
+            will-change: transform, opacity;
+            
+            /* Using pre-blurred SVG for max performance */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            border-radius: 9999px;
         }
-        
+
+        /* ULTIMATE FIX: Using advanced SVG filters to create a truly abstract, organic, non-circular shape with soft, transparent edges. */
         .blob-purple { 
-            background-color: var(--brand-purple);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cdefs%3E%3CradialGradient id='grad' cx='50%25' cy='50%25' r='50%25'%3E%3Cstop offset='0%25' stop-color='%238854F3' stop-opacity='1'/%3E%3Cstop offset='100%25' stop-color='%238854F3' stop-opacity='0'/%3E%3C/radialGradient%3E%3Cfilter id='blob_filter' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='3' result='noise'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='noise' scale='50'/%3E%3CfeGaussianBlur stdDeviation='70'/%3E%3C/filter%3E%3C/defs%3E%3Ccircle cx='250' cy='250' r='150' fill='url(%23grad)' filter='url(%23blob_filter)'/%3E%3C/svg%3E");
         }
         .blob-orange { 
-            background-color: var(--brand-orange);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cdefs%3E%3CradialGradient id='grad' cx='50%25' cy='50%25' r='50%25'%3E%3Cstop offset='0%25' stop-color='%23F97316' stop-opacity='1'/%3E%3Cstop offset='100%25' stop-color='%23F97316' stop-opacity='0'/%3E%3C/radialGradient%3E%3Cfilter id='blob_filter' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='3' result='noise'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='noise' scale='50'/%3E%3CfeGaussianBlur stdDeviation='70'/%3E%3C/filter%3E%3C/defs%3E%3Ccircle cx='250' cy='250' r='150' fill='url(%23grad)' filter='url(%23blob_filter)'/%3E%3C/svg%3E");
         }
+        /* --- OPTIMIZATION END --- */
         
         .author-photo-container {
             position: relative;
@@ -183,12 +187,9 @@
             -webkit-mask-position: center;
             mask-position: center;
             transition: background-color 0.4s ease-in-out;
-            /* FIX: Promote to own rendering layer to prevent animation glitches */
             transform: translateZ(0);
         }
 
-        /* PERFORMANCE FIX: The animated grain effect was causing major slowdowns on mobile devices. */
-        /* It is now disabled on screens smaller than 768px to ensure a smooth experience. */
         body::after {
             content: "";
             position: fixed;
@@ -201,19 +202,16 @@
             background-image: url('data:image/svg+xml,<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"><filter id="a"><feTurbulence baseFrequency="0.65" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23a)"/></svg>');
             background-size: 256px 256px;
             opacity: 0.08;
-            /* Promotes the element to its own layer for better static compositing performance. */
             transform: translateZ(0); 
         }
 
-        /* The expensive grain animation is now enabled only on larger screens. */
         @media (min-width: 768px) {
             body::after {
-                will-change: transform; /* Performance hint for animation */
+                will-change: transform;
                 animation: grain-animation 8s alternate linear infinite;
             }
         }
 
-        /* The keyframe animation for the grain effect. */
         @keyframes grain-animation {
             0%   { transform: translate(0, 0); }
             25%  { transform: translate(-3px, 4px); }
@@ -225,10 +223,9 @@
 </head>
 <body class="antialiased">
     <div id="page-container">
-        <div id="blob1" class="blob blob-purple w-80 h-80 md:w-96 md:h-96 lg:w-[32rem] lg:h-[32rem] xl:w-[40rem] xl:h-[40rem]"></div>
-        <div id="blob2" class="blob blob-orange w-80 h-80 md:w-96 md:h-96 lg:w-[32rem] lg:h-[32rem] xl:w-[40rem] xl:h-[40rem]"></div>
+        <div id="blob1" class="blob blob-purple w-[45rem] h-[45rem] md:w-[65rem] md:h-[65rem] lg:w-[80rem] lg:h-[80rem] xl:w-[95rem] xl:h-[95rem]"></div>
+        <div id="blob2" class="blob blob-orange w-[45rem] h-[45rem] md:w-[65rem] md:h-[65rem] lg:w-[80rem] lg:h-[80rem] xl:w-[95rem] xl:h-[95rem]"></div>
 
-        <!-- FIX: Header background is now black -->
         <header class="absolute top-0 w-full z-20 py-1 px-4 sm:px-6 lg:px-8 bg-[#0a0a0a]">
             <div class="container mx-auto flex justify-between items-center">
                 <a href="#" class="logo-link flex-shrink-0"><img src="https://i.ibb.co/gn7SmgY/866f2500-dd81-4d09-8c0f-2b55c25a3464-removalai-preview.png" alt="AIT Logo" class="h-16 lg:h-20 w-auto"></a>
@@ -246,13 +243,11 @@
                 <button id="menu-btn" class="md:hidden focus:outline-none z-30"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg></button>
             </div>
             <div id="mobile-menu" class="mobile-menu md:hidden fixed top-0 right-0 h-full w-full bg-[#0a0a0a] transform translate-x-full z-20 p-8">
-                <!-- FIX 7: Added logo to the top-left of the mobile menu -->
                 <a href="#" class="logo-link absolute top-1 left-4 sm:left-6">
                     <img src="https://i.ibb.co/gn7SmgY/866f2500-dd81-4d09-8c0f-2b55c25a3464-removalai-preview.png" alt="AIT Logo" class="h-16 w-auto">
                 </a>
                 <nav class="flex flex-col h-full justify-center items-center space-y-8 text-lg">
                     <a href="#" class="nav-link text-center">AI Super Agent</a><a href="#" class="nav-link text-center">AI Employees</a><a href="#" class="nav-link text-center">AI Companies</a><a href="#" class="nav-link text-center">AI Startup Studio</a><a href="#" class="nav-link text-center">Blog</a>
-                    <!-- FIX 5: Increased button height to match the main hero button -->
                     <a href="#" class="main-cta-button flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
                 </nav>
             </div>
@@ -262,10 +257,7 @@
              <section id="hero-section" class="content-section">
                  <div class="container mx-auto max-w-4xl text-center">
                      <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight xl:whitespace-nowrap"><span style="color: var(--brand-purple);">AI</span> FOR <span style="color: var(--brand-orange);">HUMAN</span> GOOD</h1>
-                     <!-- FIX 8: Added font-bold to match the button's font weight -->
-                     <!-- FIX 3: Replaced class with inline style for font-weight consistency -->
                      <p class="mt-6 text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-3xl mx-auto" style="font-weight: 700;">AI ecosystem for making AI<br>a trusted business & personal assistant</p>
-                     <!-- FIX 4: Increased vertical padding to make the button taller -->
                      <a href="#" class="main-cta-button inline-flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
                  </div>
              </section>
@@ -274,7 +266,7 @@
                  <div class="container mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16">
                      <div class="flex-shrink-0">
                          <div class="author-photo-container w-48 h-48 lg:w-56 lg:h-56 rounded-full inline-block">
-                             <!-- FIX: Restored original GIF URL -->
+                             <!-- GIF is safe and untouched -->
                              <img src="https://i.ibb.co/G3MdKgx1/High-Performance-bli.gif" alt="Andre, founder of Andre AI Technologies" class="w-full h-full object-cover rounded-full">
                          </div>
                      </div>
@@ -289,7 +281,6 @@
              </section>
 
              <section id="dataism-section" class="content-section">
-                 <!-- FIX: Reverted to vertical centering on desktop and enabled conditional scrolling with padding on mobile -->
                  <div class="container mx-auto max-w-7xl xl:max-w-screen-xl text-center flex flex-col items-center px-4 pt-24 pb-8 md:p-0 h-full overflow-y-auto md:h-auto md:overflow-visible md:justify-center">
                      <div class="flex flex-col items-center justify-center">
                          <div class="flex flex-col text-center">
@@ -301,7 +292,6 @@
                      </div>
 
                      <div class="mt-12 lg:mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
-                         <!-- FIX: Adjusted card width for mobile and ensured content dictates height -->
                          <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-xs mx-auto w-full md:max-w-none md:mx-0">
                              <div class="flex-grow">
                                  <h3 class="text-2xl font-bold text-white">🔬 AI Laboratory</h3>
@@ -311,7 +301,6 @@
                                  <span class="whitespace-nowrap">Visit AI Lab</span>
                              </a>
                          </div>
-                         <!-- FIX: Adjusted card width for mobile and ensured content dictates height -->
                          <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-xs mx-auto w-full md:max-w-none md:mx-0">
                             <div class="flex-grow">
                                  <h3 class="text-2xl font-bold text-white">🎓 AI Academy</h3>
@@ -321,7 +310,6 @@
                                  <span class="whitespace-nowrap">Visit AI Academy</span>
                              </a>
                          </div>
-                         <!-- FIX: Adjusted card width for mobile and ensured content dictates height -->
                          <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-xs mx-auto w-full md:max-w-none md:mx-0">
                              <div class="flex-grow">
                                   <h3 class="text-2xl font-bold text-white">🌍 Datapedia</h3>
@@ -354,7 +342,7 @@
             let angle = 0; 
             let wanderTime = 0; 
             let currentSectionIndex = -1;
-            let cardTarget = null; // Will store the element of the hovered card
+            let cardTarget = null;
             
             let blob1State = { x: window.innerWidth * 0.45, y: window.innerHeight * 0.4, scale: 1.0 };
             let blob2State = { x: window.innerWidth * 0.55, y: window.innerHeight * 0.5, scale: 1.0 };
@@ -385,8 +373,6 @@
 
             const typewriterInstances = {};
 
-            // --- TYPEWRITER EFFECT START ---
-            // This function is self-contained and handles the typewriter effect cleanly.
             const setupTypewriter = (element) => { 
                 if (!element) return;
                 const elementId = element.id;
@@ -399,7 +385,6 @@
                 const contentQueue = [];
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = originalHTML;
-                // Parse nodes into a simple array of characters and '<br>' strings
                 Array.from(tempDiv.childNodes).forEach(node => {
                     if (node.nodeType === Node.TEXT_NODE) {
                         contentQueue.push(...node.textContent.split(''));
@@ -415,18 +400,18 @@
                     clearTimeout(timeoutId); 
                     if (isTyping) return;
                     isTyping = true;
-                    element.innerHTML = ''; // Clear content
-                    element.style.visibility = 'visible'; // Make visible right before typing starts
+                    element.innerHTML = '';
+                    element.style.visibility = 'visible';
                     let charIndex = 0;
                     
                     const type = () => {
                         if (charIndex < contentQueue.length) {
                             const char = contentQueue[charIndex];
-                            element.innerHTML += char; // Append char or <br> tag
+                            element.innerHTML += char;
                             charIndex++;
-                            timeoutId = setTimeout(type, 45); // Typing speed
+                            timeoutId = setTimeout(type, 45);
                         } else {
-                            isTyping = false; // Done
+                            isTyping = false;
                         }
                     };
                     type();
@@ -436,18 +421,16 @@
                     clearTimeout(timeoutId);
                     isTyping = false;
                     element.innerHTML = originalHTML;
-                    element.style.visibility = 'hidden'; // Hide it to prevent flash of content
+                    element.style.visibility = 'hidden';
                 }
 
                 typewriterInstances[elementId] = { start: startTyping, reset: reset };
-                reset(); // Set initial state to hidden
+                reset();
             };
 
-            // Assign IDs and initialize the typewriter effect for target elements
             document.querySelector('#hero-section p').id = 'hero-subtitle';
             setupTypewriter(document.getElementById('hero-subtitle'));
             setupTypewriter(document.getElementById('about-text'));
-            // --- TYPEWRITER EFFECT END ---
             
             function handleScroll() {
                 const scrollPosition = window.scrollY;
@@ -458,8 +441,6 @@
                     currentSectionIndex = newSectionIndex;
                     
                     sections.forEach((section, index) => {
-                        // The querySelector here is a bit broad, but we rely on the specific IDs
-                        // given to the typewriter elements to trigger the correct instance.
                         const pElement = section.querySelector('p');
                         const typewriterId = pElement ? pElement.id : null;
                         const instance = typewriterId ? typewriterInstances[typewriterId] : null;
@@ -487,43 +468,43 @@
                 const blobWidth = blob1.offsetWidth;
                 const blobHeight = blob1.offsetHeight;
 
-                // Priority: Card Hover > Orbiting > Wandering
                 if (cardTarget && currentSectionIndex === 2) {
                     const cardRect = cardTarget.getBoundingClientRect();
                     const centerX = cardRect.left + cardRect.width / 2;
                     const centerY = cardRect.top + cardRect.height / 2;
                     
-                    targetScale1 = 0.6; // A bit larger when centered
+                    targetScale1 = 0.6;
                     targetScale2 = 0.6;
                     
-                    // Set target for both blobs to the center of the card
-                    targetX1 = centerX - blobWidth / 2;
+                    const offset = cardRect.width * 0.2; // Расстояние, на которое блобы разъезжаются
+                    
+                    targetX1 = centerX - (blobWidth / 2) - offset;
                     targetY1 = centerY - blobHeight / 2;
-                    targetX2 = centerX - blobWidth / 2;
+                    targetX2 = centerX - (blobWidth / 2) + offset;
                     targetY2 = centerY - blobHeight / 2;
 
                 } else if (isOrbiting && authorPhoto) {
                     const photoRect = authorPhoto.getBoundingClientRect();
                     const centerX = photoRect.left + photoRect.width / 2;
-                    const centerY = photoRect.top + photoRect.height / 2;
+                    const centerY = window.innerHeight * 0.3; // ПОДНЯЛ ЕЩЕ ВЫШЕ
                     const radius = photoRect.width * 0.6;
                     angle += 0.003; 
                     targetScale1 = 0.7;
                     targetScale2 = 0.7;
                     targetX1 = (centerX + radius * Math.cos(angle)) - blobWidth / 2;
                     targetY1 = (centerY + radius * Math.sin(angle)) - blobHeight / 2;
-                    targetX2 = (centerX + radius * Math.cos(angle + Math.PI)) - blobWidth / 2;
-                    targetY2 = (centerY + radius * Math.sin(angle + Math.PI)) - blobHeight / 2;
+                    targetX2 = (centerX + radius * Math.cos(angle + Math.PI / 2)) - blobWidth / 2; 
+                    targetY2 = (centerY + radius * Math.sin(angle + Math.PI / 2)) - blobHeight / 2;
                 } else {
                     wanderTime += 0.003;
                     const centerX = window.innerWidth / 2;
                     const centerY = window.innerHeight / 2;
-                    const wanderRadiusX = Math.min(centerX, centerY) * 0.35;
-                    const wanderRadiusY = Math.min(centerX, centerY) * 0.25;
+                    const wanderRadiusX = Math.min(centerX, centerY) * 0.45;
+                    const wanderRadiusY = Math.min(centerX, centerY) * 0.35;
                     targetX1 = centerX + wanderRadiusX * Math.cos(wanderTime) - blobWidth / 2;
                     targetY1 = centerY + wanderRadiusY * Math.sin(wanderTime * 1.5) - blobHeight / 2;
                     targetScale1 = 1.0;
-                    const phaseOffset = 1.5;
+                    const phaseOffset = 1.5; // Увеличил расстояние между блобами
                     targetX2 = centerX + wanderRadiusX * Math.cos(wanderTime - phaseOffset) - blobWidth / 2;
                     targetY2 = centerY + wanderRadiusY * Math.sin((wanderTime - phaseOffset) * 1.5) - blobHeight / 2;
                     targetScale2 = 1.0;
