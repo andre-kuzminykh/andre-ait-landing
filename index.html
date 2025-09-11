@@ -31,6 +31,7 @@
             height: 100vh;
             width: 100%;
             overflow: hidden;
+            perspective: 1000px; /* Force 3D rendering context for children */
         }
 
         #content-wrapper {
@@ -523,8 +524,8 @@
                 blob2State.y += (targetY2 - blob2State.y) * smoothingFactor;
                 blob2State.scale += (targetScale2 - blob2State.scale) * smoothingFactor;
                 
-                blob1.style.transform = `translate(${blob1State.x}px, ${blob1State.y}px) scale(${blob1State.scale}) translateZ(0)`;
-                blob2.style.transform = `translate(${blob2State.x}px, ${blob2State.y}px) scale(${blob2State.scale}) translateZ(0)`;
+                blob1.style.transform = `translate3d(${blob1State.x}px, ${blob1State.y}px, 0) scale(${blob1State.scale})`;
+                blob2.style.transform = `translate3d(${blob2State.x}px, ${blob2State.y}px, 0) scale(${blob2State.scale})`;
                 requestAnimationFrame(animate);
             }
 
