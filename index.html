@@ -58,7 +58,7 @@
             z-index: 2;
         }
 
-        /* --- RELIABILITY FIX (User suggestion A): Adding intrinsic size to SVG --- */
+        /* --- FIX for blob pixelation --- */
         .blob {
             position: fixed;
             z-index: -1;
@@ -70,6 +70,13 @@
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
+
+            /* Added properties to prevent pixelation on mobile Web Views during transforms. */
+            /* This forces better hardware acceleration and hints the engine to prioritize quality. */
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: high-quality;
         }
 
         /* Added width/height attributes to the SVG data URI to hint the browser to rasterize at a high resolution, preventing pixelation. */
@@ -270,7 +277,7 @@
                      <div class="speech-bubble mt-4 md:mt-0 w-full max-w-2xl rounded-2xl p-6 lg:p-8 flex flex-col">
                          <p id="about-text" class="text-white text-sm md:text-base lg:text-lg leading-relaxed">Hi, I’m Andre, founder of Andre AI Technologies.<br>I have 10+ years of experience in AI transformation of global tech companies and launching AI startups.<br>I focus on AI research, building AI products for businesses and individuals, training people for emerging professions, driving harmony between AI and humans, and shaping a new economy where AI is the core of the modern operational model.</p>
                          <a href="#" class="cv-button inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-6 text-base self-end">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2"><path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a.375.375 0 0 1-.375-.375V6.75A3.75 3.75 0 0 0 10.5 3h-1.875A.375.375 0 0 1 8.25 2.625V1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z" clip-rule="evenodd" /><path d="M12.971 1.816A5.23 5.23 0 0 1 15.75 1.5h1.875c.414 0 .75.336.75.75v4.5c0 .414-.336.75-.75.75h-1.875a5.23 5.23 0 0 1-2.779-.316Z" /></svg>
+                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2"><path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a.375.375 0 0 1-.375-.375V6.75A3.75 3.75 0 0 0 10.5 3h-1.875A.375.375 0 0 1 8.25 2.625V1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z" clip-rule="evenodd" /><path d="M12.971 1.816A5.23 5.23 0 0 1 15.75 1.5h1.875c.414 0 .75.336.75.75v4.5c0 .414-.336.75-.75.75h-1.875a5.23 5.23 0 0 1-2.779-.316Z" /></svg>
                              CV
                          </a>
                      </div>
@@ -527,4 +534,3 @@
     </script>
 </body>
 </html>
-
