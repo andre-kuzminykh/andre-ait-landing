@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,6 +17,10 @@
             --brand-orange-rgb: 249, 115, 22;
         }
         
+        html {
+            background-color: #0a0a0a;
+        }
+
         body {
             font-family: 'JetBrains Mono', monospace;
             background-color: #0a0a0a;
@@ -53,7 +57,12 @@
             z-index: 1;
             transition: opacity 0.8s ease-in-out;
             padding: 1rem;
-            padding-top: 6rem;
+            padding-top: 8rem;
+        }
+
+        /* FIX: Align footer content to the start (top) of the section */
+        #footer-section {
+            justify-content: flex-start;
         }
 
         .content-section.is-visible {
@@ -111,7 +120,7 @@
         
         @media (min-width: 768px) {
             .content-section {
-                padding-top: 7rem; /* FIXED: Increased padding to avoid header overlap */
+                padding-top: 9rem;
             }
             .speech-bubble::before {
                 top: 3rem; left: -1rem;
@@ -223,6 +232,14 @@
             75% { transform: translate(-2px, -2px); }
             100% { transform: translate(0, 0); }
         }
+        
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -278,7 +295,6 @@
                  <div class="container mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16">
                      <div class="flex-shrink-0">
                          <div class="author-photo-container w-48 h-48 lg:w-56 lg:h-56 rounded-full inline-block">
-                             <!-- GIF URL CORRECTED: Original was broken, I've used a working version. -->
                              <img src="https://i.ibb.co/G3MdKgx1/High-Performance-bli.gif" alt="Andre, founder of Andre AI Technologies" class="w-full h-full object-cover rounded-full">
                          </div>
                      </div>
@@ -293,7 +309,6 @@
              </section>
 
              <section id="dataism-section" class="content-section">
-                <!-- FIXED: Simplified container classes for proper vertical alignment -->
                  <div class="container mx-auto max-w-7xl xl:max-w-screen-xl text-center flex flex-col items-center px-4 h-full justify-center">
                      <div class="flex flex-col items-center justify-center">
                          <div class="flex flex-col text-center">
@@ -337,7 +352,6 @@
              </section>
 
              <section id="neuronium-section" class="content-section">
-                 <!-- FIXED: Simplified container classes for proper vertical alignment -->
                  <div class="container mx-auto max-w-7xl xl:max-w-screen-xl text-center flex flex-col items-center px-4 h-full justify-center">
                      <div class="flex flex-col items-center justify-center">
                          <div class="flex flex-col text-center">
@@ -372,7 +386,6 @@
              </section>
              
              <section id="human-intelligence-section" class="content-section">
-                 <!-- FIXED: Simplified container classes for proper vertical alignment -->
                  <div class="container mx-auto max-w-7xl xl:max-w-screen-xl text-center flex flex-col items-center px-4 h-full justify-center">
                      <div class="flex flex-col items-center justify-center">
                          <div class="flex flex-col text-center">
@@ -429,7 +442,6 @@
              </section>
 
              <section id="genesis-factory-section" class="content-section">
-                <!-- FIXED: Simplified container classes for proper vertical alignment -->
                  <div class="container mx-auto max-w-7xl xl:max-w-screen-xl text-center flex flex-col items-center px-4 h-full justify-center">
                      <div class="flex flex-col items-center justify-center">
                          <div class="flex flex-col text-center">
@@ -463,9 +475,7 @@
                  </div>
              </section>
 
-             <!-- AI-FIRST GROUP SECTION START -->
              <section id="ai-first-group-section" class="content-section">
-                 <!-- FIXED: Simplified container classes for proper vertical alignment -->
                  <div class="container mx-auto max-w-7xl xl:max-w-screen-xl text-center flex flex-col items-center px-4 h-full justify-center">
                      <div class="flex flex-col items-center justify-center">
                          <div class="flex flex-col text-center">
@@ -477,7 +487,6 @@
                      </div>
 
                      <div class="mt-12 lg:mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl mx-auto">
-                         <!-- Andre AI Consulting Card -->
                          <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg w-full">
                              <div>
                                  <h3 class="text-2xl font-bold text-white">🧠 Andre AI Consulting</h3>
@@ -495,7 +504,6 @@
                                  <span class="whitespace-nowrap">Contact</span>
                              </a>
                          </div>
-                         <!-- Universa Design Card -->
                          <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg w-full">
                              <div>
                                  <h3 class="text-2xl font-bold text-white">✨ Universa Design</h3>
@@ -516,11 +524,9 @@
                      </div>
                  </div>
              </section>
-             <!-- AI-FIRST GROUP SECTION END -->
 
              <!-- BLOG SECTION START -->
              <section id="blog-section" class="content-section">
-                <!-- FIXED: Simplified container classes for proper vertical alignment -->
                  <div class="container mx-auto max-w-7xl xl:max-w-screen-xl text-center flex flex-col items-center px-4 h-full justify-center">
                      <div class="flex flex-col items-center justify-center">
                          <div class="flex flex-col text-center">
@@ -530,73 +536,84 @@
                              <p id="blog-subtitle" class="typewriter-target text-xl md:text-2xl text-white mt-2">Latest News & Insights from the World of AI</p>
                          </div>
                      </div>
-        
-                     <div class="mt-12 lg:mt-16 grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
-                         <!-- Main large post -->
-                         <div class="lg:col-span-2 blog-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col h-full text-left shadow-lg w-full transition-transform transform hover:scale-[1.02]">
-                             <img src="https://i.ibb.co/L5B0p1V/photo-1518770660439-4636190af475-ixlib-rb-4-0.jpg" alt="AI Technology" class="rounded-lg mb-6 w-full h-64 object-cover">
-                             <div class="flex-grow flex flex-col">
-                                 <h3 class="text-2xl lg:text-3xl font-bold text-white">The Future of Generative AI in Business</h3>
-                                 <p class="mt-4 text-gray-400 flex-grow">Discover how generative AI is reshaping industries, from automating complex workflows to creating hyper-personalized customer experiences. We dive deep into the latest trends and what they mean for your business.</p>
+             
+                     <!-- REVISED: Blog slider wrapped in flexbox for side buttons -->
+                     <div class="mt-12 lg:mt-16 w-full max-w-5xl mx-auto flex items-center gap-x-2 sm:gap-x-4">
+                         <button id="blog-prev" class="flex-shrink-0 z-10 bg-black/30 text-white p-2 rounded-full hover:bg-black/50 transition-colors focus:outline-none">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                         </button>
+                         <div class="w-full flex-grow overflow-hidden">
+                             <div id="blog-slider-container" class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-hide">
+                                 <!-- Slide 1 -->
+                                 <div class="blog-slide flex-shrink-0 w-full snap-center p-2">
+                                     <div class="blog-card bg-[#111113] border border-[#333] rounded-2xl overflow-hidden flex flex-col md:flex-row h-full text-left shadow-lg w-full transition-transform transform hover:scale-[1.01]">
+                                         <img src="https://i.ibb.co/1YqZKwPL/Chat-GPT-Image-14-2025-01-05-00.png" alt="Business Matrix" class="w-full md:w-5/12 h-64 md:h-auto object-cover">
+                                         <div class="p-6 lg:p-8 flex flex-col h-full w-full">
+                                             <div class="flex-grow">
+                                                 <p class="text-xs text-gray-400 mb-2 uppercase tracking-wider">September 14, 2025</p>
+                                                 <h3 class="text-xl lg:text-2xl font-bold text-white">Business Matrix: The Architecture of Companies in the Age of AI</h3>
+                                                 <p class="mt-3 text-gray-400 text-sm leading-relaxed hidden sm:block">While six years ago AI transformation was available only to large corporations, today it is within reach of any company that wants to remain competitive in the new economy. Some companies go through the transformation successfully, others struggle. That’s why I will share the main challenges and how to solve them based on practical experience.</p>
+                                             </div>
+                                             <a href="#" class="cv-button btn-with-arrow self-end inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-6 text-sm"><span>Read More</span></a>
+                                         </div>
+                                     </div>
+                                 </div>
+                                 <!-- Slide 2 -->
+                                 <div class="blog-slide flex-shrink-0 w-full snap-center p-2">
+                                     <div class="blog-card bg-[#111113] border border-[#333] rounded-2xl overflow-hidden flex flex-col md:flex-row h-full text-left shadow-lg w-full transition-transform transform hover:scale-[1.01]">
+                                         <img src="https://i.ibb.co/L5B0p1V/photo-1518770660439-4636190af475-ixlib-rb-4-0.jpg" alt="AI Ethics" class="w-full md:w-5/12 h-64 md:h-auto object-cover">
+                                         <div class="p-6 lg:p-8 flex flex-col h-full w-full">
+                                             <div class="flex-grow">
+                                                 <p class="text-xs text-gray-400 mb-2 uppercase tracking-wider">September 10, 2025</p>
+                                                 <h3 class="text-xl lg:text-2xl font-bold text-white">Navigating the Ethics of AI</h3>
+                                                 <p class="mt-3 text-gray-400 text-sm leading-relaxed hidden sm:block">A look into the complex ethical questions surrounding artificial intelligence and the frameworks being developed to ensure responsible innovation.</p>
+                                             </div>
+                                             <a href="#" class="cv-button btn-with-arrow self-end inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-6 text-sm"><span>Read More</span></a>
+                                         </div>
+                                     </div>
+                                 </div>
+                                 <!-- Slide 3 -->
+                                  <div class="blog-slide flex-shrink-0 w-full snap-center p-2">
+                                     <div class="blog-card bg-[#111113] border border-[#333] rounded-2xl overflow-hidden flex flex-col md:flex-row h-full text-left shadow-lg w-full transition-transform transform hover:scale-[1.01]">
+                                         <img src="https://i.ibb.co/L5B0p1V/photo-1518770660439-4636190af475-ixlib-rb-4-0.jpg" alt="AI in Healthcare" class="w-full md:w-5/12 h-64 md:h-auto object-cover">
+                                         <div class="p-6 lg:p-8 flex flex-col h-full w-full">
+                                             <div class="flex-grow">
+                                                 <p class="text-xs text-gray-400 mb-2 uppercase tracking-wider">September 08, 2025</p>
+                                                 <h3 class="text-xl lg:text-2xl font-bold text-white">AI's Impact on Healthcare</h3>
+                                                 <p class="mt-3 text-gray-400 text-sm leading-relaxed hidden sm:block">From diagnostics to drug discovery, AI is revolutionizing healthcare. Explore the groundbreaking applications changing patient outcomes.</p>
+                                             </div>
+                                             <a href="#" class="cv-button btn-with-arrow self-end inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-6 text-sm"><span>Read More</span></a>
+                                         </div>
+                                     </div>
+                                 </div>
+                                 <!-- Slide 4 -->
+                                 <div class="blog-slide flex-shrink-0 w-full snap-center p-2">
+                                     <div class="blog-card bg-[#111113] border border-[#333] rounded-2xl overflow-hidden flex flex-col md:flex-row h-full text-left shadow-lg w-full transition-transform transform hover:scale-[1.01]">
+                                         <img src="https://i.ibb.co/L5B0p1V/photo-1518770660439-4636190af475-ixlib-rb-4-0.jpg" alt="AI Job Market" class="w-full md:w-5/12 h-64 md:h-auto object-cover">
+                                         <div class="p-6 lg:p-8 flex flex-col h-full w-full">
+                                             <div class="flex-grow">
+                                                 <p class="text-xs text-gray-400 mb-2 uppercase tracking-wider">September 05, 2025</p>
+                                                 <h3 class="text-xl lg:text-2xl font-bold text-white">The AI Job Market in 2025</h3>
+                                                 <p class="mt-3 text-gray-400 text-sm leading-relaxed hidden sm:block">What skills will be in demand? How is AI creating new roles while transforming existing ones? We analyze the future of work.</p>
+                                             </div>
+                                             <a href="#" class="cv-button btn-with-arrow self-end inline-flex items-center justify-center font-bold py-2 px-5 rounded-full mt-6 text-sm"><span>Read More</span></a>
+                                         </div>
+                                     </div>
+                                 </div>
                              </div>
-                             <a href="blog-post-example.html" class="cv-button btn-with-arrow self-end inline-flex items-center justify-center font-bold py-3 px-6 rounded-full mt-6 text-sm">
-                                 <span>Read More</span>
-                             </a>
                          </div>
-        
-                         <!-- Smaller posts -->
-                         <div class="space-y-6 flex flex-col h-full">
-                           <!-- Small post 1 -->
-                             <div class="blog-card bg-[#111113] border border-[#333] rounded-2xl p-6 flex gap-6 items-start text-left shadow-lg w-full transition-transform transform hover:scale-[1.02] hover:border-purple-500/50 flex-grow relative">
-                                 <img src="https://i.ibb.co/L5B0p1V/photo-1518770660439-4636190af475-ixlib-rb-4-0.jpg" alt="AI Ethics" class="flex-shrink-0 w-32 h-32 object-cover rounded-lg">
-                                 <div class="flex-grow">
-                                     <h4 class="text-md font-bold text-white leading-tight">Navigating the Ethics of AI</h4>
-                                 </div>
-                                 <div class="absolute bottom-6 right-6">
-                                     <a href="blog-post-example.html" class="cv-button btn-with-arrow inline-flex items-center justify-center font-bold py-3 px-6 rounded-full text-sm">
-                                         <span>Read More</span>
-                                     </a>
-                                 </div>
-                             </div>
-                              <!-- Small post 2 -->
-                             <div class="blog-card bg-[#111113] border border-[#333] rounded-2xl p-6 flex gap-6 items-start text-left shadow-lg w-full transition-transform transform hover:scale-[1.02] hover:border-purple-500/50 flex-grow relative">
-                                 <img src="https://i.ibb.co/L5B0p1V/photo-1518770660439-4636190af475-ixlib-rb-4-0.jpg" alt="AI in Healthcare" class="flex-shrink-0 w-32 h-32 object-cover rounded-lg">
-                                 <div class="flex-grow">
-                                     <h4 class="text-md font-bold text-white leading-tight">AI's Impact on Healthcare</h4>
-                                 </div>
-                                 <div class="absolute bottom-6 right-6">
-                                     <a href="blog-post-example.html" class="cv-button btn-with-arrow inline-flex items-center justify-center font-bold py-3 px-6 rounded-full text-sm">
-                                         <span>Read More</span>
-                                     </a>
-                                 </div>
-                             </div>
-                              <!-- Small post 3 -->
-                              <div class="blog-card bg-[#111113] border border-[#333] rounded-2xl p-6 flex gap-6 items-start text-left shadow-lg w-full transition-transform transform hover:scale-[1.02] hover:border-purple-500/50 flex-grow relative">
-                                  <img src="https://i.ibb.co/L5B0p1V/photo-1518770660439-4636190af475-ixlib-rb-4-0.jpg" alt="AI Job Market" class="flex-shrink-0 w-32 h-32 object-cover rounded-lg">
-                                  <div class="flex-grow">
-                                      <h4 class="text-md font-bold text-white leading-tight">The AI Job Market in 2025</h4>
-                                  </div>
-                                  <div class="absolute bottom-6 right-6">
-                                      <a href="blog-post-example.html" class="cv-button btn-with-arrow inline-flex items-center justify-center font-bold py-3 px-6 rounded-full text-sm">
-                                          <span>Read More</span>
-                                      </a>
-                                  </div>
-                              </div>
-                         </div>
-                     </div>
-                     <div class="mt-12 w-full flex justify-center">
-                       <a href="#" class="cv-button btn-with-arrow self-center inline-flex items-center justify-center font-bold py-3 px-8 rounded-full text-base">
-                           <span>Visit Full Blog</span>
-                       </a>
+                         <button id="blog-next" class="flex-shrink-0 z-10 bg-black/30 text-white p-2 rounded-full hover:bg-black/50 transition-colors focus:outline-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                         </button>
                      </div>
                  </div>
              </section>
              <!-- BLOG SECTION END -->
 
              <!-- FOOTER SECTION START -->
-            <section id="footer-section" class="content-section flex flex-col p-0">
+            <section id="footer-section" class="content-section flex flex-col">
                 <!-- Main Content -->
-                <div class="container mx-auto max-w-screen-xl flex flex-col items-center justify-center px-4 w-full flex-grow min-h-0 overflow-y-auto pt-24 pb-8">
+                <div class="container mx-auto max-w-screen-xl flex flex-col items-center px-4 w-full flex-grow min-h-0 overflow-y-auto pb-8"> 
                     <div class="w-full flex flex-col items-center text-center">
                         <div class="flex flex-col items-center justify-center mb-12">
                             <h2 class="text-4xl sm:text-5xl font-bold text-white leading-tight">Andre AI Technologies</h2>
@@ -716,7 +733,7 @@
             const interactiveCards = document.querySelectorAll('.dataism-card, .employee-card, .blog-card');
             interactiveCards.forEach(card => {
                 card.addEventListener('mouseenter', () => {
-                    if (currentSectionIndex >= 2) { // check if we are on any of the card sections
+                    if (currentSectionIndex >= 2) {
                         cardTarget = card;
                     }
                 });
@@ -915,6 +932,40 @@
                 requestAnimationFrame(animate);
             }
 
+            const sliderContainer = document.getElementById('blog-slider-container');
+            const prevBtn = document.getElementById('blog-prev');
+            const nextBtn = document.getElementById('blog-next');
+
+            if (sliderContainer && prevBtn && nextBtn) {
+                const checkScrollButtons = () => {
+                    const atStart = sliderContainer.scrollLeft === 0;
+                    const atEnd = sliderContainer.scrollWidth - sliderContainer.clientWidth <= Math.ceil(sliderContainer.scrollLeft);
+
+                    prevBtn.disabled = atStart;
+                    prevBtn.classList.toggle('opacity-50', atStart);
+                    prevBtn.classList.toggle('cursor-not-allowed', atStart);
+                    
+                    nextBtn.disabled = atEnd;
+                    nextBtn.classList.toggle('opacity-50', atEnd);
+                    nextBtn.classList.toggle('cursor-not-allowed', atEnd);
+                };
+
+                nextBtn.addEventListener('click', () => {
+                    const slideWidth = sliderContainer.querySelector('.blog-slide').clientWidth;
+                    sliderContainer.scrollBy({ left: slideWidth, behavior: 'smooth' });
+                });
+
+                prevBtn.addEventListener('click', () => {
+                    const slideWidth = sliderContainer.querySelector('.blog-slide').clientWidth;
+                    sliderContainer.scrollBy({ left: -slideWidth, behavior: 'smooth' });
+                });
+                
+                sliderContainer.addEventListener('scroll', checkScrollButtons);
+                // Run check on load
+                checkScrollButtons();
+            }
+
+
             window.addEventListener('scroll', handleScroll);
             handleScroll();
             animate();
@@ -922,6 +973,4 @@
     </script>
 </body>
 </html>
-
-
 
