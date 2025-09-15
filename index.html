@@ -26,7 +26,7 @@
             font-family: 'JetBrains Mono', monospace;
             background-color: #0a0a0a;
             color: #E5E7EB;
-            height: 900vh; /* Increased height for footer section */
+            height: 900vh;
             -webkit-overflow-scrolling: touch;
         }
         
@@ -54,7 +54,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start; /* REVISED: Align content to top */
             opacity: 0;
             z-index: 1;
             transition: opacity 0.8s ease-in-out;
@@ -116,6 +116,10 @@
         }
         
         @media (min-width: 768px) {
+            #hero-section, #about-section {
+                 align-items: center;
+                 justify-content: center;
+            }
             .speech-bubble::before {
                 top: 3rem; left: -1rem;
                 transform: translateY(-50%);
