@@ -60,6 +60,7 @@
             transition: opacity 0.8s ease-in-out;
             padding: 8rem 1rem 4rem; /* Reduced bottom padding */
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch; /* Improved scrolling on mobile */
             box-sizing: border-box;
         }
 
@@ -242,17 +243,19 @@
             scrollbar-width: none;  /* Firefox */
         }
         
-        /* ADDED: For footer transition */
+        /* ADDED: For footer transition and initial state */
         footer {
+            transform: translateY(100%);
             transition: transform 0.5s ease-in-out;
         }
 
         @media (max-width: 767px) {
             #final-section {
-                /* FIX 3: Increased space for the fixed footer to ensure last card is visible */
-                padding-bottom: 18rem; 
+                /* Add enough padding to see content above the fixed footer */
+                padding-bottom: 14rem; 
             }
         }
+        
     </style>
 </head>
 <body class="antialiased">
@@ -307,7 +310,6 @@
                  <div class="container mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16">
                      <div class="flex-shrink-0">
                          <div class="author-photo-container w-48 h-48 lg:w-56 lg:h-56 rounded-full inline-block">
-                             <!-- FIX 1: Updated the GIF URL -->
                              <img src="https://i.ibb.co/G3MdKgx1/High-Performance-bli.gif" alt="Andre, founder of Andre AI Technologies" class="w-full h-full object-cover rounded-full">
                          </div>
                      </div>
@@ -333,7 +335,6 @@
                      </div>
                      <div class="mt-8 md:mt-12 w-full">
                          <div class="flex flex-col items-center md:grid md:grid-cols-3 gap-8 w-full py-4">
-                             <!-- FIX 2: Reduced bottom margin for mobile -->
                              <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg w-full max-w-xs md:max-w-none mb-4 md:mb-0 h-full">
                                  <div class="flex-grow">
                                      <h3 class="text-2xl font-bold text-white">🔬 AI Laboratory</h3>
@@ -343,7 +344,6 @@
                                      <span class="whitespace-nowrap">Visit</span>
                                  </a>
                              </div>
-                             <!-- FIX 2: Reduced bottom margin for mobile -->
                              <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg w-full max-w-xs md:max-w-none mb-4 md:mb-0 h-full">
                                  <div class="flex-grow">
                                      <h3 class="text-2xl font-bold text-white">🎓 AI Academy</h3>
@@ -363,7 +363,7 @@
                                  </a>
                              </div>
                          </div>
-                    </div>
+                     </div>
                  </div>
              </section>
 
@@ -380,7 +380,6 @@
 
                      <div class="mt-8 md:mt-12 w-full max-w-4xl mx-auto">
                          <div class="flex flex-col items-center md:grid md:grid-cols-2 gap-8 w-full py-4">
-                             <!-- FIX 2: Reduced bottom margin for mobile -->
                              <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg w-full max-w-xs md:max-w-none mb-4 md:mb-0">
                                  <div class="flex-grow">
                                      <h3 class="text-2xl font-bold text-white">🤖 Personal</h3>
@@ -475,7 +474,6 @@
 
                      <div class="mt-8 md:mt-12 w-full max-w-4xl mx-auto">
                          <div class="flex flex-col items-center md:grid md:grid-cols-2 gap-8 w-full py-4">
-                             <!-- FIX 2: Reduced bottom margin for mobile -->
                              <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg w-full max-w-xs md:max-w-none mb-4 md:mb-0">
                                  <div class="flex-grow">
                                      <h3 class="text-2xl font-bold text-white">📜 Dataist AI</h3>
@@ -512,7 +510,6 @@
                      
                      <div class="mt-8 md:mt-12 w-full">
                          <div class="flex flex-col items-center md:grid md:grid-cols-2 gap-8 w-full py-4">
-                             <!-- FIX 2: Reduced bottom margin for mobile -->
                              <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg w-full max-w-sm md:max-w-none mb-4 md:mb-0">
                                  <div>
                                      <h3 class="text-2xl font-bold text-white">🧠 Andre AI Consulting</h3>
@@ -649,7 +646,6 @@
                          
                          <div class="w-full">
                              <div class="flex flex-col items-center md:grid md:grid-cols-2 lg:grid-cols-3 gap-8 w-full py-4">
-                                 <!-- FIX 2: Reduced bottom margin for mobile -->
                                  <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 flex flex-col text-center shadow-lg h-full transition-transform transform hover:scale-105 w-full max-w-xs md:max-w-none mb-4 md:mb-0">
                                      <div class="flex-grow">
                                          <h4 class="text-xl font-bold text-white mb-3">🔬 Dataism Science Hub</h4>
@@ -657,7 +653,6 @@
                                      </div>
                                      <a href="#" class="cv-button btn-with-arrow self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full text-sm mt-6"><span>Explore</span></a>
                                  </div>
-                                 <!-- FIX 2: Reduced bottom margin for mobile -->
                                  <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 flex flex-col text-center shadow-lg h-full transition-transform transform hover:scale-105 w-full max-w-xs md:max-w-none mb-4 md:mb-0">
                                      <div class="flex-grow">
                                          <h4 class="text-xl font-bold text-white mb-3">🧠 Neuronium AI</h4>
@@ -665,7 +660,6 @@
                                      </div>
                                      <a href="#" class="cv-button btn-with-arrow self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full text-sm mt-6"><span>Explore</span></a>
                                  </div>
-                                 <!-- FIX 2: Reduced bottom margin for mobile -->
                                  <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 flex flex-col text-center shadow-lg h-full transition-transform transform hover:scale-105 w-full max-w-xs md:max-w-none mb-4 md:mb-0">
                                      <div class="flex-grow">
                                          <h4 class="text-xl font-bold text-white mb-3">🤵🏻 Human Intelligence Platform</h4>
@@ -673,7 +667,6 @@
                                      </div>
                                      <a href="#" class="cv-button btn-with-arrow self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full text-sm mt-6"><span>Explore</span></a>
                                  </div>
-                                 <!-- FIX 2: Reduced bottom margin for mobile -->
                                  <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 flex flex-col text-center shadow-lg h-full transition-transform transform hover:scale-105 w-full max-w-xs md:max-w-none mb-4 md:mb-0">
                                      <div class="flex-grow">
                                          <h4 class="text-xl font-bold text-white mb-3">🚀 Genesis Startup Factory</h4>
@@ -681,7 +674,6 @@
                                      </div>
                                      <a href="#" class="cv-button btn-with-arrow self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full text-sm mt-6"><span>Explore</span></a>
                                  </div>
-                                 <!-- FIX 2: Reduced bottom margin for mobile -->
                                  <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 flex flex-col text-center shadow-lg h-full transition-transform transform hover:scale-105 w-full max-w-xs md:max-w-none mb-4 md:mb-0">
                                      <div class="flex-grow">
                                          <h4 class="text-xl font-bold text-white mb-3">✨ AI-First Group</h4>
@@ -701,9 +693,10 @@
                      </div>
                  </div>
              </section>
-             </div>
+        </div>
     </div>
 
+    <!-- FIX: Moved footer outside and made it fixed again -->
     <footer class="fixed bottom-0 left-0 right-0 w-full z-20 bg-[#0a0a0a]">
         <div class="container mx-auto">
             <div class="w-full flex flex-col md:flex-row items-center justify-between gap-y-4 py-4 px-4">
@@ -736,7 +729,7 @@
             });
 
             const sections = document.querySelectorAll('.content-section');
-            const footer = document.querySelector('footer'); // ADDED
+            const footer = document.querySelector('footer');
             const authorPhoto = document.querySelector('.author-photo-container');
             const blob1 = document.getElementById('blob1');
             const blob2 = document.getElementById('blob2');
@@ -746,8 +739,6 @@
             let currentSectionIndex = -1;
             let cardTarget = null;
             
-            footer.style.transform = 'translateY(100%)'; // ADDED: Initially hide footer
-
             let blob1State = { x: window.innerWidth * 0.45, y: window.innerHeight * 0.4, scale: 1.0 };
             let blob2State = { x: window.innerWidth * 0.55, y: window.innerHeight * 0.5, scale: 1.0 };
             
@@ -869,19 +860,16 @@
             function handleScroll() {
                 const scrollPosition = window.scrollY;
                 const screenHeight = window.innerHeight;
-                // NOTE: The scroll logic appears correct. The reported issue about skipping a section could not be reproduced
-                // from the provided code. The logic correctly calculates the index based on scroll position.
-                // The other fixes (padding, margins) may resolve any layout-related calculation issues.
-                const lastSectionIndex = sections.length - 1;
                 const newSectionIndex = Math.min(Math.floor(scrollPosition / screenHeight), sections.length - 1);
                 
                 // ADDED: Show/hide footer based on the current section
+                const lastSectionIndex = sections.length - 1;
                 if (newSectionIndex === lastSectionIndex) {
                     footer.style.transform = 'translateY(0)';
                 } else {
                     footer.style.transform = 'translateY(100%)';
                 }
-
+                
                 if (newSectionIndex !== currentSectionIndex) {
                     currentSectionIndex = newSectionIndex;
                     
@@ -1035,3 +1023,4 @@
     </script>
 </body>
 </html>
+
