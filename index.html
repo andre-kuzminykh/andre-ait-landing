@@ -250,10 +250,14 @@
         }
         
         footer {
-            transform: translateY(100%);
-            transition: transform 0.5s ease-in-out;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
         }
-
+        footer.is-visible {
+            opacity: 1;
+            visibility: visible;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -877,13 +881,12 @@
                 
                 const lastSectionIndex = sections.length - 1;
                 if (newSectionIndex === lastSectionIndex) {
-                    footer.style.transform = 'translateY(0)';
+                    footer.classList.add('is-visible');
                     finalSection.classList.add('footer-is-visible');
                 } else {
-                    footer.style.transform = 'translateY(100%)';
+                    footer.classList.remove('is-visible');
                     finalSection.classList.remove('footer-is-visible');
-                }
-                
+                }          
                 if (newSectionIndex !== currentSectionIndex) {
                     currentSectionIndex = newSectionIndex;
                     
