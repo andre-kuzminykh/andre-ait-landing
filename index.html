@@ -65,6 +65,14 @@
             box-sizing: border-box;
         }
 
+        #final-section {
+            justify-content: flex-start !important; /* начинаем сверху */
+            align-items: center;                    /* оставляем по центру горизонтально */
+            padding-top: 4rem;                      /* отступ сверху под хедер */
+            padding-bottom: var(--footer-h);        /* отступ снизу под футер */
+            overflow-y: auto;                       /* включаем прокрутку */
+        }
+
         .content-section.is-visible {
             opacity: 1;
             z-index: 2;
