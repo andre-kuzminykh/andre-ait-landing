@@ -65,13 +65,22 @@
             box-sizing: border-box;
         }
         #human-intelligence-section,
+        #genesis-factory-section,
         #ai-first-group-section,
+        #blog-section {
+            justify-content: flex-start !important;
+            align-items: center;
+            padding-top: 4rem;   /* отступ под хедер */
+            overflow-y: auto;
+        }
+
+/* Только финальный блок — сверху + запас под футер */
         #final-section {
-            justify-content: flex-start !important; /* начинаем сверху */
-            align-items: center;                    /* оставляем по центру горизонтально */
-            padding-top: 4rem;                      /* отступ сверху под хедер */
-            padding-bottom: var(--footer-h);        /* отступ снизу под футер */
-            overflow-y: auto;                       /* включаем прокрутку */
+            justify-content: flex-start !important;
+            align-items: center;
+            padding-top: 4rem;
+            padding-bottom: var(--footer-h); /* чтобы карточки не заезжали под футер */
+            overflow-y: auto;
         }
 
         .content-section.is-visible {
