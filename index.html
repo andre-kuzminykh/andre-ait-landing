@@ -117,9 +117,11 @@
         }
         
         @media (min-width: 768px) {
-            #hero-section, #about-section {
-                align-items: center;
+            .content-section {
                 justify-content: center;
+            }
+            #final-section {
+                padding-bottom: 4rem;
             }
             .speech-bubble::before {
                 top: 3rem; left: -1rem;
@@ -245,8 +247,11 @@
             transition: transform 0.5s ease-in-out;
         }
 
-        #final-section {
-            padding-bottom: 14rem; /* FIX 2: Increased space for the fixed footer */
+        @media (max-width: 767px) {
+            #final-section {
+                /* FIX 3: Increased space for the fixed footer to ensure last card is visible */
+                padding-bottom: 18rem; 
+            }
         }
     </style>
 </head>
@@ -290,19 +295,20 @@
         
         <div id="content-wrapper">
              <section id="hero-section" class="content-section justify-center"> <div class="container mx-auto max-w-4xl text-center">
-                     <h1 id="hero-title" class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight xl:whitespace-nowrap">
-                         <span style="color: var(--brand-purple);">AI</span> FOR <span style="color: var(--brand-orange);">HUMAN</span> GOOD
-                     </h1>
-                     <p id="hero-subtitle" data-typewriter-mode="adaptive" class="typewriter-target mt-6 text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-3xl mx-auto" style="font-weight: 700;">AI ecosystem for making AI<br>a trusted business & personal assistant</p>
-                     <a href="#" class="main-cta-button inline-flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
-                 </div>
+                    <h1 id="hero-title" class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight xl:whitespace-nowrap">
+                        <span style="color: var(--brand-purple);">AI</span> FOR <span style="color: var(--brand-orange);">HUMAN</span> GOOD
+                    </h1>
+                    <p id="hero-subtitle" data-typewriter-mode="adaptive" class="typewriter-target mt-6 text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-3xl mx-auto" style="font-weight: 700;">AI ecosystem for making AI<br>a trusted business & personal assistant</p>
+                    <a href="#" class="main-cta-button inline-flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
+                </div>
              </section>
 
              <section id="about-section" class="content-section">
                  <div class="container mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16">
                      <div class="flex-shrink-0">
                          <div class="author-photo-container w-48 h-48 lg:w-56 lg:h-56 rounded-full inline-block">
-                             <img src="https://i.ibb.co/G3MdKgx/High-Performance-bli.gif" alt="Andre, founder of Andre AI Technologies" class="w-full h-full object-cover rounded-full">
+                             <!-- FIX 1: Updated the GIF URL -->
+                             <img src="https://i.ibb.co/G3MdKgx1/High-Performance-bli.gif" alt="Andre, founder of Andre AI Technologies" class="w-full h-full object-cover rounded-full">
                          </div>
                      </div>
                      <div class="speech-bubble mt-4 md:mt-0 w-full max-w-2xl rounded-2xl p-6 lg:p-8 flex flex-col">
@@ -327,7 +333,8 @@
                      </div>
                      <div class="mt-8 md:mt-12 w-full">
                          <div class="flex flex-col items-center md:grid md:grid-cols-3 gap-8 w-full py-4">
-                             <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg w-full max-w-xs md:max-w-none mb-8 md:mb-0 h-full">
+                             <!-- FIX 2: Reduced bottom margin for mobile -->
+                             <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg w-full max-w-xs md:max-w-none mb-4 md:mb-0 h-full">
                                  <div class="flex-grow">
                                      <h3 class="text-2xl font-bold text-white">🔬 AI Laboratory</h3>
                                      <p class="mt-3 text-gray-400">Research & Development<br>of Applied AI Solutions</p>
@@ -336,7 +343,8 @@
                                      <span class="whitespace-nowrap">Visit</span>
                                  </a>
                              </div>
-                             <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg w-full max-w-xs md:max-w-none mb-8 md:mb-0 h-full">
+                             <!-- FIX 2: Reduced bottom margin for mobile -->
+                             <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg w-full max-w-xs md:max-w-none mb-4 md:mb-0 h-full">
                                  <div class="flex-grow">
                                      <h3 class="text-2xl font-bold text-white">🎓 AI Academy</h3>
                                      <p class="mt-3 text-gray-400">Educational programs<br>for AI Professionals</p>
@@ -372,7 +380,8 @@
 
                      <div class="mt-8 md:mt-12 w-full max-w-4xl mx-auto">
                          <div class="flex flex-col items-center md:grid md:grid-cols-2 gap-8 w-full py-4">
-                             <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg w-full max-w-xs md:max-w-none mb-8 md:mb-0">
+                             <!-- FIX 2: Reduced bottom margin for mobile -->
+                             <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg w-full max-w-xs md:max-w-none mb-4 md:mb-0">
                                  <div class="flex-grow">
                                      <h3 class="text-2xl font-bold text-white">🤖 Personal</h3>
                                      <p class="mt-3 text-gray-400">For advanced research<br>and daily tasks</p>
@@ -466,7 +475,8 @@
 
                      <div class="mt-8 md:mt-12 w-full max-w-4xl mx-auto">
                          <div class="flex flex-col items-center md:grid md:grid-cols-2 gap-8 w-full py-4">
-                             <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg w-full max-w-xs md:max-w-none mb-8 md:mb-0">
+                             <!-- FIX 2: Reduced bottom margin for mobile -->
+                             <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg w-full max-w-xs md:max-w-none mb-4 md:mb-0">
                                  <div class="flex-grow">
                                      <h3 class="text-2xl font-bold text-white">📜 Dataist AI</h3>
                                      <p class="mt-3 text-gray-400">AI Papers Researcher</p>
@@ -502,7 +512,8 @@
                      
                      <div class="mt-8 md:mt-12 w-full">
                          <div class="flex flex-col items-center md:grid md:grid-cols-2 gap-8 w-full py-4">
-                             <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg w-full max-w-sm md:max-w-none mb-8 md:mb-0">
+                             <!-- FIX 2: Reduced bottom margin for mobile -->
+                             <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 lg:p-8 flex flex-col justify-between text-center shadow-lg w-full max-w-sm md:max-w-none mb-4 md:mb-0">
                                  <div>
                                      <h3 class="text-2xl font-bold text-white">🧠 Andre AI Consulting</h3>
                                      <p class="mt-1 text-gray-400">CTO-as-a-Service</p>
@@ -638,35 +649,40 @@
                          
                          <div class="w-full">
                              <div class="flex flex-col items-center md:grid md:grid-cols-2 lg:grid-cols-3 gap-8 w-full py-4">
-                                 <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 flex flex-col text-center shadow-lg h-full transition-transform transform hover:scale-105 w-full max-w-xs md:max-w-none mb-8 md:mb-0">
+                                 <!-- FIX 2: Reduced bottom margin for mobile -->
+                                 <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 flex flex-col text-center shadow-lg h-full transition-transform transform hover:scale-105 w-full max-w-xs md:max-w-none mb-4 md:mb-0">
                                      <div class="flex-grow">
                                          <h4 class="text-xl font-bold text-white mb-3">🔬 Dataism Science Hub</h4>
                                          <p class="text-sm text-gray-400">Open Applied AI Community for research and development.</p>
                                      </div>
                                      <a href="#" class="cv-button btn-with-arrow self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full text-sm mt-6"><span>Explore</span></a>
                                  </div>
-                                 <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 flex flex-col text-center shadow-lg h-full transition-transform transform hover:scale-105 w-full max-w-xs md:max-w-none mb-8 md:mb-0">
+                                 <!-- FIX 2: Reduced bottom margin for mobile -->
+                                 <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 flex flex-col text-center shadow-lg h-full transition-transform transform hover:scale-105 w-full max-w-xs md:max-w-none mb-4 md:mb-0">
                                      <div class="flex-grow">
                                          <h4 class="text-xl font-bold text-white mb-3">🧠 Neuronium AI</h4>
                                          <p class="text-sm text-gray-400">Your personal and professional AI Super Agent for any task.</p>
                                      </div>
                                      <a href="#" class="cv-button btn-with-arrow self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full text-sm mt-6"><span>Explore</span></a>
                                  </div>
-                                 <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 flex flex-col text-center shadow-lg h-full transition-transform transform hover:scale-105 w-full max-w-xs md:max-w-none mb-8 md:mb-0">
+                                 <!-- FIX 2: Reduced bottom margin for mobile -->
+                                 <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 flex flex-col text-center shadow-lg h-full transition-transform transform hover:scale-105 w-full max-w-xs md:max-w-none mb-4 md:mb-0">
                                      <div class="flex-grow">
                                          <h4 class="text-xl font-bold text-white mb-3">🤵🏻 Human Intelligence Platform</h4>
                                          <p class="text-sm text-gray-400">Hire autonomous, human-like AI employees for your business.</p>
                                      </div>
                                      <a href="#" class="cv-button btn-with-arrow self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full text-sm mt-6"><span>Explore</span></a>
                                  </div>
-                                 <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 flex flex-col text-center shadow-lg h-full transition-transform transform hover:scale-105 w-full max-w-xs md:max-w-none mb-8 md:mb-0">
+                                 <!-- FIX 2: Reduced bottom margin for mobile -->
+                                 <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 flex flex-col text-center shadow-lg h-full transition-transform transform hover:scale-105 w-full max-w-xs md:max-w-none mb-4 md:mb-0">
                                      <div class="flex-grow">
                                          <h4 class="text-xl font-bold text-white mb-3">🚀 Genesis Startup Factory</h4>
                                          <p class="text-sm text-gray-400">Our AI Startup Studio for launching innovative products.</p>
                                      </div>
                                      <a href="#" class="cv-button btn-with-arrow self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full text-sm mt-6"><span>Explore</span></a>
                                  </div>
-                                 <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 flex flex-col text-center shadow-lg h-full transition-transform transform hover:scale-105 w-full max-w-xs md:max-w-none mb-8 md:mb-0">
+                                 <!-- FIX 2: Reduced bottom margin for mobile -->
+                                 <div class="dataism-card bg-[#111113] border border-[#333] rounded-2xl p-6 flex flex-col text-center shadow-lg h-full transition-transform transform hover:scale-105 w-full max-w-xs md:max-w-none mb-4 md:mb-0">
                                      <div class="flex-grow">
                                          <h4 class="text-xl font-bold text-white mb-3">✨ AI-First Group</h4>
                                          <p class="text-sm text-gray-400">Consulting and design services to empower tech companies.</p>
@@ -853,7 +869,10 @@
             function handleScroll() {
                 const scrollPosition = window.scrollY;
                 const screenHeight = window.innerHeight;
-                const lastSectionIndex = sections.length - 1; // ADDED
+                // NOTE: The scroll logic appears correct. The reported issue about skipping a section could not be reproduced
+                // from the provided code. The logic correctly calculates the index based on scroll position.
+                // The other fixes (padding, margins) may resolve any layout-related calculation issues.
+                const lastSectionIndex = sections.length - 1;
                 const newSectionIndex = Math.min(Math.floor(scrollPosition / screenHeight), sections.length - 1);
                 
                 // ADDED: Show/hide footer based on the current section
@@ -1016,3 +1035,6 @@
     </script>
 </body>
 </html>
+
+
+
