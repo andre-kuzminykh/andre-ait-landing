@@ -870,7 +870,10 @@
             function handleScroll() {
                 const scrollPosition = window.scrollY;
                 const screenHeight = window.innerHeight;
-                const newSectionIndex = Math.min(Math.floor(scrollPosition / screenHeight), sections.length - 1);
+                const newSectionIndex = Math.min(
+                    Math.floor((scrollPosition + screenHeight * 0.5) / screenHeight),
+                    sections.length - 1
+                );
                 
                 const lastSectionIndex = sections.length - 1;
                 if (newSectionIndex === lastSectionIndex) {
