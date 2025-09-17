@@ -1028,31 +1028,31 @@
                  const totalSlides = slides.length;
 
                  const updateSliderPosition = () => {
-                      if (slides.length === 0) return;
-                      const slideWidth = slides[0].clientWidth;
-                      sliderContainer.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
-                      
-                      const atStart = currentIndex === 0;
-                      const atEnd = currentIndex >= totalSlides - 1;
+                     if (slides.length === 0) return;
+                     const slideWidth = slides[0].clientWidth;
+                     sliderContainer.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+                     
+                     const atStart = currentIndex === 0;
+                     const atEnd = currentIndex >= totalSlides - 1;
 
-                      prevBtn.disabled = atStart;
-                      prevBtnMobile.disabled = atStart;
-                      nextBtn.disabled = atEnd;
-                      nextBtnMobile.disabled = atEnd;
+                     prevBtn.disabled = atStart;
+                     prevBtnMobile.disabled = atStart;
+                     nextBtn.disabled = atEnd;
+                     nextBtnMobile.disabled = atEnd;
                  };
 
                  const goToNext = () => {
-                      if (currentIndex < totalSlides - 1) {
-                          currentIndex++;
-                          updateSliderPosition();
-                      }
+                     if (currentIndex < totalSlides - 1) {
+                         currentIndex++;
+                         updateSliderPosition();
+                     }
                  };
 
                  const goToPrev = () => {
-                       if (currentIndex > 0) {
-                           currentIndex--;
-                           updateSliderPosition();
-                      }
+                     if (currentIndex > 0) {
+                         currentIndex--;
+                         updateSliderPosition();
+                     }
                  };
 
                  nextBtn.addEventListener('click', goToNext);
@@ -1064,7 +1064,86 @@
                  window.addEventListener('resize', updateSliderPosition);
                }
 
+            // --- SCROLL FIX START ---
+            // This logic controls the page scrolling to prevent skipping sections.
+            let isAnimatingScroll = false;
+            let touchStartY = 0;
+
+            const navigateToSection = (index) => {
+                if (index < 0 || index >= sections.length) return;
+                
+                isAnimatingScroll = true;
+                
+                window.scrollTo({
+                    top: index * window.innerHeight,
+                    behavior: 'auto' // Instant scroll lets the CSS transitions handle the visuals
+                });
+
+                // Cooldown period to prevent another scroll action during the transition.
+                // This should be slightly longer than the CSS opacity transition (0.8s).
+                setTimeout(() => {
+                    isAnimatingScroll = false;
+                }, 1200);
+            };
+
+            const wheelHandler = (e) => {
+                if (isAnimatingScroll) {
+                    e.preventDefault();
+                    return;
+                }
+                const currentIndex = Math.round(window.scrollY / window.innerHeight);
+
+                if (e.deltaY > 0) { // Scrolling down
+                    if (currentIndex < sections.length - 1) {
+                        e.preventDefault();
+                        navigateToSection(currentIndex + 1);
+                    }
+                } else { // Scrolling up
+                    if (currentIndex > 0) {
+                        e.preventDefault();
+                        navigateToSection(currentIndex - 1);
+                    }
+                }
+            };
+
+            const touchStartHandler = (e) => {
+                if (isAnimatingScroll) return;
+                touchStartY = e.touches[0].clientY;
+            };
+
+            const touchEndHandler = (e) => {
+                if (isAnimatingScroll) return;
+
+                const touchEndY = e.changedTouches[0].clientY;
+                const deltaY = touchStartY - touchEndY;
+                const sensitivity = 50; // Minimum swipe distance in pixels
+
+                if (Math.abs(deltaY) < sensitivity) return;
+
+                const currentIndex = Math.round(window.scrollY / window.innerHeight);
+                
+                if (deltaY > 0) { // Swiped up (equivalent to scrolling down)
+                     if (currentIndex < sections.length - 1) {
+                        navigateToSection(currentIndex + 1);
+                     }
+                } else { // Swiped down (equivalent to scrolling up)
+                    if (currentIndex > 0) {
+                        navigateToSection(currentIndex - 1);
+                    }
+                }
+            };
+
+            // Add new event listeners to manage scroll. { passive: false } is required to use preventDefault().
+            window.addEventListener('wheel', wheelHandler, { passive: false });
+            window.addEventListener('touchstart', touchStartHandler, { passive: true });
+            window.addEventListener('touchend', touchEndHandler, { passive: true });
+            // --- SCROLL FIX END ---
+
+
+            // This original listener is still needed to update the UI (fading sections) when the scroll position changes.
             window.addEventListener('scroll', handleScroll);
+            
+            // Initial calls to set the state correctly on page load.
             handleScroll();
             animate();
         });
