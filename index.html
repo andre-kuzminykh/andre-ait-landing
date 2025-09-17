@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --footer-h: 80px; /* Запасное значение высоты футера */
             --brand-purple: #8854F3;
             --brand-orange: #F97316;
             --brand-purple-rgb: 136, 84, 243;
@@ -20,15 +19,15 @@
         
         html {
             background-color: #0a0a0a;
-            scroll-behavior: smooth;
         }
 
         body {
             font-family: 'JetBrains Mono', monospace;
             background-color: #0a0a0a;
             color: #E5E7EB;
-            height: 900vh;
+            height: 900vh; /* Высота для работы скролла по секциям */
             -webkit-overflow-scrolling: touch;
+            overflow: hidden; /* Предотвращаем стандартный скролл body */
         }
         
         #page-container {
@@ -69,11 +68,7 @@
             opacity: 1;
             z-index: 2;
         }
-
-        #final-section.footer-is-visible {
-            height: calc(100% - var(--footer-h));
-        }
-
+        
         .blob {
             position: fixed;
             z-index: -1;
@@ -127,7 +122,7 @@
                 justify-content: center;
             }
             #final-section {
-                padding-bottom: 4rem;
+                padding-bottom: 0; /* Убрали отступ, т.к. футер теперь внутри */
             }
             .speech-bubble::before {
                 top: 3rem; left: -1rem;
@@ -248,11 +243,11 @@
             scrollbar-width: none;
         }
         
-        footer {
-            transform: translateY(100%);
-            transition: transform 0.5s ease-in-out;
+        #final-section {
+            padding-left: 0;
+            padding-right: 0;
+            padding-bottom: 0;
         }
-
     </style>
 </head>
 <body class="antialiased">
@@ -262,14 +257,14 @@
 
         <header class="absolute top-0 w-full z-[200] py-1 px-4 sm:px-6 lg:px-8 bg-[#0a0a0a]">
             <div class="container mx-auto flex justify-between items-center">
-                <a href="#" class="logo-link flex-shrink-0"><img src="https://i.ibb.co/gn7SmgY/866f2500-dd81-4d09-8c0f-2b55c25a3464-removalai-preview.png" alt="AIT Logo" class="h-16 lg:h-20 w-auto"></a>
+                <a href="#" data-target-section-index="0" class="logo-link flex-shrink-0"><img src="https://i.ibb.co/gn7SmgY/866f2500-dd81-4d09-8c0f-2b55c25a3464-removalai-preview.png" alt="AIT Logo" class="h-16 lg:h-20 w-auto"></a>
                 <nav class="hidden md:flex items-center md:text-xs lg:text-sm xl:text-base space-x-4 md:space-x-6 lg:space-x-10">
-                    <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">Science Hub</div><div class="lg:hidden"><span class="block">Science</span><span class="block leading-tight">Hub</span></div></a>
-                    <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Super Agent</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Super Agent</span></div></a>
-                    <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Employees</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Employees</span></div></a>
-                    <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Products</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Products</span></div></a>
-                    <a href="#" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Services</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Services</span></div></a>
-                    <a href="#" class="nav-link text-center lg:whitespace-nowrap">Blog</a>
+                    <a href="#" data-target-section-index="2" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">Science Hub</div><div class="lg:hidden"><span class="block">Science</span><span class="block leading-tight">Hub</span></div></a>
+                    <a href="#" data-target-section-index="3" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Super Agent</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Super Agent</span></div></a>
+                    <a href="#" data-target-section-index="4" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Employees</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Employees</span></div></a>
+                    <a href="#" data-target-section-index="5" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Products</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Products</span></div></a>
+                    <a href="#" data-target-section-index="6" class="nav-link text-center lg:whitespace-nowrap"><div class="hidden lg:block">AI Services</div><div class="lg:hidden"><span class="block">AI</span><span class="block leading-tight">Services</span></div></a>
+                    <a href="#" data-target-section-index="7" class="nav-link text-center lg:whitespace-nowrap">Blog</a>
                 </nav>
                 <a href="#" class="hidden md:flex items-center justify-center cta-button text-white font-medium py-3 md:px-3 lg:px-5 xl:px-7 rounded-full md:text-xs lg:text-sm xl:text-base">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
@@ -286,7 +281,7 @@
                              <span style="color: var(--brand-purple);">AI</span> FOR <span style="color: var(--brand-orange);">HUMAN</span> GOOD
                          </h1>
                          <p id="hero-subtitle" data-typewriter-mode="adaptive" class="typewriter-target mt-6 text-base sm:text-lg md:text-xl lg:text-2xl text-white max-w-3xl mx-auto" style="font-weight: 700;">AI ecosystem for making AI<br>a trusted business & personal assistant</p>
-                         <a href="#" class="main-cta-button inline-flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
+                         <a href="#" data-target-section-index="8" class="main-cta-button inline-flex items-center justify-center font-bold py-4 px-6 sm:py-5 sm:px-8 rounded-full mt-12 text-base sm:text-lg lg:text-xl"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>Discover AI Solutions</a>
                      </div>
                  </section>
 
@@ -294,7 +289,8 @@
                          <div class="container mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16">
                              <div class="flex-shrink-0">
                                  <div class="author-photo-container w-48 h-48 lg:w-56 lg:h-56 rounded-full inline-block">
-                                     <img src="https://i.ibb.co/G3MdKgx1/High-Performance-bli.gif" alt="Andre, founder of Andre AI Technologies" class="w-full h-full object-cover rounded-full">
+                                     <!-- ИЗМЕНЕНО: Ссылка на GIF -->
+                                     <img src="https://i.ibb.co/68qt4sL/ezgif-6-353a24e93b.gif" alt="Andre, founder of Andre AI Technologies" class="w-full h-full object-cover rounded-full">
                                  </div>
                              </div>
                              <div class="speech-bubble mt-4 md:mt-0 w-full max-w-2xl rounded-2xl p-6 lg:p-8 flex flex-col">
@@ -610,7 +606,7 @@
                                      </button>
                                  </div>
                                  <div class="md:hidden flex justify-center w-full mt-4 space-x-4">
-                                      <button id="blog-prev-mobile" class="flex-shrink-0 z-10 bg-black/30 text-white p-2 rounded-full hover:bg-black/50 transition-colors focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed">
+                                     <button id="blog-prev-mobile" class="flex-shrink-0 z-10 bg-black/30 text-white p-2 rounded-full hover:bg-black/50 transition-colors focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed">
                                          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
                                      </button>
                                       <button id="blog-next-mobile" class="flex-shrink-0 z-10 bg-black/30 text-white p-2 rounded-full hover:bg-black/50 transition-colors focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed">
@@ -620,8 +616,10 @@
                              </div>
                          </div>
                  </section>
+
+                 <!-- ИЗМЕНЕНО: Футер теперь является частью последней секции -->
                  <section id="final-section" class="content-section flex flex-col scrollbar-hide">
-                         <div class="container mx-auto max-w-screen-xl flex flex-col items-center justify-start px-4 w-full min-h-0"> 
+                         <div class="container mx-auto max-w-screen-xl flex flex-col items-center justify-start px-4 w-full flex-grow"> 
                              <div class="w-full flex flex-col items-center justify-start text-center gap-8 md:gap-12">
                                  <div class="flex flex-col items-center justify-center">
                                      <h2 class="text-4xl sm:text-5xl font-bold text-white leading-tight">Andre AI Technologies</h2>
@@ -671,38 +669,36 @@
                                                  <p class="text-sm text-gray-400">Latest news, insights, and stories from the world of AI.</p>
                                              </div>
                                              <a href="#" class="cv-button btn-with-arrow self-center inline-flex items-center justify-center font-bold py-3 px-6 rounded-full text-sm mt-6"><span>Explore</span></a>
-                                         </div>
+                                             </div>
                                      </div>
                                  </div>
                              </div>
                          </div>
+                         <footer class="w-full z-20 bg-[#0a0a0a] mt-auto border-t border-gray-800">
+                             <div class="container mx-auto">
+                                 <div class="w-full flex flex-col md:flex-row items-center justify-between gap-y-4 py-4 px-4">
+                                     <div class="flex items-center gap-3 order-2 md:order-1">
+                                         <img src="https://i.ibb.co/gn7SmgY/866f2500-dd81-4d09-8c0f-2b55c25a3464-removalai-preview.png" alt="AIT Logo" class="h-8 w-auto">
+                                         <p class="text-base text-gray-400">&copy; 2025 Andre AI Technologies</p>
+                                     </div>
+                                     <div class="flex items-center gap-x-8 text-base text-gray-400 order-1 md:order-2">
+                                         <a href="#" class="hover:text-white transition-colors">Terms of Use</a>
+                                         <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                                     </div>
+                                     <div class="order-3">
+                                         <button id="back-to-top-btn" class="bg-[#1a1a1c] border border-gray-700 rounded-full p-3 text-white hover:bg-purple-500/20 hover:border-purple-500 transition-all transform hover:-translate-y-1">
+                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 19V5M5 12l7-7 7 7" />
+                                             </svg>
+                                         </button>
+                                     </div>
+                                 </div>
+                             </div>
+                         </footer>
                  </section>
         </div>
     </div>
 
-    <footer class="fixed bottom-0 left-0 right-0 w-full z-20 bg-[#0a0a0a]">
-        <div class="container mx-auto">
-            <div class="w-full flex flex-col md:flex-row items-center justify-between gap-y-4 py-4 px-4">
-                <div class="flex items-center gap-3 order-2 md:order-1">
-                    <img src="https://i.ibb.co/gn7SmgY/866f2500-dd81-4d09-8c0f-2b55c25a3464-removalai-preview.png" alt="AIT Logo" class="h-8 w-auto">
-                    <p class="text-base text-gray-400">&copy; 2025 Andre AI Technologies</p>
-                </div>
-                <div class="flex items-center gap-x-8 text-base text-gray-400 order-1 md:order-2">
-                    <a href="#" class="hover:text-white transition-colors">Terms of Use</a>
-                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
-                </div>
-                <div class="order-3">
-                    <button id="back-to-top-btn" class="bg-[#1a1a1c] border border-gray-700 rounded-full p-3 text-white hover:bg-purple-500/20 hover:border-purple-500 transition-all transform hover:-translate-y-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 19V5M5 12l7-7 7 7" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- === MOVED & EDITED: Mobile menu now has close button and functional links === -->
     <div id="mobile-menu" class="mobile-menu md:hidden fixed top-0 right-0 h-full w-full bg-[#0a0a0a] transform translate-x-full z-[300] p-8">
         <button id="close-menu-btn" class="absolute top-7 right-6 sm:right-8 text-white focus:outline-none z-[310]">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -725,54 +721,35 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const footer = document.querySelector('footer');
-            const finalSection = document.getElementById('final-section');
-
-            const setFooterHeightVar = () => {
-                if (footer) {
-                    const footerHeight = Math.ceil(footer.getBoundingClientRect().height);
-                    document.documentElement.style.setProperty('--footer-h', `${footerHeight}px`);
-                }
-            };
-
-            setFooterHeightVar();
-            window.addEventListener('resize', setFooterHeightVar);
-            
-            // === EDITED: Refactored and improved menu logic ===
             const menuBtn = document.getElementById('menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
             const closeMenuBtn = document.getElementById('close-menu-btn');
-            const mobileNavLinks = document.querySelectorAll('#mobile-menu nav a');
             
             const toggleMenu = () => {
-                const isOpen = mobileMenu.classList.toggle('translate-x-full');
-                if (!isOpen) { // Menu is now open
-                    menuBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>`;
-                } else { // Menu is now closed
-                    menuBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>`;
-                }
+                const isOpening = mobileMenu.classList.toggle('translate-x-full');
+                document.body.style.overflow = 'hidden'; 
             };
 
             menuBtn.addEventListener('click', toggleMenu);
             closeMenuBtn.addEventListener('click', toggleMenu);
 
-            mobileNavLinks.forEach(link => {
+            // --- ИЗМЕНЕНО: Единый обработчик для всех навигационных ссылок ---
+            const allNavLinks = document.querySelectorAll('a[data-target-section-index]');
+            allNavLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    const targetIndex = link.dataset.targetSectionIndex;
-                    if (targetIndex !== undefined) {
-                        const screenHeight = window.innerHeight;
-                        window.scrollTo({
-                            top: targetIndex * screenHeight,
-                            behavior: 'auto' // Use 'auto' to let the main scroll handler manage the animation
-                        });
+                    const targetIndex = parseInt(link.dataset.targetSectionIndex, 10);
+                    if (!isNaN(targetIndex)) {
+                       navigateToSection(targetIndex);
                     }
-                    // Close menu after click
-                    setTimeout(() => {
-                        if (!mobileMenu.classList.contains('translate-x-full')) {
-                            toggleMenu();
-                        }
-                    }, 100);
+                    // Если это мобильное меню, закрываем его после клика
+                    if (link.closest('#mobile-menu')) {
+                        setTimeout(() => {
+                            if (!mobileMenu.classList.contains('translate-x-full')) {
+                                toggleMenu();
+                            }
+                        }, 100);
+                    }
                 });
             });
 
@@ -816,23 +793,17 @@
             const backToTopBtn = document.getElementById('back-to-top-btn');
             if (backToTopBtn) {
                 backToTopBtn.addEventListener('click', () => {
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
+                    navigateToSection(0);
                 });
             }
 
             const typewriterInstances = {};
 
+            // ИЗМЕНЕНО: Оптимизированный эффект печатной машинки
             const setupTypewriter = (element) => {
-                if (!element) return;
+                if (!element || !element.id) return;
                 const elementId = element.id;
-                if (!elementId) {
-                    console.warn("Typewriter target needs an ID", element);
-                    return;
-                }
-
+                
                 const isAdaptive = element.dataset.typewriterMode === 'adaptive';
                 const originalHTML = element.innerHTML;
                 let typingTarget = element;
@@ -842,14 +813,9 @@
                     const sizer = document.createElement('span');
                     sizer.style.visibility = 'hidden';
                     sizer.innerHTML = originalHTML;
-
                     const typer = document.createElement('span');
                     typer.style.position = 'absolute';
-                    typer.style.top = '0';
-                    typer.style.left = '0';
-                    typer.style.width = '100%';
-                    typer.style.height = '100%';
-
+                    typer.style.inset = '0';
                     element.innerHTML = '';
                     element.appendChild(sizer);
                     element.appendChild(typer);
@@ -868,32 +834,42 @@
                 });
 
                 let isTyping = false;
-                let timeoutId = null;
+                let animationFrameId = null;
 
                 const startTyping = (onComplete = null) => {
-                    clearTimeout(timeoutId);
+                    cancelAnimationFrame(animationFrameId);
                     if (isTyping) return;
-                    isTyping = true;
                     
+                    isTyping = true;
                     typingTarget.innerHTML = '';
-
+                    
                     let charIndex = 0;
-                    const type = () => {
-                        if (charIndex < contentQueue.length) {
-                            const char = contentQueue[charIndex];
-                            typingTarget.innerHTML += char;
-                            charIndex++;
-                            timeoutId = setTimeout(type, 25);
-                        } else {
-                            isTyping = false;
-                            if (onComplete) onComplete();
+                    let lastTime = 0;
+                    const typingSpeed = 25; // ms
+
+                    const type = (currentTime) => {
+                        if (!isTyping) return;
+                        if (lastTime === 0) lastTime = currentTime;
+                        
+                        const elapsed = currentTime - lastTime;
+                        if (elapsed >= typingSpeed) {
+                            if (charIndex < contentQueue.length) {
+                                typingTarget.innerHTML += contentQueue[charIndex];
+                                charIndex++;
+                                lastTime = currentTime;
+                            } else {
+                                isTyping = false;
+                                if (onComplete) onComplete();
+                                return;
+                            }
                         }
+                        animationFrameId = requestAnimationFrame(type);
                     };
-                    type();
+                    animationFrameId = requestAnimationFrame(type);
                 };
 
                 const reset = () => {
-                    clearTimeout(timeoutId);
+                    cancelAnimationFrame(animationFrameId);
                     isTyping = false;
                     typingTarget.innerHTML = '';
                 };
@@ -912,42 +888,28 @@
                     sections.length - 1
                 );
                 
-                const lastSectionIndex = sections.length - 1;
-                if (newSectionIndex === lastSectionIndex) {
-                    footer.style.transform = 'translateY(0)';
-                    finalSection.classList.add('footer-is-visible');
-                } else {
-                    footer.style.transform = 'translateY(100%)';
-                    finalSection.classList.remove('footer-is-visible');
-                }
-                
                 if (newSectionIndex !== currentSectionIndex) {
                     currentSectionIndex = newSectionIndex;
                     
                     sections.forEach((section, index) => {
                         const typewriterElements = section.querySelectorAll('.typewriter-target');
-
                         if (index === currentSectionIndex) {
                             section.classList.add('is-visible');
                             section.scrollTop = 0;
 
-                            if (section.id === 'dataism-section') {
-                                typewriterInstances['dataism-title']?.start(() => typewriterInstances['dataism-subtitle']?.start());
-                            } else if (section.id === 'neuronium-section') {
-                                typewriterInstances['neuronium-title']?.start(() => typewriterInstances['neuronium-subtitle']?.start());
-                            } else if (section.id === 'human-intelligence-section') {
-                                typewriterInstances['human-intelligence-title']?.start(() => typewriterInstances['human-intelligence-subtitle']?.start());
-                            } else if (section.id === 'genesis-factory-section') {
-                                typewriterInstances['genesis-factory-title']?.start(() => typewriterInstances['genesis-factory-subtitle']?.start());
-                            } else if (section.id === 'ai-first-group-section') {
-                                typewriterInstances['ai-first-group-title']?.start(() => typewriterInstances['ai-first-group-subtitle']?.start());
-                            } else if (section.id === 'blog-section') {
-                                typewriterInstances['blog-title']?.start(() => typewriterInstances['blog-subtitle']?.start());
-                            } else if (section.id === 'final-section') {
-                                typewriterInstances['footer-subtitle']?.start();
-                            }
-                            else {
-                                typewriterElements.forEach(el => typewriterInstances[el.id]?.start());
+                            // Запускаем анимации для текущей секции
+                            if (typewriterInstances[section.id]) {
+                                typewriterInstances[section.id].start();
+                            } else {
+                                const title = typewriterElements[0];
+                                const subtitle = typewriterElements[1];
+                                if (title && typewriterInstances[title.id]) {
+                                    if(subtitle && typewriterInstances[subtitle.id]) {
+                                        typewriterInstances[title.id].start(() => typewriterInstances[subtitle.id].start());
+                                    } else {
+                                        typewriterInstances[title.id].start();
+                                    }
+                                }
                             }
                         } else {
                             section.classList.remove('is-visible');
@@ -1017,73 +979,45 @@
             }
             
             const sliderContainer = document.getElementById('blog-slider-container');
-            const prevBtn = document.getElementById('blog-prev');
-            const nextBtn = document.getElementById('blog-next');
-            const prevBtnMobile = document.getElementById('blog-prev-mobile');
-            const nextBtnMobile = document.getElementById('blog-next-mobile');
-
             if (sliderContainer) {
-                 const slides = sliderContainer.querySelectorAll('.blog-slide');
-                 let currentIndex = 0;
-                 const totalSlides = slides.length;
+                const slides = sliderContainer.querySelectorAll('.blog-slide');
+                let currentIndex = 0;
+                const totalSlides = slides.length;
+                const updateSliderPosition = () => {
+                    if (slides.length === 0) return;
+                    const slideWidth = slides[0].clientWidth;
+                    sliderContainer.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+                    const atStart = currentIndex === 0;
+                    const atEnd = currentIndex >= totalSlides - 1;
+                    document.getElementById('blog-prev').disabled = atStart;
+                    document.getElementById('blog-prev-mobile').disabled = atStart;
+                    document.getElementById('blog-next').disabled = atEnd;
+                    document.getElementById('blog-next-mobile').disabled = atEnd;
+                };
+                const goToNext = () => { if (currentIndex < totalSlides - 1) { currentIndex++; updateSliderPosition(); } };
+                const goToPrev = () => { if (currentIndex > 0) { currentIndex--; updateSliderPosition(); } };
+                document.getElementById('blog-next').addEventListener('click', goToNext);
+                document.getElementById('blog-next-mobile').addEventListener('click', goToNext);
+                document.getElementById('blog-prev').addEventListener('click', goToPrev);
+                document.getElementById('blog-prev-mobile').addEventListener('click', goToPrev);
+                updateSliderPosition();
+                window.addEventListener('resize', updateSliderPosition);
+            }
 
-                 const updateSliderPosition = () => {
-                     if (slides.length === 0) return;
-                     const slideWidth = slides[0].clientWidth;
-                     sliderContainer.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
-                     
-                     const atStart = currentIndex === 0;
-                     const atEnd = currentIndex >= totalSlides - 1;
-
-                     prevBtn.disabled = atStart;
-                     prevBtnMobile.disabled = atStart;
-                     nextBtn.disabled = atEnd;
-                     nextBtnMobile.disabled = atEnd;
-                 };
-
-                 const goToNext = () => {
-                     if (currentIndex < totalSlides - 1) {
-                         currentIndex++;
-                         updateSliderPosition();
-                     }
-                 };
-
-                 const goToPrev = () => {
-                     if (currentIndex > 0) {
-                         currentIndex--;
-                         updateSliderPosition();
-                     }
-                 };
-
-                 nextBtn.addEventListener('click', goToNext);
-                 nextBtnMobile.addEventListener('click', goToNext);
-                 prevBtn.addEventListener('click', goToPrev);
-                 prevBtnMobile.addEventListener('click', goToPrev);
-                 
-                 updateSliderPosition();
-                 window.addEventListener('resize', updateSliderPosition);
-               }
-
-            // --- SCROLL FIX START ---
-            // This logic controls the page scrolling to prevent skipping sections.
+            // --- ИСПРАВЛЕНИЕ: Контроль прокрутки для предотвращения "перескакивания" секций ---
             let isAnimatingScroll = false;
             let touchStartY = 0;
 
             const navigateToSection = (index) => {
-                if (index < 0 || index >= sections.length) return;
-                
+                if (index < 0 || index >= sections.length || isAnimatingScroll) return;
                 isAnimatingScroll = true;
                 
                 window.scrollTo({
                     top: index * window.innerHeight,
-                    behavior: 'auto' // Instant scroll lets the CSS transitions handle the visuals
+                    behavior: 'auto'
                 });
-
-                // Cooldown period to prevent another scroll action during the transition.
-                // This should be slightly longer than the CSS opacity transition (0.8s).
-                setTimeout(() => {
-                    isAnimatingScroll = false;
-                }, 1200);
+                // Cooldown для предотвращения повторного срабатывания во время анимации
+                setTimeout(() => { isAnimatingScroll = false; }, 1200);
             };
 
             const wheelHandler = (e) => {
@@ -1091,18 +1025,28 @@
                     e.preventDefault();
                     return;
                 }
-                const currentIndex = Math.round(window.scrollY / window.innerHeight);
+                
+                const currentSection = sections[currentSectionIndex];
+                const isScrollable = currentSection.scrollHeight > currentSection.clientHeight;
+                const isScrollingDown = e.deltaY > 0;
 
-                if (e.deltaY > 0) { // Scrolling down
-                    if (currentIndex < sections.length - 1) {
-                        e.preventDefault();
-                        navigateToSection(currentIndex + 1);
+                if (isScrollable) {
+                    // If scrolling down but not at the bottom, allow native scroll
+                    if (isScrollingDown && currentSection.scrollTop + currentSection.clientHeight < currentSection.scrollHeight - 5) {
+                        return; 
                     }
-                } else { // Scrolling up
-                    if (currentIndex > 0) {
-                        e.preventDefault();
-                        navigateToSection(currentIndex - 1);
+                    // If scrolling up but not at the top, allow native scroll
+                    if (!isScrollingDown && currentSection.scrollTop > 5) {
+                        return;
                     }
+                }
+
+                e.preventDefault();
+                
+                if (isScrollingDown) {
+                    navigateToSection(currentSectionIndex + 1);
+                } else {
+                    navigateToSection(currentSectionIndex - 1);
                 }
             };
 
@@ -1115,35 +1059,41 @@
                 if (isAnimatingScroll) return;
 
                 const touchEndY = e.changedTouches[0].clientY;
-                const deltaY = touchStartY - touchEndY;
-                const sensitivity = 50; // Minimum swipe distance in pixels
+                const deltaY = touchStartY - touchEndY; // positive for swipe up
+                const sensitivity = 50;
 
                 if (Math.abs(deltaY) < sensitivity) return;
 
-                const currentIndex = Math.round(window.scrollY / window.innerHeight);
-                
-                if (deltaY > 0) { // Swiped up (equivalent to scrolling down)
-                     if (currentIndex < sections.length - 1) {
-                        navigateToSection(currentIndex + 1);
-                     }
-                } else { // Swiped down (equivalent to scrolling up)
-                    if (currentIndex > 0) {
-                        navigateToSection(currentIndex - 1);
+                const currentSection = sections[currentSectionIndex];
+                const isScrollable = currentSection.scrollHeight > currentSection.clientHeight;
+                const isSwipingUp = deltaY > 0;
+
+                // Check if we should allow native scroll
+                if (isScrollable) {
+                    // If swiping up (to scroll down) but not at the bottom, allow native scroll
+                    if (isSwipingUp && currentSection.scrollTop + currentSection.clientHeight < currentSection.scrollHeight - 5) {
+                        return; 
                     }
+                    // If swiping down (to scroll up) but not at the top, allow native scroll
+                    if (!isSwipingUp && currentSection.scrollTop > 5) {
+                        return;
+                    }
+                }
+                
+                // If we are here, it means we should navigate sections
+                if (isSwipingUp) { // Swiped up
+                    navigateToSection(currentSectionIndex + 1);
+                } else { // Swiped down
+                    navigateToSection(currentSectionIndex - 1);
                 }
             };
 
-            // Add new event listeners to manage scroll. { passive: false } is required to use preventDefault().
             window.addEventListener('wheel', wheelHandler, { passive: false });
             window.addEventListener('touchstart', touchStartHandler, { passive: true });
             window.addEventListener('touchend', touchEndHandler, { passive: true });
-            // --- SCROLL FIX END ---
-
-
-            // This original listener is still needed to update the UI (fading sections) when the scroll position changes.
+            
             window.addEventListener('scroll', handleScroll);
             
-            // Initial calls to set the state correctly on page load.
             handleScroll();
             animate();
         });
