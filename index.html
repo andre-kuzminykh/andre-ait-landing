@@ -685,7 +685,7 @@
                                          <a href="#" class="hover:text-white transition-colors">Terms of Use</a>
                                          <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
                                      </div>
-                                     <div class="order-3">
+                                     <div class="order-3 md:order-3 w-full md:w-auto flex justify-center md:justify-end">
                                          <button id="back-to-top-btn" class="bg-[#1a1a1c] border border-gray-700 rounded-full p-3 text-white hover:bg-purple-500/20 hover:border-purple-500 transition-all transform hover:-translate-y-1">
                                              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 19V5M5 12l7-7 7 7" />
@@ -705,7 +705,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </button>
-        <a href="#" class="logo-link absolute top-1 left-4 sm:left-6">
+        <a href="#" data-target-section-index="0" class="logo-link absolute top-1 left-4 sm:left-6">
             <img src="https://i.ibb.co/gn7SmgY/866f2500-dd81-4d09-8c0f-2b55c25a3464-removalai-preview.png" alt="AIT Logo" class="h-16 w-auto">
         </a>
         <nav class="flex flex-col h-full justify-center items-center space-y-8 text-lg">
@@ -1026,6 +1026,8 @@
                     return;
                 }
                 
+                if (currentSectionIndex < 0) return; // ИСПРАВЛЕНИЕ: Защита от ошибки
+                
                 const currentSection = sections[currentSectionIndex];
                 const isScrollable = currentSection.scrollHeight > currentSection.clientHeight;
                 const isScrollingDown = e.deltaY > 0;
@@ -1056,7 +1058,7 @@
             };
 
             const touchEndHandler = (e) => {
-                if (isAnimatingScroll) return;
+                if (isAnimatingScroll || currentSectionIndex < 0) return; // ИСПРАВЛЕНИЕ: Защита от ошибки
 
                 const touchEndY = e.changedTouches[0].clientY;
                 const deltaY = touchStartY - touchEndY; // positive for swipe up
