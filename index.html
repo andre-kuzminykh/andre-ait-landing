@@ -17,9 +17,12 @@
             --brand-orange-rgb: 249, 115, 22;
         }
         
-        html, body { overscroll-behavior: none; }
-        .content-section { overscroll-behavior: contain; } {
-            background-color: #0a0a0a;
+        html, body { 
+            overscroll-behavior: none; 
+            background-color: #0a0a0a; /* <- фон переносим сюда */
+        }
+        .content-section { 
+            overscroll-behavior: contain; 
         }
 
         body {
@@ -1102,17 +1105,6 @@ const navigateStep = (step) => {
               } else {
                 if (lockDirection !== -1) navigateStep(-1);
               }
-            };
-
-                // Если дошли сюда, значит мы у края секции (или она не скроллится)
-                // и можем переходить к следующей/предыдущей
-                e.preventDefault();
-                
-                if (isScrollingDown) {
-                    navigateToSection(currentSectionIndex + 1);
-                } else {
-                    navigateToSection(currentSectionIndex - 1);
-                }
             };
 
             const touchStartHandler = (e) => {
