@@ -18,64 +18,70 @@
         }
         
         html, body { 
-            overscroll-behavior: none; 
-            background-color: #0a0a0a; /* <- фон переносим сюда */
-        }
-        .content-section { 
-            overscroll-behavior: contain; 
-        }
-
-        body {
-            font-family: 'JetBrains Mono', monospace;
+            overscroll-behavior: none;
             background-color: #0a0a0a;
-            color: #E5E7EB;
-            /* Высота для работы скролла по секциям. 9 секций * 100vh. */
-            height: 900vh; 
-            -webkit-overflow-scrolling: touch;
-            /* Предотвращаем стандартный скролл body, так как мы управляем им через JS */
+            height: 100%;
         }
+            
+            body {
+                font-family: 'JetBrains Mono', monospace;
+                background-color: #0a0a0a;
+                color: #E5E7EB;
+                height: 100vh;
+                overflow: hidden;
+                -webkit-overflow-scrolling: auto; /* отключаем инерцию на body */
+            }
+            
+            /* Контейнер с секциями */
+            #page-container {
+                position: relative;     /* было sticky — больше не нужно */
+                top: 0;
+                height: 100vh;
+                width: 100%;
+                overflow: hidden;
+                perspective: 1000px;
+            }
+
+            #content-wrapper {
+                position: relative;
+                height: 100%;
+                width: 100%;
+            }
+            
+            
+            /* БАЗОВОЕ состояние секций (невидимы, во весь экран, с внутренним скроллом) */
+            .content-section {
+                position: absolute;
+                inset: 0;                /* top:0; right:0; bottom:0; left:0 */
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start; /* на мобиле контент сверху */
+                opacity: 0;
+                z-index: 1;
+                transition: opacity 0.8s ease-in-out;
+                padding: 9rem 1rem 4rem; /* чтобы не лезло под header */
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                box-sizing: border-box;
+                scroll-padding-top: 9rem;
+                overscroll-behavior: contain;
+                touch-action: pan-y;
+            }
+
+            /* Активная секция */
+                .content-section.is-visible {
+                  opacity: 1;
+                  z-index: 2;
+                }
+                
+                @media (min-width:768px){
+                  .content-section{ justify-content:center; }
+                }
         
-        #page-container {
-            touch-action: none;
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            width: 100%;
-            overflow: hidden;
-            perspective: 1000px;
-        }
-
-        #content-wrapper {
-            position: relative;
-            height: 100%;
-            width: 100%;
-        }
-
-        .content-section {
-            touch-action: pan-y;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start; /* Default for mobile */
-            opacity: 0;
-            z-index: 1;
-            transition: opacity 0.8s ease-in-out;
-            padding: 9rem 1rem 4rem; /* Оставляем отступ, чтобы контент не залезал под header */
-            overflow-y: auto; /* Включаем скролл для длинных секций */
-            -webkit-overflow-scrolling: touch;
-            box-sizing: border-box;
-            scroll-padding-top: 9rem;  
-        }
-
-        .content-section.is-visible {
-            opacity: 1;
-            z-index: 2;
-        }
+            /* Секции остаются как есть: overflow-y: auto рулит внутренним контентом */
         
         .blob {
             position: fixed;
@@ -740,8 +746,8 @@
             const closeMenuBtn = document.getElementById('close-menu-btn');
             
             const toggleMenu = () => {
-                const isOpening = mobileMenu.classList.toggle('translate-x-full');
-                document.body.style.overflow = 'hidden';  
+                const isClosedAfter = mobileMenu.classList.toggle('translate-x-full'); // true = закрыто
+                document.body.style.overflow = isClosedAfter ? '' : 'hidden';
             };
 
             menuBtn.addEventListener('click', toggleMenu);
@@ -766,13 +772,97 @@
             });
 
             const sections = document.querySelectorAll('.content-section');
+
+            // ===== ЧЕСТНЫЙ ПЕЙДЖЕР =====
+            let currentSectionIndex = 0;        // начинаем с 0
+            let isAnimatingSwitch = false;
+            let lastSwitchAt = 0;
+            
+            const SWITCH_LOCK_MS = 450;
+            const EDGE_BUFFER = 5;
+            
+            const showSection = (index, { resetScroll = true } = {}) => {
+              index = Math.max(0, Math.min(sections.length - 1, index));
+              if (index === currentSectionIndex || isAnimatingSwitch) return;
+            
+              isAnimatingSwitch = true;
+            
+              sections.forEach((s, i) => {
+                if (i === index) {
+                  s.classList.add('is-visible');
+                  if (resetScroll) requestAnimationFrame(() => { s.scrollTop = 0; });
+                } else {
+                  s.classList.remove('is-visible');
+                }
+              });
+            
+              currentSectionIndex = index;
+              lastSwitchAt = Date.now();
+              setTimeout(() => { isAnimatingSwitch = false; }, SWITCH_LOCK_MS);
+            };
+            
+            // Инициализация
+            showSection(0);
+            
+            const navigateToSection = (index) => { showSection(index); };
+            const navigateStep = (step) => { showSection(currentSectionIndex + step); };
+
+
+            // WHEEL
+            const onWheel = (e) => {
+                if (isAnimatingSwitch) { e.preventDefault(); return; }
+                if (Math.abs(e.deltaY) < 2) return; // фильтр микроимпульсов
+            
+              const sec = sections[currentSectionIndex];
+              const isScrollable = sec.scrollHeight > sec.clientHeight;
+              const atBottom = sec.scrollTop + sec.clientHeight >= sec.scrollHeight - EDGE_BUFFER;
+              const atTop    = sec.scrollTop <= EDGE_BUFFER;
+              const down = e.deltaY > 0;
+            
+              if (isScrollable) {
+                if (down && !atBottom) return;     // внутри секции прокрутка вниз
+                if (!down && !atTop)   return;     // внутри секции прокрутка вверх
+              }
+            
+              e.preventDefault();                  // глушим инерцию
+              if (down && atBottom) navigateStep(+1);
+              else if (!down && atTop) navigateStep(-1);
+            };
+            window.addEventListener('wheel', onWheel, { passive:false });
+            
+            // TOUCH
+            let touchStartY = 0;
+            window.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, { passive:true });
+            
+            window.addEventListener('touchmove', (e) => {
+              if (isAnimatingSwitch) return;
+              const sec = sections[currentSectionIndex];
+              const isScrollable = sec.scrollHeight > sec.clientHeight;
+              const atBottom = sec.scrollTop + sec.clientHeight >= sec.scrollHeight - EDGE_BUFFER;
+              const atTop    = sec.scrollTop <= EDGE_BUFFER;
+            
+              const dy = touchStartY - e.touches[0].clientY; // >0 — свайп вверх (вниз по странице)
+              const SENS = 40;
+            
+              if (isScrollable) {
+                if (dy > 0 && !atBottom) return;
+                if (dy < 0 && !atTop)    return;
+              }
+            
+              if (Math.abs(dy) > SENS && Date.now() - lastSwitchAt > SWITCH_LOCK_MS) {
+                e.preventDefault(); // блокируем нативную инерцию
+                if (dy > 0 && atBottom) navigateStep(+1);
+                else if (dy < 0 && atTop) navigateStep(-1);
+              }
+            }, { passive:false });
+
+            
             const authorPhoto = document.querySelector('.author-photo-container');
             const blob1 = document.getElementById('blob1');
             const blob2 = document.getElementById('blob2');
             let isOrbiting = false;
             let angle = 0;
             let wanderTime = 0;
-            let currentSectionIndex = -1;
             let cardTarget = null;
             
             let blob1State = { x: window.innerWidth * 0.45, y: window.innerHeight * 0.4, scale: 1.0 };
@@ -810,7 +900,6 @@
                 });
             }
 
-            const typewriterInstances = {};
 
             const setupTypewriter = (element) => {
                 if (!element || !element.id) return;
@@ -881,66 +970,17 @@
                 };
 
                 const reset = () => {
-                    cancelAnimationFrame(animationFrameId);
-                    isTyping = false;
-                    typingTarget.innerHTML = '';
+                    typingTarget.innerHTML = originalHTML; // вместо очистки
                 };
                 
                 typewriterInstances[elementId] = { start: startTyping, reset: reset };
-                reset();
+                typingTarget.innerHTML = originalHTML;
             };
 
             document.querySelectorAll('.typewriter-target').forEach(setupTypewriter);
             
-            function handleScroll() {
-                const scrollPosition = window.scrollY;
-                const screenHeight = window.innerHeight;
-                const newSectionIndex = Math.min(
-                    Math.floor((scrollPosition + screenHeight * 0.5) / screenHeight),
-                    sections.length - 1
-                );
+    
                 
-                if (newSectionIndex !== currentSectionIndex) {
-                    currentSectionIndex = newSectionIndex;
-                    
-                    sections.forEach((section, index) => {
-                        const typewriterElements = section.querySelectorAll('.typewriter-target');
-                        if (index === currentSectionIndex) {
-                            section.classList.add('is-visible');
-                            
-                            // *** КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ №2 ***
-                            // Принудительно сбрасываем внутреннюю прокрутку секции на 0,
-                            // когда она становится активной. Это гарантирует, что при попытке
-                            // прокрутить вверх, мы не будем "застревать" внутри блока.
-                            // `requestAnimationFrame` гарантирует, что сброс произойдет 
-                            // в самый правильный момент перед следующей отрисовкой кадра.
-                            requestAnimationFrame(() => {
-                                section.scrollTop = 0;
-                            });
-                            
-                            if (typewriterInstances[section.id]) {
-                                typewriterInstances[section.id].start();
-                            } else {
-                                const title = typewriterElements[0];
-                                const subtitle = typewriterElements[1];
-                                if (title && typewriterInstances[title.id]) {
-                                    if(subtitle && typewriterInstances[subtitle.id]) {
-                                        typewriterInstances[title.id].start(() => typewriterInstances[subtitle.id].start());
-                                    } else {
-                                        typewriterInstances[title.id].start();
-                                    }
-                                }
-                            }
-                        } else {
-                            section.classList.remove('is-visible');
-                            typewriterElements.forEach(el => typewriterInstances[el.id]?.reset());
-                        }
-                    });
-
-                    isOrbiting = (currentSectionIndex === 1);
-                }
-                unlockAfterSettle();
-            }
 
             function animate() {
                 let targetX1, targetY1, targetScale1;
@@ -1025,187 +1065,10 @@
                 window.addEventListener('resize', updateSliderPosition);
             }
 
-            let touchStartY = 0;
-            let consumingSwipe = false;   // мы «съели» жест для межсекционной навигации
-            let lastSwipeTime = 0;
-
-            // уже есть:
-            window.addEventListener('touchstart', touchStartHandler, { passive: true });
-            window.addEventListener('touchend',   touchEndHandler,   { passive: true });
-
-
-            // ДОБАВЬ: НОВЫЙ ОБРАБОТЧИК
-            const touchMoveHandler = (e) => {
-              if (isAnimatingScroll || currentSectionIndex < 0) return;
             
-              const currentSection = sections[currentSectionIndex];
-              if (!currentSection) return;
-            
-              const touchY = e.touches[0].clientY;
-              const deltaY = touchStartY - touchY; // >0 — свайп вверх (вниз по странице)
-              const sensitivity = 40;              // пикселей достаточно для намерения
-              const scrollBuffer = 5;
-            
-              const isScrollable = currentSection.scrollHeight > currentSection.clientHeight;
-              const atBottom = currentSection.scrollTop + currentSection.clientHeight >= currentSection.scrollHeight - scrollBuffer;
-              const atTop    = currentSection.scrollTop <= scrollBuffer;
-            
-              // Если секция сама скроллится — даём ей прокручиваться до края
-              if (isScrollable && !consumingSwipe) {
-                // Вниз внутри секции
-                if (deltaY > 0 && !atBottom) return;
-                // Вверх внутри секции
-                if (deltaY < 0 && !atTop)    return;
-              }
-            
-              // Мы на границе секции и пользователь тянет дальше — берём управление на себя
-              if (!consumingSwipe && Math.abs(deltaY) > sensitivity) {
-                e.preventDefault();                // убивает нативную инерцию
-                const now = Date.now();
-                if (now - lastSwipeTime < 400) return; // анти-дубль в одном жесте
-            
-                lastSwipeTime = now;
-                consumingSwipe = true;
-                if (deltaY > 0 && atBottom) {
-                  navigateStep(+1);                // вниз на ровно одну секцию
-                } else if (deltaY < 0 && atTop) {
-                  navigateStep(-1);                // вверх на одну секцию
-                }
-              } else if (consumingSwipe) {
-                // Уже «съели» жест — блокируем дальнейшую инерцию до завершения
-                e.preventDefault();
-              }
-            };
-            
-            window.addEventListener('touchmove', touchMoveHandler, { passive: false });
-            
-            // Дополни существующий touchStart/touchEnd:
-            const touchStartHandler = (e) => {
-              if (isAnimatingScroll) return;
-              touchStartY = e.touches[0].clientY;
-              consumingSwipe = false;    // новый жест — сбрасываем
-            };
-            
-            const touchEndHandler = (e) => {
-              // Ничего не делаем, если жест уже «съеден» на touchmove
-              // (navigateStep уже вызван). Оставляем как есть.
-            };
 
-            // --- FIX: замок, чтобы не пролетать по две секции за один жест
-let gestureLock = false;     // когда true, повторные переходы игнорируются
-let lockDirection = 0;       // -1 вверх, +1 вниз; защита от повторов в ту же сторону
-let scrollSettleTimer = null;
 
-const unlockAfterSettle = () => {
-  clearTimeout(scrollSettleTimer);
-  // маленькая пауза, чтобы «успокоился» скролл/инерция
-  scrollSettleTimer = setTimeout(() => {
-    gestureLock = false;
-    lockDirection = 0;
-  }, 180);
-};
-
-const navigateStep = (step) => {
-  if (gestureLock || isAnimatingScroll) return;
-  const target = Math.max(0, Math.min(sections.length - 1, currentSectionIndex + step));
-  if (target === currentSectionIndex) return;
-
-  gestureLock = true;
-  lockDirection = step;
-  isAnimatingScroll = true;
-
-  // мгновенный перевод (анимация появления уже в CSS)
-  window.scrollTo({ top: target * window.innerHeight, behavior: 'auto' });
-
-  // короткая блокировка — достаточно 450мс, не 1200мс
-  setTimeout(() => {
-    isAnimatingScroll = false;
-    unlockAfterSettle();
-  }, 450);
-};
-
-            const navigateToSection = (index) => {
-              if (index < 0 || index >= sections.length || isAnimatingScroll) return;
-              isAnimatingScroll = true;
-              window.scrollTo({ top: index * window.innerHeight, behavior: 'auto' });
-              setTimeout(() => { isAnimatingScroll = false; }, 550);
-            };
-
-            const wheelHandler = (e) => {
-                // если уже едем/заблокировано — гасим событие и выходим
-                if (isAnimatingScroll || gestureLock) { 
-                    e.preventDefault();
-                    return; 
-                }
-                
-                if (currentSectionIndex < 0) return;
-                
-                const isScrollingDown = e.deltaY > 0; // СНАЧАЛА определяем направление
-                const currentSection = sections[currentSectionIndex];
-                const isScrollable = currentSection.scrollHeight > currentSection.clientHeight;
-                const scrollBuffer = 5;
-
-                // если внутри секции ещё есть что скроллить — ничего не переключаем
-                if (isScrollable) {
-                    if (isScrollingDown && currentSection.scrollTop + currentSection.clientHeight < currentSection.scrollHeight - scrollBuffer) {
-                        return; // допускаем внутренний скролл вниз
-                    }
-                    if (!isScrollingDown && currentSection.scrollTop > scrollBuffer) {
-                        return; // допускаем внутренний скролл вверх
-                    }
-                }
-            
-              // дошли до края секции — переключаемся РОВНО на одну секцию
-              e.preventDefault();
-              if (isScrollingDown) {
-                if (lockDirection !== 1) navigateStep(+1);
-              } else {
-                if (lockDirection !== -1) navigateStep(-1);
-              }
-            };
-
-            const touchStartHandler = (e) => {
-                if (isAnimatingScroll) return;
-                touchStartY = e.touches[0].clientY;
-            };
-
-            const touchEndHandler = (e) => {
-                if (isAnimatingScroll || currentSectionIndex < 0) return;
-
-                const touchEndY = e.changedTouches[0].clientY;
-                const deltaY = touchStartY - touchEndY;
-                const sensitivity = 50;
-
-                if (Math.abs(deltaY) < sensitivity) return;
-
-                const currentSection = sections[currentSectionIndex];
-                const isScrollable = currentSection.scrollHeight > currentSection.clientHeight;
-                const isSwipingUp = deltaY > 0;
-                const scrollBuffer = 5; // Небольшой буфер
-
-                if (isScrollable) {
-                    if (isSwipingUp && currentSection.scrollTop + currentSection.clientHeight < currentSection.scrollHeight - scrollBuffer) {
-                        return; 
-                    }
-                    if (!isSwipingUp && currentSection.scrollTop > scrollBuffer) {
-                        return;
-                    }
-                }
-                
-                if (isSwipingUp && currentSection.scrollTop + currentSection.clientHeight >= currentSection.scrollHeight - scrollBuffer) {
-                    if (lockDirection !== 1) navigateStep(+1);
-                } else if (!isSwipingUp && currentSection.scrollTop <= scrollBuffer) {
-                    if (lockDirection !== -1) navigateStep(-1);
-                }
-            };
-
-            window.addEventListener('wheel', wheelHandler, { passive: false });
-            window.addEventListener('touchstart', touchStartHandler, { passive: true });
-            window.addEventListener('touchend', touchEndHandler, { passive: true });
-            
-            window.addEventListener('scroll', handleScroll);
-            
-            handleScroll();
+         
             animate();
         });
     </script>
