@@ -36,6 +36,7 @@
         }
         
         #page-container {
+            touch-action: none;
             position: sticky;
             top: 0;
             height: 100vh;
@@ -51,6 +52,7 @@
         }
 
         .content-section {
+            touch-action: pan-y;
             position: absolute;
             top: 0;
             left: 0;
@@ -1023,8 +1025,71 @@
                 window.addEventListener('resize', updateSliderPosition);
             }
 
-            let isAnimatingScroll = false;
             let touchStartY = 0;
+            let consumingSwipe = false;   // мы «съели» жест для межсекционной навигации
+            let lastSwipeTime = 0;
+
+            // уже есть:
+            window.addEventListener('touchstart', touchStartHandler, { passive: true });
+            window.addEventListener('touchend',   touchEndHandler,   { passive: true });
+
+
+            // ДОБАВЬ: НОВЫЙ ОБРАБОТЧИК
+            const touchMoveHandler = (e) => {
+              if (isAnimatingScroll || currentSectionIndex < 0) return;
+            
+              const currentSection = sections[currentSectionIndex];
+              if (!currentSection) return;
+            
+              const touchY = e.touches[0].clientY;
+              const deltaY = touchStartY - touchY; // >0 — свайп вверх (вниз по странице)
+              const sensitivity = 40;              // пикселей достаточно для намерения
+              const scrollBuffer = 5;
+            
+              const isScrollable = currentSection.scrollHeight > currentSection.clientHeight;
+              const atBottom = currentSection.scrollTop + currentSection.clientHeight >= currentSection.scrollHeight - scrollBuffer;
+              const atTop    = currentSection.scrollTop <= scrollBuffer;
+            
+              // Если секция сама скроллится — даём ей прокручиваться до края
+              if (isScrollable && !consumingSwipe) {
+                // Вниз внутри секции
+                if (deltaY > 0 && !atBottom) return;
+                // Вверх внутри секции
+                if (deltaY < 0 && !atTop)    return;
+              }
+            
+              // Мы на границе секции и пользователь тянет дальше — берём управление на себя
+              if (!consumingSwipe && Math.abs(deltaY) > sensitivity) {
+                e.preventDefault();                // убивает нативную инерцию
+                const now = Date.now();
+                if (now - lastSwipeTime < 400) return; // анти-дубль в одном жесте
+            
+                lastSwipeTime = now;
+                consumingSwipe = true;
+                if (deltaY > 0 && atBottom) {
+                  navigateStep(+1);                // вниз на ровно одну секцию
+                } else if (deltaY < 0 && atTop) {
+                  navigateStep(-1);                // вверх на одну секцию
+                }
+              } else if (consumingSwipe) {
+                // Уже «съели» жест — блокируем дальнейшую инерцию до завершения
+                e.preventDefault();
+              }
+            };
+            
+            window.addEventListener('touchmove', touchMoveHandler, { passive: false });
+            
+            // Дополни существующий touchStart/touchEnd:
+            const touchStartHandler = (e) => {
+              if (isAnimatingScroll) return;
+              touchStartY = e.touches[0].clientY;
+              consumingSwipe = false;    // новый жест — сбрасываем
+            };
+            
+            const touchEndHandler = (e) => {
+              // Ничего не делаем, если жест уже «съеден» на touchmove
+              // (navigateStep уже вызван). Оставляем как есть.
+            };
 
             // --- FIX: замок, чтобы не пролетать по две секции за один жест
 let gestureLock = false;     // когда true, повторные переходы игнорируются
@@ -1059,20 +1124,11 @@ const navigateStep = (step) => {
   }, 450);
 };
 
-            
             const navigateToSection = (index) => {
-                if (index < 0 || index >= sections.length || isAnimatingScroll) return;
-                isAnimatingScroll = true;
-                
-                // Используем behavior: 'auto' для мгновенного перехода, 
-                // т.к. анимация появления/исчезновения уже есть в CSS.
-                window.scrollTo({
-                    top: index * window.innerHeight,
-                    behavior: 'auto' 
-                });
-                
-                // Увеличили время блокировки, чтобы предотвратить слишком быстрые повторные скроллы
-                setTimeout(() => { isAnimatingScroll = false; }, 1200); 
+              if (index < 0 || index >= sections.length || isAnimatingScroll) return;
+              isAnimatingScroll = true;
+              window.scrollTo({ top: index * window.innerHeight, behavior: 'auto' });
+              setTimeout(() => { isAnimatingScroll = false; }, 550);
             };
 
             const wheelHandler = (e) => {
