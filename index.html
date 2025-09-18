@@ -843,6 +843,9 @@
                 const oldIndex = currentSectionIndex;
                 currentSectionIndex = newIndex;
 
+                // Сбрасываем цель для "капель" при смене секции
+                cardTarget = null;
+
                 // Обновляем классы видимости
                 sections.forEach((section, index) => {
                     const typewriterElements = section.querySelectorAll('.typewriter-target');
