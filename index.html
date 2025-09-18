@@ -835,7 +835,7 @@
 
             // Функция для обновления активной секции
             const updateActiveSection = (newIndex) => {
-                if (newIndex < 0 || newIndex >= totalSections || newIndex === currentSectionIndex && sections[newIndex].classList.contains('is-visible')) {
+                if (newIndex < 0 || newIndex >= totalSections || newIndex === currentSectionIndex && sections[newIndex]?.classList.contains('is-visible')) {
                     isTransitioning = false;
                     return;
                 }
@@ -908,6 +908,8 @@
                 }
 
                 const currentSection = sections[currentSectionIndex];
+                if (!currentSection) return; // FIX: Добавлена проверка на существование секции
+                
                 const isScrollable = currentSection.scrollHeight > currentSection.clientHeight;
                 const isScrollingDown = e.deltaY > 0;
                 const scrollBuffer = 5; // Небольшой буфер
@@ -947,6 +949,8 @@
                 if (Math.abs(deltaY) < sensitivity) return;
                 
                 const currentSection = sections[currentSectionIndex];
+                if (!currentSection) return; // FIX: Добавлена проверка на существование секции
+                
                 const isScrollable = currentSection.scrollHeight > currentSection.clientHeight;
                 const isSwipingUp = deltaY > 0;
                 const scrollBuffer = 5;
@@ -1005,7 +1009,7 @@
             closeMenuBtn.addEventListener('click', toggleMenu);
             
 
-            // === ЛОГИКА АНИМАЦИИ "КАПЕЛЬ" (без изменений) ===
+            // === ЛОГИКА АНИМАЦИИ "КАПЕЛЬ" ===
             const allCtaButtons = document.querySelectorAll('.main-cta-button, .cv-button, .cta-button');
             allCtaButtons.forEach(button => {
                 const hide = () => { blob1.style.opacity = '0';   blob2.style.opacity = '0'; };
