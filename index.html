@@ -778,14 +778,15 @@
             
             const allCtaButtons = document.querySelectorAll('.main-cta-button, .cv-button, .cta-button');
             allCtaButtons.forEach(button => {
-                button.addEventListener('mouseenter', () => {
-                    blob1.style.opacity = '0';
-                    blob2.style.opacity = '0';
-                });
-                button.addEventListener('mouseleave', () => {
-                    blob1.style.opacity = '0.7';
-                    blob2.style.opacity = '0.7';
-                });
+                const hide = () => { blob1.style.opacity = '0';   blob2.style.opacity = '0'; };
+                const show = () => { blob1.style.opacity = '0.7'; blob2.style.opacity = '0.7'; };
+                button.addEventListener('mouseenter', hide);
+                button.addEventListener('mouseleave', show);
+                button.addEventListener('focus', hide);
+                button.addEventListener('blur', show);
+                button.addEventListener('click', show);
+                button.addEventListener('touchstart', hide, {passive:true});
+                button.addEventListener('touchend', show,   {passive:true});
             });
 
             const interactiveCards = document.querySelectorAll('.dataism-card, .employee-card, .blog-card');
