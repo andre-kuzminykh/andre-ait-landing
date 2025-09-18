@@ -58,10 +58,11 @@
             opacity: 0;
             z-index: 1;
             transition: opacity 0.8s ease-in-out;
-            padding: 8rem 1rem 4rem;
+            padding: 9rem 1rem 4rem; /* Оставляем отступ, чтобы контент не залезал под header */
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             box-sizing: border-box;
+            scroll-padding-top: 9rem; 
         }
 
         .content-section.is-visible {
@@ -289,7 +290,6 @@
                          <div class="container mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16">
                              <div class="flex-shrink-0">
                                  <div class="author-photo-container w-48 h-48 lg:w-56 lg:h-56 rounded-full inline-block">
-                                     <!-- ИЗМЕНЕНО: Ссылка на GIF -->
                                      <img src="https://i.ibb.co/G3MdKgx1/High-Performance-bli.gif" alt="Andre, founder of Andre AI Technologies" class="w-full h-full object-cover rounded-full">
                                  </div>
                              </div>
@@ -721,6 +721,13 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // *** ГЛАВНОЕ ИСПРАВЛЕНИЕ ***
+            // Говорим браузеру, чтобы он не пытался самостоятельно восстанавливать
+            // позицию прокрутки. Мы будем управлять этим полностью сами.
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+            }
+
             const menuBtn = document.getElementById('menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
             const closeMenuBtn = document.getElementById('close-menu-btn');
@@ -733,16 +740,14 @@
             menuBtn.addEventListener('click', toggleMenu);
             closeMenuBtn.addEventListener('click', toggleMenu);
 
-            // --- ИЗМЕНЕНО: Единый обработчик для всех навигационных ссылок ---
             const allNavLinks = document.querySelectorAll('a[data-target-section-index]');
             allNavLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
                     const targetIndex = parseInt(link.dataset.targetSectionIndex, 10);
                     if (!isNaN(targetIndex)) {
-                       navigateToSection(targetIndex);
+                        navigateToSection(targetIndex);
                     }
-                    // Если это мобильное меню, закрываем его после клика
                     if (link.closest('#mobile-menu')) {
                         setTimeout(() => {
                             if (!mobileMenu.classList.contains('translate-x-full')) {
@@ -799,7 +804,6 @@
 
             const typewriterInstances = {};
 
-            // ИЗМЕНЕНО: Оптимизированный эффект печатной машинки
             const setupTypewriter = (element) => {
                 if (!element || !element.id) return;
                 const elementId = element.id;
@@ -895,9 +899,14 @@
                         const typewriterElements = section.querySelectorAll('.typewriter-target');
                         if (index === currentSectionIndex) {
                             section.classList.add('is-visible');
-                            section.scrollTop = 0;
-
-                            // Запускаем анимации для текущей секции
+                            
+                            // *** ГЛАВНОЕ ИСПРАВЛЕНИЕ 2: НАДЕЖНЫЙ СБРОС ПРОКРУТКИ ***
+                            // requestAnimationFrame гарантирует, что сброс произойдет 
+                            // в самый правильный момент перед следующей отрисовкой кадра.
+                            requestAnimationFrame(() => {
+                                section.scrollTop = 0;
+                            });
+                            
                             if (typewriterInstances[section.id]) {
                                 typewriterInstances[section.id].start();
                             } else {
@@ -1004,7 +1013,6 @@
                 window.addEventListener('resize', updateSliderPosition);
             }
 
-            // --- ИСПРАВЛЕНИЕ: Контроль прокрутки для предотвращения "перескакивания" секций ---
             let isAnimatingScroll = false;
             let touchStartY = 0;
 
@@ -1016,7 +1024,6 @@
                     top: index * window.innerHeight,
                     behavior: 'auto'
                 });
-                // Cooldown для предотвращения повторного срабатывания во время анимации
                 setTimeout(() => { isAnimatingScroll = false; }, 1200);
             };
 
@@ -1026,18 +1033,16 @@
                     return;
                 }
                 
-                if (currentSectionIndex < 0) return; // ИСПРАВЛЕНИЕ: Защита от ошибки
+                if (currentSectionIndex < 0) return;
                 
                 const currentSection = sections[currentSectionIndex];
                 const isScrollable = currentSection.scrollHeight > currentSection.clientHeight;
                 const isScrollingDown = e.deltaY > 0;
 
                 if (isScrollable) {
-                    // If scrolling down but not at the bottom, allow native scroll
                     if (isScrollingDown && currentSection.scrollTop + currentSection.clientHeight < currentSection.scrollHeight - 5) {
                         return; 
                     }
-                    // If scrolling up but not at the top, allow native scroll
                     if (!isScrollingDown && currentSection.scrollTop > 5) {
                         return;
                     }
@@ -1058,10 +1063,10 @@
             };
 
             const touchEndHandler = (e) => {
-                if (isAnimatingScroll || currentSectionIndex < 0) return; // ИСПРАВЛЕНИЕ: Защита от ошибки
+                if (isAnimatingScroll || currentSectionIndex < 0) return;
 
                 const touchEndY = e.changedTouches[0].clientY;
-                const deltaY = touchStartY - touchEndY; // positive for swipe up
+                const deltaY = touchStartY - touchEndY;
                 const sensitivity = 50;
 
                 if (Math.abs(deltaY) < sensitivity) return;
@@ -1070,22 +1075,18 @@
                 const isScrollable = currentSection.scrollHeight > currentSection.clientHeight;
                 const isSwipingUp = deltaY > 0;
 
-                // Check if we should allow native scroll
                 if (isScrollable) {
-                    // If swiping up (to scroll down) but not at the bottom, allow native scroll
                     if (isSwipingUp && currentSection.scrollTop + currentSection.clientHeight < currentSection.scrollHeight - 5) {
                         return; 
                     }
-                    // If swiping down (to scroll up) but not at the top, allow native scroll
                     if (!isSwipingUp && currentSection.scrollTop > 5) {
                         return;
                     }
                 }
                 
-                // If we are here, it means we should navigate sections
-                if (isSwipingUp) { // Swiped up
+                if (isSwipingUp) { 
                     navigateToSection(currentSectionIndex + 1);
-                } else { // Swiped down
+                } else { 
                     navigateToSection(currentSectionIndex - 1);
                 }
             };
