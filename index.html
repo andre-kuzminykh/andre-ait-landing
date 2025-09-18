@@ -1020,6 +1020,40 @@
             let isAnimatingScroll = false;
             let touchStartY = 0;
 
+            // --- FIX: замок, чтобы не пролетать по две секции за один жест
+let gestureLock = false;     // когда true, повторные переходы игнорируются
+let lockDirection = 0;       // -1 вверх, +1 вниз; защита от повторов в ту же сторону
+let scrollSettleTimer = null;
+
+const unlockAfterSettle = () => {
+  clearTimeout(scrollSettleTimer);
+  // маленькая пауза, чтобы «успокоился» скролл/инерция
+  scrollSettleTimer = setTimeout(() => {
+    gestureLock = false;
+    lockDirection = 0;
+  }, 180);
+};
+
+const navigateStep = (step) => {
+  if (gestureLock || isAnimatingScroll) return;
+  const target = Math.max(0, Math.min(sections.length - 1, currentSectionIndex + step));
+  if (target === currentSectionIndex) return;
+
+  gestureLock = true;
+  lockDirection = step;
+  isAnimatingScroll = true;
+
+  // мгновенный перевод (анимация появления уже в CSS)
+  window.scrollTo({ top: target * window.innerHeight, behavior: 'auto' });
+
+  // короткая блокировка — достаточно 450мс, не 1200мс
+  setTimeout(() => {
+    isAnimatingScroll = false;
+    unlockAfterSettle();
+  }, 450);
+};
+
+            
             const navigateToSection = (index) => {
                 if (index < 0 || index >= sections.length || isAnimatingScroll) return;
                 isAnimatingScroll = true;
@@ -1036,9 +1070,10 @@
             };
 
             const wheelHandler = (e) => {
-                if (isAnimatingScroll) {
-                    e.preventDefault();
-                    return;
+                if (isScrollingDown) {
+                    if (lockDirection !== 1) navigateStep(+1);
+                } else {
+                    if (lockDirection !== -1) navigateStep(-1);
                 }
                 
                 if (currentSectionIndex < 0) return;
@@ -1098,10 +1133,10 @@
                     }
                 }
                 
-                if (isSwipingUp) {  
-                    navigateToSection(currentSectionIndex + 1);
-                } else {  
-                    navigateToSection(currentSectionIndex - 1);
+                if (isSwipingUp && currentSection.scrollTop + currentSection.clientHeight >= currentSection.scrollHeight - scrollBuffer) {
+                    if (lockDirection !== 1) navigateStep(+1);
+                } else if (!isSwipingUp && currentSection.scrollTop <= scrollBuffer) {
+                    if (lockDirection !== -1) navigateStep(-1);
                 }
             };
 
