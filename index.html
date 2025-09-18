@@ -25,9 +25,11 @@
             font-family: 'JetBrains Mono', monospace;
             background-color: #0a0a0a;
             color: #E5E7EB;
-            height: 900vh; /* Высота для работы скролла по секциям */
+            /* Высота для работы скролла по секциям. 9 секций * 100vh. */
+            height: 900vh; 
             -webkit-overflow-scrolling: touch;
-            overflow: hidden; /* Предотвращаем стандартный скролл body */
+            /* Предотвращаем стандартный скролл body, так как мы управляем им через JS */
+            overflow: hidden; 
         }
         
         #page-container {
@@ -59,10 +61,10 @@
             z-index: 1;
             transition: opacity 0.8s ease-in-out;
             padding: 9rem 1rem 4rem; /* Оставляем отступ, чтобы контент не залезал под header */
-            overflow-y: auto;
+            overflow-y: auto; /* Включаем скролл для длинных секций */
             -webkit-overflow-scrolling: touch;
             box-sizing: border-box;
-            scroll-padding-top: 9rem; 
+            scroll-padding-top: 9rem;  
         }
 
         .content-section.is-visible {
@@ -86,10 +88,10 @@
             image-rendering: high-quality;
         }
 
-        .blob-purple { 
+        .blob-purple {  
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='1600' viewBox='0 0 500 500'%3e%3cdefs%3e%3cradialGradient id='grad' cx='50%25' cy='50%25' r='50%25'%3e%3cstop offset='0%25' stop-color='%238854F3' stop-opacity='1'/%3e%3cstop offset='100%25' stop-color='%238854F3' stop-opacity='0'/%3e%3c/radialGradient%3e%3cfilter id='blob_filter' x='-50%25' y='-50%25' width='200%25' height='200%25'%3e%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='3' result='noise'/%3e%3CfeDisplacementMap in='SourceGraphic' in2='noise' scale='50'/%3e%3CfeGaussianBlur stdDeviation='70'/%3e%3C/filter%3e%3c/defs%3e%3ccircle cx='250' cy='250' r='150' fill='url(%23grad)' filter='url(%23blob_filter)'/%3e%3c/svg%3e");
         }
-        .blob-orange { 
+        .blob-orange {  
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='1600' viewBox='0 0 500 500'%3e%3cdefs%3e%3cradialGradient id='grad' cx='50%25' cy='50%25' r='50%25'%3e%3cstop offset='0%25' stop-color='%23F97316' stop-opacity='1'/%3e%3cstop offset='100%25' stop-color='%23F97316' stop-opacity='0'/%3e%3c/radialGradient%3e%3cfilter id='blob_filter' x='-50%25' y='-50%25' width='200%25' height='200%25'%3e%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='3' result='noise'/%3e%3CfeDisplacementMap in='SourceGraphic' in2='noise' scale='50'/%3e%3CfeGaussianBlur stdDeviation='70'/%3e%3C/filter%3e%3c/defs%3e%3ccircle cx='250' cy='250' r='150' fill='url(%23grad)' filter='url(%23blob_filter)'/%3e%3c/svg%3e");
         }
         
@@ -108,7 +110,7 @@
         .speech-bubble::before {
             content: '';
             position: absolute;
-            top: -1rem; 
+            top: -1rem;  
             left: 50%;
             transform: translateX(-50%);
             width: 0; height: 0;
@@ -617,7 +619,6 @@
                          </div>
                  </section>
 
-                 <!-- ИЗМЕНЕНО: Футер теперь является частью последней секции -->
                  <section id="final-section" class="content-section flex flex-col scrollbar-hide">
                          <div class="container mx-auto max-w-screen-xl flex flex-col items-center justify-start px-4 w-full flex-grow"> 
                              <div class="w-full flex flex-col items-center justify-start text-center gap-8 md:gap-12">
@@ -721,9 +722,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // *** ГЛАВНОЕ ИСПРАВЛЕНИЕ ***
+            // *** КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ №1 ***
             // Говорим браузеру, чтобы он не пытался самостоятельно восстанавливать
-            // позицию прокрутки. Мы будем управлять этим полностью сами.
+            // позицию прокрутки при перезагрузке страницы. Мы будем управлять этим полностью сами.
+            // Это предотвращает "застревание" на середине прокручиваемого блока.
             if ('scrollRestoration' in history) {
                 history.scrollRestoration = 'manual';
             }
@@ -734,7 +736,7 @@
             
             const toggleMenu = () => {
                 const isOpening = mobileMenu.classList.toggle('translate-x-full');
-                document.body.style.overflow = 'hidden'; 
+                document.body.style.overflow = 'hidden';  
             };
 
             menuBtn.addEventListener('click', toggleMenu);
@@ -900,8 +902,11 @@
                         if (index === currentSectionIndex) {
                             section.classList.add('is-visible');
                             
-                            // *** ГЛАВНОЕ ИСПРАВЛЕНИЕ 2: НАДЕЖНЫЙ СБРОС ПРОКРУТКИ ***
-                            // requestAnimationFrame гарантирует, что сброс произойдет 
+                            // *** КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ №2 ***
+                            // Принудительно сбрасываем внутреннюю прокрутку секции на 0,
+                            // когда она становится активной. Это гарантирует, что при попытке
+                            // прокрутить вверх, мы не будем "застревать" внутри блока.
+                            // `requestAnimationFrame` гарантирует, что сброс произойдет 
                             // в самый правильный момент перед следующей отрисовкой кадра.
                             requestAnimationFrame(() => {
                                 section.scrollTop = 0;
@@ -957,7 +962,7 @@
                     targetScale2 = 0.7;
                     targetX1 = (centerX + radius * Math.cos(angle)) - blobWidth / 2;
                     targetY1 = (centerY + radius * Math.sin(angle)) - blobHeight / 2;
-                    targetX2 = (centerX + radius * Math.cos(angle + Math.PI / 2)) - blobWidth / 2; 
+                    targetX2 = (centerX + radius * Math.cos(angle + Math.PI / 2)) - blobWidth / 2;  
                     targetY2 = (centerY + radius * Math.sin(angle + Math.PI / 2)) - blobHeight / 2;
                 } else {
                     wanderTime += 0.003;
@@ -974,7 +979,7 @@
                     targetScale2 = 1.0;
                 }
                 
-                const smoothingFactor = 0.04; 
+                const smoothingFactor = 0.04;  
                 blob1State.x += (targetX1 - blob1State.x) * smoothingFactor;
                 blob1State.y += (targetY1 - blob1State.y) * smoothingFactor;
                 blob1State.scale += (targetScale1 - blob1State.scale) * smoothingFactor;
@@ -1020,11 +1025,15 @@
                 if (index < 0 || index >= sections.length || isAnimatingScroll) return;
                 isAnimatingScroll = true;
                 
+                // Используем behavior: 'auto' для мгновенного перехода, 
+                // т.к. анимация появления/исчезновения уже есть в CSS.
                 window.scrollTo({
                     top: index * window.innerHeight,
-                    behavior: 'auto'
+                    behavior: 'auto' 
                 });
-                setTimeout(() => { isAnimatingScroll = false; }, 1200);
+                
+                // Увеличили время блокировки, чтобы предотвратить слишком быстрые повторные скроллы
+                setTimeout(() => { isAnimatingScroll = false; }, 1200); 
             };
 
             const wheelHandler = (e) => {
@@ -1038,16 +1047,21 @@
                 const currentSection = sections[currentSectionIndex];
                 const isScrollable = currentSection.scrollHeight > currentSection.clientHeight;
                 const isScrollingDown = e.deltaY > 0;
+                const scrollBuffer = 5; // Небольшой буфер
 
                 if (isScrollable) {
-                    if (isScrollingDown && currentSection.scrollTop + currentSection.clientHeight < currentSection.scrollHeight - 5) {
+                    // Если скроллим ВНИЗ, но еще не достигли конца секции, разрешаем внутренний скролл
+                    if (isScrollingDown && currentSection.scrollTop + currentSection.clientHeight < currentSection.scrollHeight - scrollBuffer) {
                         return; 
                     }
-                    if (!isScrollingDown && currentSection.scrollTop > 5) {
+                    // Если скроллим ВВЕРХ, но еще не в самом верху секции, разрешаем внутренний скролл
+                    if (!isScrollingDown && currentSection.scrollTop > scrollBuffer) {
                         return;
                     }
                 }
 
+                // Если дошли сюда, значит мы у края секции (или она не скроллится)
+                // и можем переходить к следующей/предыдущей
                 e.preventDefault();
                 
                 if (isScrollingDown) {
@@ -1074,19 +1088,20 @@
                 const currentSection = sections[currentSectionIndex];
                 const isScrollable = currentSection.scrollHeight > currentSection.clientHeight;
                 const isSwipingUp = deltaY > 0;
+                const scrollBuffer = 5; // Небольшой буфер
 
                 if (isScrollable) {
-                    if (isSwipingUp && currentSection.scrollTop + currentSection.clientHeight < currentSection.scrollHeight - 5) {
+                    if (isSwipingUp && currentSection.scrollTop + currentSection.clientHeight < currentSection.scrollHeight - scrollBuffer) {
                         return; 
                     }
-                    if (!isSwipingUp && currentSection.scrollTop > 5) {
+                    if (!isSwipingUp && currentSection.scrollTop > scrollBuffer) {
                         return;
                     }
                 }
                 
-                if (isSwipingUp) { 
+                if (isSwipingUp) {  
                     navigateToSection(currentSectionIndex + 1);
-                } else { 
+                } else {  
                     navigateToSection(currentSectionIndex - 1);
                 }
             };
